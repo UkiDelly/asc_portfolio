@@ -1,0 +1,11 @@
+flutter_native_splash:
+
+  color: "#342a38"
+
+  #color:# "#FFFFFF" : 로고가 어두운 색이면 배경을 흰색으로 " # 위의 color 나 이미지 중에서 한가지만 선택가능함
+
+  #background_image: "assets/background.png" : 위의 color 나 이미지 중에서 한가지만 선택가능함
+
+  image: assets/images/logo_set_splash.png
+
+  android_12:
