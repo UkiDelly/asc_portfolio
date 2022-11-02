@@ -1,6 +1,7 @@
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 
+import 'change_seat_page.dart';
 import 'login_page.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -22,6 +23,13 @@ class NavDrawer extends StatelessWidget {
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('assets/images/logo_set_mini.png'))),
+          ),
+          ListTile(
+            leading: Icon(Icons.airline_seat_individual_suite_sharp, color: AppColor.appPURPLE),
+            title: Text('좌석이동'),
+            onTap: () => {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeSeatPage()))
+            },
           ),
           ListTile(
             leading: logInfo ? Icon(Icons.login, color: AppColor.appPURPLE) : Icon(Icons.logout, color: AppColor.appPURPLE),

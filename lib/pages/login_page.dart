@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/pages/sign_up_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 
@@ -120,6 +121,7 @@ class _LoginDemoState extends State<LoginDemo> {
                   label: Text('회원가입'),// <-- Text
                   backgroundColor: Colors.black,
                   onPressed: ()  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
                   }
               ),
             ),
