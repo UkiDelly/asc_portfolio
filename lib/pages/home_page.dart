@@ -1,5 +1,5 @@
 import 'package:asc_portfolio/pages/nav_drawer_page.dart';
-import 'package:asc_portfolio/pages/payment_page.dart';
+import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:asc_portfolio/pages/specific_seat_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                   label: Text("좌석 선택후 시간을 선택해주세요.",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
                   backgroundColor: AppColor.appPURPLE,
                   onPressed: ()  {
-                  }
+                }
               ),
             ),
             Card(
@@ -54,8 +54,8 @@ class _HomePageState extends State<HomePage> {
                       return Text(
                         '현재시간 : ${DateFormat('yyyy-MM-dd h시 mm분 ss초 a').format(DateTime.now().add(Duration(hours: 9)))
                         }',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                      );
-                    }),
+                  );
+                }),
               ),
             ),
             SizedBox(height: 20,),
@@ -355,8 +355,8 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(builder: (context) => PaymentPage()))
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo())),
-              }
-          },
+                }
+              },
             icon: loginCheck ? Icon(Icons.add_card) : Icon(Icons.account_circle),
           )
         ],

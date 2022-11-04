@@ -1,6 +1,20 @@
+import 'dart:convert';
 import 'package:asc_portfolio/pages/sign_up_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
+// import 'package:http/http.dart' as http;
+import 'package:asc_portfolio/server/dio_server.dart';
+
+
+// class JsonObject {
+//   final String success;
+//
+//   JsonObject({required this.success});
+//
+//   factory JsonObject.fromJson(Map<String, dynamic> json) {
+//     return JsonObject(success: json['success'] as String);
+//   }
+// }
 
 class LoginDemo extends StatefulWidget {
   @override
@@ -9,7 +23,10 @@ class LoginDemo extends StatefulWidget {
 
 class _LoginDemoState extends State<LoginDemo> {
 
+
   bool _obscureText = false;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +72,7 @@ class _LoginDemoState extends State<LoginDemo> {
                     OutlineInputBorder(borderRadius: BorderRadius.circular(25.0),
                         borderSide: BorderSide(
                           color: Colors.black,
-                        )),
+                    )),
                   ),
                 ),
               ),
@@ -104,7 +121,32 @@ class _LoginDemoState extends State<LoginDemo> {
                   heroTag: 'Login',
                   label: Text('로그인'),// <-- Text
                   backgroundColor: Colors.black,
-                  onPressed: ()  {
+                  onPressed: ()   {
+
+                    server.postReq();
+                    //
+                    // final url = Uri.parse(
+                    //   'http://10.0.2.2:8080/user/signup',
+                    // );
+                    // final response = await http.post(
+                    //     url,
+                    // body: <String, String> {
+                    //   'loginId': 'user_id_value',
+                    //   'password': 'user_pwd_value',
+                    //   'email' : 'email2@gmail.com',
+                    // },
+                    // headers : <String, String> {
+                    //   'Content-Type': 'application/json'
+                    //   },
+                    // );
+                    //
+                    // print('Response status: ${response.statusCode}');
+                    // print('Response body: ${response.body}');
+
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) => _buildPopupDialog(context),
+                    // );
                   }
               ),
             ),
@@ -143,6 +185,38 @@ class _LoginDemoState extends State<LoginDemo> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColor.appPURPLE,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text('비밀번호가 일치하지 않습니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+            ],
+          ),
+        ],
+      ),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text("비밀번호를 확인해주세요.", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 12, color: Colors.white),),
+        ],
+      ),
+      actions: <Widget>[
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            },
+          child: const Text('OK', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+        ),
+      ],
     );
   }
 }

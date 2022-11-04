@@ -88,7 +88,10 @@ class _SignupPageState extends State<SignupPage> {
                         label: Text('회원가입'),// <-- Text
                         backgroundColor: Colors.black,
                         onPressed: ()  {
-                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => _buildPopupDialog(context),
+                          );
                         }
                     ),
                   ),
@@ -110,6 +113,39 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ]
       )
+    );
+  }
+
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppColor.appPURPLE,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const Text('이미 존재하는 Email 주소 입니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+        ],
+      ),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text("다른 Email 주소를 사용하세요.", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 12, color: Colors.white),),
+            ],
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        new TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+        ),
+      ],
     );
   }
 }
