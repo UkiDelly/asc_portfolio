@@ -123,7 +123,6 @@ class _LoginDemoState extends State<LoginDemo> {
                   backgroundColor: Colors.black,
                   onPressed: ()   {
 
-                    server.postReq();
                     //
                     // final url = Uri.parse(
                     //   'http://10.0.2.2:8080/user/signup',

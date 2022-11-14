@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:asc_portfolio/server/dio_server.dart';
 
 import '../style/app_color.dart';
 
@@ -11,12 +12,18 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
 
-  final _emailController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   void dispose() {
-    _emailController.dispose();
+
+    idController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
     super.dispose();
+
   }
 
   @override
@@ -24,8 +31,9 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: AppColor.appPURPLE,
         resizeToAvoidBottomInset: false,
-        body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-            Widget>[
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
           Container(
             child: Stack(
               children: <Widget>[
@@ -41,7 +49,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 children: <Widget>[
                   TextField(
-                    controller: _emailController,
+                    controller: emailController,
                     decoration: InputDecoration(
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
@@ -52,12 +60,12 @@ class _SignupPageState extends State<SignupPage> {
                         // hintStyle: ,
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white))),
-                    onTap: () {
-                      print(_emailController); // controller로 값 전달
+                    onTap: () {// controller로 값 전달
                     },
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    controller: idController,
                     decoration: InputDecoration(
                         labelText: 'NAME ',
                         labelStyle: TextStyle(
@@ -66,10 +74,10 @@ class _SignupPageState extends State<SignupPage> {
                             color: Colors.grey),
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white))),
-                    obscureText: true,
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    controller: passwordController,
                     decoration: InputDecoration(
                         labelText: 'PASSWORD',
                         labelStyle: TextStyle(
@@ -78,6 +86,7 @@ class _SignupPageState extends State<SignupPage> {
                             color: Colors.grey),
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white))),
+                    obscureText: true,
                   ),
                   SizedBox(height: 50.0),
                   Container(
@@ -87,12 +96,17 @@ class _SignupPageState extends State<SignupPage> {
                         heroTag: 'SignUp2',
                         label: Text('회원가입'),// <-- Text
                         backgroundColor: Colors.black,
-                        onPressed: ()  {
+                        onPressed: () async {
+                          String id = idController.text;
+                          String password = passwordController.text;
+                          String email = emailController.text;
+
+                          server.postReqSignUp(id, password, email);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) => _buildPopupDialog(context),
-                          );
-                        }
+                        );
+                      }
                     ),
                   ),
                   SizedBox(height: 20.0),

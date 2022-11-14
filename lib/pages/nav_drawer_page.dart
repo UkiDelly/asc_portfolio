@@ -69,6 +69,16 @@ class NavDrawer extends StatelessWidget {
             title: Text('Contact'),
             onTap: () => {Navigator.of(context).pop()},
           ),
+          SizedBox(height: 100),
+          Container(
+            padding: EdgeInsets.all(10),
+            child: ListTile(
+              title: Text('Copyright ©2022 All Rights Reserved', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),),
+              subtitle: Text('Powered by padonan', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),),
+              onTap: () => {
+              },
+            ),
+          ),
         ],
       ),
     );

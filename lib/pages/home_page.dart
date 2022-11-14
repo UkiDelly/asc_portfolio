@@ -1,12 +1,12 @@
 import 'package:asc_portfolio/pages/nav_drawer_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
-import 'package:asc_portfolio/pages/specific_seat_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
-
+import 'package:asc_portfolio/server/dio_server.dart';
+import '../server/parse/room.dart';
 import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,22 +16,79 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
+
   bool loginCheck = true;
 
-  final List _widgetOptions = [
+
+
+  List<Room> _roomDatas = [];
+  //List<UserQrAndName> _userQrAndNameData = [];
+  Map<String, String>? _userQrAndNameData;
+  String _userName = "";
+  String _qrCode = "";
+
+  void _fetchGet() async {
+    final roomDatas = await server.getRoomReq();
+    setState(() {
+      _roomDatas = roomDatas;
+    });
+
+    final userQrAndNameData = await server.getUserReq();
+    setState(() {
+      _userQrAndNameData = userQrAndNameData.first.toJson();
+      print(_userQrAndNameData);
+      String qrCode = _userQrAndNameData!.values.toString().replaceAll('(', '').replaceAll(')', '');
+      print("qrCode="+qrCode);
+      String name = _userQrAndNameData!.keys.toString().replaceAll('(', '').replaceAll(')', '');
+      print("name="+name);
+      _userName = name;
+      _qrCode = qrCode;
+      print("qrCodeToString="+_qrCode.toString());
+    });
+  }
+
+  bool _getRoomState(int index) {
+    Map<int, String> state = _roomDatas[index].toJson();
+    if(state.values.toString() == "(Y)") {
+        print(state.values.toString().runtimeType);
+          return true;
+    } else {
+        print("state:"+state.values.toString());
+        print(state.values.toString().runtimeType);
+          return false;
+    }
+  }
+
+  @override
+  void initState() {
+    _fetchGet();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    List seatSet = [];
+
+    for (int i=0; i<_roomDatas.length; i++) {
+      seatSet.add(_roomDatas[i].toJson());
+    }
+
+    final List _widgetOptions = [
       Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
             Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              color: AppColor.appPURPLE ,
-              child: Image.asset("assets/images/logo_set_splash.png")),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                color: AppColor.appPURPLE ,
+                child: Image.asset("assets/images/logo_set_splash.png")),
             Container(
               padding: EdgeInsets.all(20),
               child: FloatingActionButton.extended(
@@ -39,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                   label: Text("좌석 선택후 시간을 선택해주세요.",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
                   backgroundColor: AppColor.appPURPLE,
                   onPressed: ()  {
-                }
+                  }
               ),
             ),
             Card(
@@ -54,8 +111,8 @@ class _HomePageState extends State<HomePage> {
                       return Text(
                         '현재시간 : ${DateFormat('yyyy-MM-dd h시 mm분 ss초 a').format(DateTime.now().add(Duration(hours: 9)))
                         }',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                  );
-                }),
+                      );
+                    }),
               ),
             ),
             SizedBox(height: 20,),
@@ -115,26 +172,36 @@ class _HomePageState extends State<HomePage> {
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
               ),
-              itemCount: 10,
+              itemCount: _roomDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (){
                     if(index == 1) {
-                      print("123");
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificSeatPage()));
+                      print(_roomDatas[index].toJson());
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificSeatPage()));
                     }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(
+                        border: Border.all(
                           color: Colors.black,
                           style: BorderStyle.solid,
                           width: 3,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: _getRoomState(index) ? AppColor.appPURPLE : Colors.white
                     ),
-                    child: Text("index: $index"),
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Text(
+                        "${_roomDatas[index].toJson().keys.toString().replaceAll('(', '').replaceAll(')', '')}",
+                        style: TextStyle(
+                          color: _getRoomState(index) ? Colors.white : AppColor.appPURPLE,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
@@ -263,80 +330,80 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    Column(
-      children: [
-        Card(
-            margin: EdgeInsets.all(50.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0)),
-            elevation: 6.0,
-            child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 4.0),
-                width: 300,
-                height: 300,
-                child: QrImage(
-                  data: "https://www.daum.net/",
-                  version: QrVersions.auto,
-                  backgroundColor: Colors.white,
-                ))),
-        Text("주의 ! QR코드를 타인에게 노출하지마세요.",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.black,fontSize: 16)),
+      Column(
+        children: [
+          Card(
+              margin: EdgeInsets.all(50.0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
+              elevation: 6.0,
+              child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4.0),
+                  width: 300,
+                  height: 300,
+                  child: QrImage(
+                    data: _qrCode,
+                    version: QrVersions.auto,
+                    backgroundColor: Colors.white,
+                  ))),
+          Text("주의 ! QR코드를 타인에게 노출하지마세요.",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.black,fontSize: 16)),
 
-        SizedBox(height: 30),
-        FloatingActionButton.extended(
-            heroTag: 'UserName',
-            icon: Icon(Icons.account_box),
-            label: Text('홍길동님', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-            backgroundColor: AppColor.appPURPLE,
-            onPressed: ()  {
-            }
+          SizedBox(height: 30),
+          FloatingActionButton.extended(
+              heroTag: 'UserName',
+              icon: Icon(Icons.account_box),
+              label: Text('${_userName}',
+                style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPURPLE,
+
+              onPressed: ()  {
+              }
           ),
-        SizedBox(height: 10),
+          SizedBox(height: 10),
           FloatingActionButton.extended(
               heroTag: 'UserSeat',
               icon: Icon(Icons.event_seat),
-              label: Text('좌석 : 12번', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              label: Text('좌석 : ', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
               backgroundColor: AppColor.appPURPLE,
               onPressed: ()  {
               }
           ),
-        SizedBox(height: 10),
-        FloatingActionButton.extended(
-            heroTag: 'UserTime',
-            icon: Icon(Icons.timer),
-            label: Text('남은시간: 3시간 10분', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-            backgroundColor: AppColor.appPURPLE,
-            onPressed: ()  {
-            }
-        ),
-      ],
-    ),
-    Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        FloatingActionButton.extended(
-            heroTag: 'Pass2',
-            icon: Icon(Icons.credit_card_outlined),
-            label: Text('내 이용권정보', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-            backgroundColor: AppColor.appPURPLE,
-            onPressed: ()  {
-            }
-        ),
-        Image.asset("assets/images/logo_pass.png"),
-        SizedBox(height: 10),
-        FloatingActionButton.extended(
-            heroTag: 'Pass',
-            icon: Icon(Icons.calendar_month),
-            label: Text('남은기간: 3일 4시간 20분', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-            backgroundColor: AppColor.appPURPLE,
-            onPressed: ()  {
-            }
-        ),
-      ],
-    )
-  ];
+          SizedBox(height: 10),
+          FloatingActionButton.extended(
+              heroTag: 'UserTime',
+              icon: Icon(Icons.timer),
+              label: Text('남은시간: ', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPURPLE,
+              onPressed: ()  {
+              }
+          ),
+        ],
+      ),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          FloatingActionButton.extended(
+              heroTag: 'Pass2',
+              icon: Icon(Icons.credit_card_outlined),
+              label: Text('내 이용권정보', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPURPLE,
+              onPressed: ()  {
+              }
+          ),
+          Image.asset("assets/images/logo_pass.png"),
+          SizedBox(height: 10),
+          FloatingActionButton.extended(
+              heroTag: 'Pass',
+              icon: Icon(Icons.calendar_month),
+              label: Text('남은기간: 3일 4시간 20분', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPURPLE,
+              onPressed: ()  {
+              }
+          ),
+        ],
+      )
+    ];
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
@@ -349,7 +416,6 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             color: Colors.white,
             onPressed: () => {
-
               if(loginCheck == true) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PaymentPage()))
@@ -361,6 +427,7 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: AppColor.appPURPLE,
@@ -389,6 +456,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+
+
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
