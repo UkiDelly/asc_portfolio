@@ -13,7 +13,7 @@ class PaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.appPURPLE,
+        backgroundColor: AppColor.appPurple,
         title: Text('이용권 선택', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
         shadowColor: Colors.white,
         elevation: 1,

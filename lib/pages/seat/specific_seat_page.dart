@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../style/app_color.dart';
-import 'home_page.dart';
+import '../../style/app_color.dart';
+import '../home_page.dart';
 
 class SpecificSeatPage extends StatelessWidget {
   const SpecificSeatPage({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class SpecificSeatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.appPURPLE,
+          backgroundColor: AppColor.appPurple,
           title: Text('시간 선택', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
           shadowColor: Colors.white,
           elevation: 1,
@@ -134,7 +134,7 @@ class SpecificSeatPage extends StatelessWidget {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -175,7 +175,7 @@ class SpecificSeatPage extends StatelessWidget {
 
   Widget _buildPopupDialogChange(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -207,7 +207,7 @@ class SpecificSeatPage extends StatelessWidget {
 
   Widget _buildPopupDialogCheck(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -239,7 +239,7 @@ class SpecificSeatPage extends StatelessWidget {
 
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

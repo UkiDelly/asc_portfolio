@@ -1,20 +1,9 @@
-import 'dart:convert';
-import 'package:asc_portfolio/pages/sign_up_page.dart';
+import 'package:asc_portfolio/pages/home_page.dart';
+import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:asc_portfolio/server/dio_server.dart';
 
-
-// class JsonObject {
-//   final String success;
-//
-//   JsonObject({required this.success});
-//
-//   factory JsonObject.fromJson(Map<String, dynamic> json) {
-//     return JsonObject(success: json['success'] as String);
-//   }
-// }
 
 class LoginDemo extends StatefulWidget {
   @override
@@ -23,26 +12,23 @@ class LoginDemo extends StatefulWidget {
 
 class _LoginDemoState extends State<LoginDemo> {
 
-
   bool _obscureText = false;
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: AppColor.appPURPLE,
+        backgroundColor: AppColor.appPurple,
         leading: IconButton(
           color: Colors.white,
           icon: const Icon(Icons.arrow_back),
           onPressed: () => {
-            Navigator.pop(context),
+          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
           },
         ),
       ),
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,9 +47,16 @@ class _LoginDemoState extends State<LoginDemo> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
+                  cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   autofocus: false,
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        )
+                    ),
+                    focusColor: Colors.black,
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'Email',
@@ -84,11 +77,18 @@ class _LoginDemoState extends State<LoginDemo> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
+                  cursorColor: Colors.black,
                   obscureText: _obscureText ? false : true,
                   autofocus: false,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        )
+                    ),
                     filled: true,
+                    focusColor: Colors.black,
                     fillColor: Colors.white,
                     hintText: 'Password',
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -123,29 +123,8 @@ class _LoginDemoState extends State<LoginDemo> {
                   backgroundColor: Colors.black,
                   onPressed: ()   {
 
-                    //
-                    // final url = Uri.parse(
-                    //   'http://10.0.2.2:8080/user/signup',
-                    // );
-                    // final response = await http.post(
-                    //     url,
-                    // body: <String, String> {
-                    //   'loginId': 'user_id_value',
-                    //   'password': 'user_pwd_value',
-                    //   'email' : 'email2@gmail.com',
-                    // },
-                    // headers : <String, String> {
-                    //   'Content-Type': 'application/json'
-                    //   },
-                    // );
-                    //
-                    // print('Response status: ${response.statusCode}');
-                    // print('Response body: ${response.body}');
+                    server.postReqLogin(context);
 
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (BuildContext context) => _buildPopupDialog(context),
-                    // );
                   }
               ),
             ),
@@ -189,7 +168,7 @@ class _LoginDemoState extends State<LoginDemo> {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

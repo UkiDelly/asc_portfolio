@@ -1,106 +1,136 @@
-import 'package:asc_portfolio/pages/nav_drawer_page.dart';
+import 'package:asc_portfolio/controller/home_controller.dart';
+import 'package:asc_portfolio/main.dart';
+import 'package:asc_portfolio/pages/nav_drawer/nav_drawer_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
+import 'package:asc_portfolio/pages/select_cafe/select_cafe_page.dart';
+import 'package:asc_portfolio/service/home_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
-import '../server/parse/room.dart';
-import 'login_page.dart';
+import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
+import 'login/login_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
+
 }
 
 
 class _HomePageState extends State<HomePage> {
 
-  int _selectedIndex = 0;
+  bool _isLogined = false;
 
-  bool loginCheck = true;
-
-
-
-  List<Room> _roomDatas = [];
-  //List<UserQrAndName> _userQrAndNameData = [];
-  Map<String, String>? _userQrAndNameData;
-  String _userName = "";
-  String _qrCode = "";
+  HomeController _homeController = HomeController();
+  HomeService _homeService = HomeService();
 
   void _fetchGet() async {
-    final roomDatas = await server.getRoomReq();
-    setState(() {
-      _roomDatas = roomDatas;
-    });
+    if (_isLogined = true) {
+      final roomDatas = await server.getAllRoomStateReq(context);
+      final userQrAndNameData = await server.getUserQrAndNameReq(context);
+      final userTicketInfo = await server.getUserTicketInfo(context);
 
-    final userQrAndNameData = await server.getUserReq();
-    setState(() {
-      _userQrAndNameData = userQrAndNameData.first.toJson();
-      print(_userQrAndNameData);
-      String qrCode = _userQrAndNameData!.values.toString().replaceAll('(', '').replaceAll(')', '');
-      print("qrCode="+qrCode);
-      String name = _userQrAndNameData!.keys.toString().replaceAll('(', '').replaceAll(')', '');
-      print("name="+name);
-      _userName = name;
-      _qrCode = qrCode;
-      print("qrCodeToString="+_qrCode.toString());
-    });
-  }
-
-  bool _getRoomState(int index) {
-    Map<int, String> state = _roomDatas[index].toJson();
-    if(state.values.toString() == "(Y)") {
-        print(state.values.toString().runtimeType);
-          return true;
-    } else {
-        print("state:"+state.values.toString());
-        print(state.values.toString().runtimeType);
-          return false;
+      setState(() {
+        _homeController.seatDatas = roomDatas;
+        _homeController.userQrAndNameData = userQrAndNameData.first.toJson();
+        _homeController.qrCode =
+            _homeController.userQrAndNameData.values.toString().replaceAll(
+                '(', '').replaceAll(')', '') ?? '';
+        _homeController.userName =
+            _homeController.userQrAndNameData.keys.toString().replaceAll(
+                '(', '').replaceAll(')', '') ?? '';
+        _homeController.userTicketInfo = userTicketInfo;
+        _homeController.period = userTicketInfo.period ?? '';
+        _homeController.remainingTime = userTicketInfo.remainingTime ?? 0;
+      });
+      print("userQrAndName=" + _homeController.userQrAndNameData.toString());
+      print("userTicketInfo=" + _homeController.userTicketInfo.toString());
     }
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isLogined == true) {
+      print("didChangeDependencies실행");
+      _fetchGet();
+    }
+    super.didChangeDependencies();
+  }
+
+  void loginFetch() async {
+    _isLogined = await server.getCheckLogin(context);
+  }
+
+  @override
   void initState() {
-    _fetchGet();
+    setState(() {
+      loginFetch();
+    });
+    print(_isLogined);
     super.initState();
+    print(_isLogined);
+    _fetchGet();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    List seatSet = [];
+    List seatList = [];
 
-    for (int i=0; i<_roomDatas.length; i++) {
-      seatSet.add(_roomDatas[i].toJson());
+    for (int i=0; i< _homeController.seatDatas.length; i++) {
+      seatList.add(_homeController.seatDatas[i].toJson());
     }
 
-    final List _widgetOptions = [
+    List _widgetOptions = [
       Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
+
             Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                color: AppColor.appPURPLE ,
-                child: Image.asset("assets/images/logo_set_splash.png")),
+                color: AppColor.appPurple ,
+                child: Image.asset("assets/images/logo_set_splash.png", width: 200, height: 200,)),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: FloatingActionButton.extended(
+                  heroTag: 'Text2',
+                  label: Text("${MyApp.cafeName}",style: TextStyle(fontSize: 22,color: Colors.white, fontWeight: FontWeight.w200),),// <-- Text
+                  backgroundColor: AppColor.appPurple,
+                  onPressed: ()  {
+                  }
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              child: FloatingActionButton.extended(
+                  heroTag: 'Text4',
+                  label: Text("관리자페이지 테스트",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
+                  backgroundColor: AppColor.appPurple,
+                  onPressed: ()  {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminMainPage()));
+                  }
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(20),
               child: FloatingActionButton.extended(
                   heroTag: 'Text',
                   label: Text("좌석 선택후 시간을 선택해주세요.",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
-                  backgroundColor: AppColor.appPURPLE,
+                  backgroundColor: AppColor.appPurple,
                   onPressed: ()  {
                   }
               ),
             ),
             Card(
-              color: AppColor.appPURPLE,
+              color: AppColor.appPurple,
               margin: EdgeInsets.all(20),
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -132,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                   Text(" : 사용가능"),
                   FloatingActionButton.small(
                       heroTag: 'colorSelect2',
-                      backgroundColor: AppColor.appPURPLE,
+                      backgroundColor: AppColor.appPurple,
                       onPressed: ()  {
                       }
                   ),
@@ -146,7 +176,15 @@ class _HomePageState extends State<HomePage> {
                 FloatingActionButton.extended(
                     heroTag: 'entrance',
                     label: Text('입구 >>'),// <-- Text
-                    backgroundColor: AppColor.appPURPLE,
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: ()  {
+                    }
+                ),
+                SizedBox(width: 200,),
+                FloatingActionButton.extended(
+                    heroTag: 'entrance2',
+                    label: Text('${MyApp.cafeName}'),// <-- Text
+                    backgroundColor: AppColor.appPurple,
                     onPressed: ()  {
                     }
                 ),
@@ -157,8 +195,9 @@ class _HomePageState extends State<HomePage> {
             FloatingActionButton.extended(
                 heroTag: 'Area1',
                 label: Text('1번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
+                  server.getAllRoomStateReq(context);
                 }
             ),
             SizedBox(height: 20),
@@ -172,12 +211,12 @@ class _HomePageState extends State<HomePage> {
                 crossAxisSpacing: 5.0,
                 mainAxisSpacing: 5.0,
               ),
-              itemCount: _roomDatas.length,
+              itemCount: _homeController.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: (){
                     if(index == 1) {
-                      print(_roomDatas[index].toJson());
+                      print(_homeController.seatDatas[index].toJson());
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => SpecificSeatPage()));
                     }
                   },
@@ -189,14 +228,14 @@ class _HomePageState extends State<HomePage> {
                           width: 3,
                         ),
                         borderRadius: BorderRadius.circular(15),
-                        color: _getRoomState(index) ? AppColor.appPURPLE : Colors.white
+                        color: _homeService.getRoomState(index, _homeController) ? AppColor.appPurple : Colors.white
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Text(
-                        "${_roomDatas[index].toJson().keys.toString().replaceAll('(', '').replaceAll(')', '')}",
+                        "${_homeController.seatDatas[index].toJson().keys.toString().replaceAll('(', '').replaceAll(')', '')}",
                         style: TextStyle(
-                          color: _getRoomState(index) ? Colors.white : AppColor.appPURPLE,
+                          color: _homeService.getRoomState(index, _homeController) ? Colors.white : AppColor.appPurple,
                           fontSize: 30,
                           fontWeight: FontWeight.w300,
                         ),
@@ -210,7 +249,7 @@ class _HomePageState extends State<HomePage> {
             FloatingActionButton.extended(
                 heroTag: 'Area2',
                 label: Text('2번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -250,7 +289,7 @@ class _HomePageState extends State<HomePage> {
             FloatingActionButton.extended(
                 heroTag: 'Area3',
                 label: Text('3번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -290,7 +329,7 @@ class _HomePageState extends State<HomePage> {
             FloatingActionButton.extended(
                 heroTag: 'Area4',
                 label: Text('4번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -342,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                   width: 300,
                   height: 300,
                   child: QrImage(
-                    data: _qrCode,
+                    data: _homeController.qrCode,
                     version: QrVersions.auto,
                     backgroundColor: Colors.white,
                   ))),
@@ -352,9 +391,9 @@ class _HomePageState extends State<HomePage> {
           FloatingActionButton.extended(
               heroTag: 'UserName',
               icon: Icon(Icons.account_box),
-              label: Text('${_userName}',
+              label: Text('${_homeController.userName}',
                 style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-              backgroundColor: AppColor.appPURPLE,
+              backgroundColor: AppColor.appPurple,
 
               onPressed: ()  {
               }
@@ -364,7 +403,7 @@ class _HomePageState extends State<HomePage> {
               heroTag: 'UserSeat',
               icon: Icon(Icons.event_seat),
               label: Text('좌석 : ', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-              backgroundColor: AppColor.appPURPLE,
+              backgroundColor: AppColor.appPurple,
               onPressed: ()  {
               }
           ),
@@ -372,8 +411,8 @@ class _HomePageState extends State<HomePage> {
           FloatingActionButton.extended(
               heroTag: 'UserTime',
               icon: Icon(Icons.timer),
-              label: Text('남은시간: ', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-              backgroundColor: AppColor.appPURPLE,
+              label: Text('좌석남은시간: ', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPurple,
               onPressed: ()  {
               }
           ),
@@ -383,20 +422,28 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FloatingActionButton.extended(
-              heroTag: 'Pass2',
+              heroTag: 'Pass3',
               icon: Icon(Icons.credit_card_outlined),
               label: Text('내 이용권정보', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-              backgroundColor: AppColor.appPURPLE,
+              backgroundColor: AppColor.appPurple,
               onPressed: ()  {
               }
           ),
-          Image.asset("assets/images/logo_pass.png"),
+          SizedBox(height: 10),
+          FloatingActionButton.extended(
+              heroTag: 'Pass2',
+              label: Text('${MyApp.cafeName}', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPurple,
+              onPressed: ()  {
+              }
+          ),
+          Image.asset("assets/images/logo_pass.png",width: 400, height: 400,),
           SizedBox(height: 10),
           FloatingActionButton.extended(
               heroTag: 'Pass',
-              icon: Icon(Icons.calendar_month),
-              label: Text('남은기간: 3일 4시간 20분', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
-              backgroundColor: AppColor.appPURPLE,
+              icon: Icon(Icons.timelapse_rounded),
+              label: Text('티켓남은기간:${_homeController.period}', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),),// <-- Text
+              backgroundColor: AppColor.appPurple,
               onPressed: ()  {
               }
           ),
@@ -407,7 +454,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
-        backgroundColor: AppColor.appPURPLE,
+        backgroundColor: AppColor.appPurple,
         title: Image.asset("assets/images/logo.png", fit: BoxFit.fill,),
         centerTitle: true,
         shadowColor: Colors.white,
@@ -416,29 +463,36 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             color: Colors.white,
             onPressed: () => {
-              if(loginCheck == true) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCafePage())),
+            },
+            icon: Icon(Icons.storefront_outlined),
+          ),
+          IconButton(
+            color: Colors.white,
+            onPressed: () => {
+              if(_homeController.loginCheck == true) {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PaymentPage()))
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo())),
                 }
               },
-            icon: loginCheck ? Icon(Icons.add_card) : Icon(Icons.account_circle),
+            icon: _homeController.loginCheck ? Icon(Icons.add_card) : Icon(Icons.account_circle),
           )
         ],
       ),
 
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColor.appPURPLE,
+        backgroundColor: AppColor.appPurple,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        currentIndex: _selectedIndex, //현재 선택된 Index
+        currentIndex: _homeController.selectedIndex, //현재 선택된 Index
         onTap: (int index) {
           setState(() {
-            _selectedIndex = index;
+            _homeController.selectedIndex = index;
           });
         },
         items: [
@@ -459,7 +513,7 @@ class _HomePageState extends State<HomePage> {
 
 
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions.elementAt(_homeController.selectedIndex),
       ),
     );
   }

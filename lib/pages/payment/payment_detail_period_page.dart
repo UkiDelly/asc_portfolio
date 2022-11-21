@@ -11,7 +11,7 @@ class PaymentDetailPeriodPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.appPURPLE,
+          backgroundColor: AppColor.appPurple,
           title: Text('자유석 기간권', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
           shadowColor: Colors.white,
           elevation: 1,
@@ -79,7 +79,7 @@ class PaymentDetailPeriodPage extends StatelessWidget {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -121,7 +121,7 @@ class PaymentDetailPeriodPage extends StatelessWidget {
 
   Widget _buildPopupDialogChange(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -153,7 +153,7 @@ class PaymentDetailPeriodPage extends StatelessWidget {
 
   Widget _buildPopupDialogCheck(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

@@ -1,84 +1,96 @@
+import 'package:asc_portfolio/dto/seat_dto.dart';
+import 'package:asc_portfolio/dto/user_qr_and_name_dto.dart';
+import 'package:asc_portfolio/dto/ticket_dto.dart';
+import 'package:asc_portfolio/main.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'auth_dio.dart';
 import 'dart:convert';
 
-import 'package:asc_portfolio/server/parse/room.dart';
-import 'package:asc_portfolio/server/parse/user_qr_and_name.dart';
-import 'package:dio/dio.dart';
 
-const _API_PREFIX = "http://10.0.2.2:8080/user/signup";
-const _API_ROOM = "http://10.0.2.2:8080/api/v1/room";
-const _API_USER_QR_AND_NAME = "http://10.0.2.2:8080/user/api/v1/33"; // 33 변경해야함
+const _API_SIGN_UP = "http://10.0.2.2:8080/user/signup";
+const _API_LOGIN = "http://10.0.2.2:8080/user/login";
+String _API_SEAT = "http://10.0.2.2:8080/api/v1/seat/${MyApp.cafeName}";
+const _API_USER_QR_AND_NAME = "http://10.0.2.2:8080/user/api/v1";
+const _API_LOGIN_CHECK = "http://10.0.2.2:8080/user/login-check";
+String _API_USER_TICKET = "http://10.0.2.2:8080/api/v1/ticket/${MyApp.cafeName}";
 
 class Server{
 
-  Future<void> postReqSignUp(String id, String password, String email) async {
+  static Map<String, String> loginData = {
+  "loginId": "ascUser1234",
+  "password": "ascUser1234",
+  };
+
+  static final storage = FlutterSecureStorage();
+
+  Future<void> postReqSignUp(String id, String password, String email, BuildContext context) async {
     Response response;
     Dio dio = new Dio();
-
-
-
     print(id); print(password); print(email.runtimeType);
     Map<String, dynamic> data =  await {
-      "loginId": id,
-      "password": password,
-      "email": email,
-    };
-    print(data);
-    response = await dio
-        .post(_API_PREFIX, data: data);
-    print(data);
-    print(response.data.toString());
-  }
-
-
-  Future<void> postReqTest2() async {
-    Response response;
-    Dio dio = new Dio();
-    Map<String, String> data = {
-      "loginId": "dioTest221",
-      "password": "dioTest221",
+      "loginId": "hello1234",
+      "password": "asdd1134",
       "email": "email@gmail.com",
+      "name": null,
+      "nickname": null
     };
     response = await dio
-        .post(_API_PREFIX, data: data);
-    print(response.data.toString());
+        .post(_API_SIGN_UP, data: data,);
+  }
+
+  Future<bool> getCheckLogin(BuildContext context) async {
+    Response response;
+    var dio = await authDio(context);
+    response = await dio.get(_API_LOGIN_CHECK);
+    if(response.statusCode == 200) {
+      print(response.statusCode);
+      return true;
+    }
+    return false;
   }
 
 
-  Future<void> postReq() async {
+  Future<void> postReqLogin(BuildContext context) async {
     Response response;
     Dio dio = new Dio();
-    Map<String, dynamic> data = {
-      "loginId": "dioTest221",
-      "password": "dioTest11",
-      "email": "email2@gmail.com"
-    };
+    Map<String, String> data = await loginData;
     response = await dio
-        .post(_API_PREFIX, data: data);
-    print(response.data.toString());
+        .post(_API_LOGIN, data: data);
+    Map<String, dynamic> token = json.decode(response.data);
+    print("logintoken="+token.toString());
+
+    storage.write(key: token.keys.toString().replaceAll('(', '').replaceAll(')', ''), value: token.values.toString().replaceAll('(', '').replaceAll(')', ''));
   }
 
-  Future<List<Room>> getRoomReq() async {
+  Future<List<SeatDto>> getAllRoomStateReq(BuildContext context) async {
     Response response;
-    Dio dio = new Dio();
-    response = await dio.get(_API_ROOM);
-    List<Room> rooms = (response.data).map<Room>((json) {
-      return Room.fromJson(json);
+    var dio = await authDio(context);
+    response = await dio.get(_API_SEAT);
+    List<SeatDto> rooms = (response.data).map<SeatDto>((json) {
+      return SeatDto.fromJson(json);
       }).toList();
-    print(response.data.toString());
     return rooms;
   }
 
-  Future<List<UserQrAndName>> getUserReq() async {
+  Future<List<UserQrAndNameDto>> getUserQrAndNameReq(BuildContext context) async {
     Response response;
-    Dio dio = new Dio();
+    var dio = await authDio(context);
     response = await dio.get(_API_USER_QR_AND_NAME);
-    List<UserQrAndName> userQrAndName = (response.data).map<UserQrAndName>((json) {
-      return UserQrAndName.fromJson(json);
+    List<UserQrAndNameDto> userQrAndName = (response.data).map<UserQrAndNameDto>((json) {
+      return UserQrAndNameDto.fromJson(json);
     }).toList();
-    print(response.data.toString());
     return userQrAndName;
   }
 
+  Future <TicketDto> getUserTicketInfo(BuildContext context) async {
+    Response response;
+    var dio = await authDio(context);
+    response = await dio.get(_API_USER_TICKET);
+    var userTicketInfo = TicketDto.fromJson(response.data);
+    return userTicketInfo;
+  }
 }
 
 Server server = Server();

@@ -11,7 +11,7 @@ class PaymentDetailTimePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.appPURPLE,
+          backgroundColor: AppColor.appPurple,
           title: Text('자유석 시간권', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
           shadowColor: Colors.white,
           elevation: 1,
@@ -39,31 +39,7 @@ class PaymentDetailTimePage extends StatelessWidget {
               ListTile(
                 selectedColor: Colors.grey,
                 leading: Icon(Icons.more_time_outlined, size: 40,color: Colors.black,),
-                title: Text('2시간'),
-                subtitle: const Text('2,000원'),
-                trailing: Icon(Icons.chevron_right, color: Colors.black),
-                onTap: () {
-                },
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              ListTile(
-                selectedColor: Colors.grey,
-                leading: Icon(Icons.more_time_outlined, size: 40,color: Colors.black,),
                 title: Text('4시간'),
-                subtitle: const Text('4,000원'),
-                trailing: Icon(Icons.chevron_right, color: Colors.black),
-                onTap: () async {
-                },
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              ListTile(
-                selectedColor: Colors.grey,
-                leading: Icon(Icons.more_time_outlined, size: 40,color: Colors.black,),
-                title: Text('8시간'),
                 subtitle: const Text('7,000원'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
@@ -75,20 +51,8 @@ class PaymentDetailTimePage extends StatelessWidget {
               ListTile(
                 selectedColor: Colors.grey,
                 leading: Icon(Icons.more_time_outlined, size: 40,color: Colors.black,),
-                title: Text('12시간'),
+                title: Text('10시간'),
                 subtitle: const Text('10,000원'),
-                trailing: Icon(Icons.chevron_right, color: Colors.black),
-                onTap: () {
-                },
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              ListTile(
-                selectedColor: Colors.grey,
-                leading: Icon(Icons.more_time_outlined, size: 40,color: Colors.black,),
-                title: Text('24시간'),
-                subtitle: const Text('20,000원'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
                 },
@@ -127,7 +91,7 @@ class PaymentDetailTimePage extends StatelessWidget {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -169,7 +133,7 @@ class PaymentDetailTimePage extends StatelessWidget {
 
   Widget _buildPopupDialogChange(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -201,7 +165,7 @@ class PaymentDetailTimePage extends StatelessWidget {
 
   Widget _buildPopupDialogCheck(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

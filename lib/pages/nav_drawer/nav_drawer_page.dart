@@ -1,9 +1,9 @@
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 
-import 'change_seat_page.dart';
-import 'home_page.dart';
-import 'login_page.dart';
+import '../seat/change_seat_page.dart';
+import '../home_page.dart';
+import '../login/login_page.dart';
 
 class NavDrawer extends StatelessWidget {
 
@@ -20,13 +20,13 @@ class NavDrawer extends StatelessWidget {
               '',
             ),
             decoration: BoxDecoration(
-                color: AppColor.appPURPLE,
+                color: AppColor.appPurple,
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: AssetImage('assets/images/logo_set_mini.png'))),
           ),
           ListTile(
-            leading: Icon(Icons.unpublished, color: AppColor.appPURPLE),
+            leading: Icon(Icons.unpublished, color: AppColor.appPurple),
             title: Text('이용종료'),
             onTap: () => {
                 showDialog(
@@ -36,36 +36,36 @@ class NavDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.airline_seat_individual_suite_sharp, color: AppColor.appPURPLE),
+            leading: Icon(Icons.airline_seat_individual_suite_sharp, color: AppColor.appPurple),
             title: Text('좌석이동'),
             onTap: () => {
             Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeSeatPage()))
             },
           ),
           ListTile(
-            leading: logInfo ? Icon(Icons.login, color: AppColor.appPURPLE) : Icon(Icons.logout, color: AppColor.appPURPLE),
+            leading: logInfo ? Icon(Icons.login, color: AppColor.appPurple) : Icon(Icons.logout, color: AppColor.appPurple),
             title: logInfo ? Text('로그인') : Text('로그아웃'),
             onTap: () => {
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo())),
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings, color: AppColor.appPURPLE),
+            leading: Icon(Icons.settings, color: AppColor.appPurple),
             title: Text('세팅'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.contact_support, color: AppColor.appPURPLE),
+            leading: Icon(Icons.contact_support, color: AppColor.appPurple),
             title: Text('1:1 채팅문의'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.border_color, color: AppColor.appPURPLE),
+            leading: Icon(Icons.border_color, color: AppColor.appPurple),
             title: Text('건의게시판'),
             onTap: () => {Navigator.of(context).pop()},
           ),
           ListTile(
-            leading: Icon(Icons.device_unknown_rounded, color: AppColor.appPURPLE),
+            leading: Icon(Icons.device_unknown_rounded, color: AppColor.appPurple),
             title: Text('Contact'),
             onTap: () => {Navigator.of(context).pop()},
           ),
@@ -86,7 +86,7 @@ class NavDrawer extends StatelessWidget {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -128,7 +128,7 @@ class NavDrawer extends StatelessWidget {
 
   Widget _buildPopupDialogChange(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

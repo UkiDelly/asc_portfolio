@@ -1,11 +1,10 @@
 import 'package:asc_portfolio/pages/home_page.dart';
-import 'package:asc_portfolio/pages/specific_seat_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
 
-import '../style/app_color.dart';
+import '../../style/app_color.dart';
 
 class ChangeSeatPage extends StatefulWidget {
   const ChangeSeatPage({Key? key}) : super(key: key);
@@ -19,7 +18,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.appPURPLE,
+        backgroundColor: AppColor.appPurple,
         title: Image.asset("assets/images/logo.png", fit: BoxFit.fill,),
         centerTitle: true,
         shadowColor: Colors.white,
@@ -34,13 +33,13 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
               child: FloatingActionButton.extended(
                   heroTag: 'Text',
                   label: Text("이동할 좌석을 선택해주세요.",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
-                  backgroundColor: AppColor.appPURPLE,
+                  backgroundColor: AppColor.appPurple,
                   onPressed: ()  {
                   }
               ),
             ),
             Card(
-              color: AppColor.appPURPLE,
+              color: AppColor.appPurple,
               margin: EdgeInsets.all(20),
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -72,7 +71,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                   Text(" : 사용가능"),
                   FloatingActionButton.small(
                       heroTag: 'colorSelect2',
-                      backgroundColor: AppColor.appPURPLE,
+                      backgroundColor: AppColor.appPurple,
                       onPressed: ()  {
                       }
                   ),
@@ -86,7 +85,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                 FloatingActionButton.extended(
                     heroTag: 'entrance',
                     label: Text('입구 >>'),// <-- Text
-                    backgroundColor: AppColor.appPURPLE,
+                    backgroundColor: AppColor.appPurple,
                     onPressed: ()  {
                     }
                 ),
@@ -97,7 +96,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
             FloatingActionButton.extended(
                 heroTag: 'Area1',
                 label: Text('1번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -142,7 +141,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
             FloatingActionButton.extended(
                 heroTag: 'Area2',
                 label: Text('2번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -182,7 +181,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
             FloatingActionButton.extended(
                 heroTag: 'Area3',
                 label: Text('3번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -222,7 +221,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
             FloatingActionButton.extended(
                 heroTag: 'Area4',
                 label: Text('4번구역'),// <-- Text
-                backgroundColor: AppColor.appPURPLE,
+                backgroundColor: AppColor.appPurple,
                 onPressed: ()  {
                 }
             ),
@@ -267,7 +266,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -303,7 +302,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
 
   Widget _buildPopupDialogChange(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

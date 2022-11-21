@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
 
-import '../style/app_color.dart';
+import '../../style/app_color.dart';
 
 class SignupPage extends StatefulWidget {
 
@@ -29,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
         resizeToAvoidBottomInset: false,
         body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,6 +49,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 children: <Widget>[
                   TextField(
+                    cursorColor: Colors.black,
                     controller: emailController,
                     decoration: InputDecoration(
                         labelText: 'EMAIL',
@@ -65,6 +66,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    cursorColor: Colors.black,
                     controller: idController,
                     decoration: InputDecoration(
                         labelText: 'NAME ',
@@ -77,6 +79,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
+                    cursorColor: Colors.black,
                     controller: passwordController,
                     decoration: InputDecoration(
                         labelText: 'PASSWORD',
@@ -101,7 +104,8 @@ class _SignupPageState extends State<SignupPage> {
                           String password = passwordController.text;
                           String email = emailController.text;
 
-                          server.postReqSignUp(id, password, email);
+                          server.postReqSignUp(id, password, email, context);
+
                           showDialog(
                             context: context,
                             builder: (BuildContext context) => _buildPopupDialog(context),
@@ -133,7 +137,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColor.appPURPLE,
+      backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
