@@ -8,16 +8,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
       routes: {
-        '/HomePage' : (context) => HomePage(),
-        '/LoginPage' : (context) => LoginDemo(),
-        '/AdminMainPage': (context) => AdminMainPage(),
+        '/HomePage': (context) => const HomePage(),
+        '/LoginPage': (context) => LoginDemo(),
+        '/AdminMainPage': (context) => const AdminMainPage(),
       },
     );
   }

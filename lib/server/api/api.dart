@@ -1,6 +1,8 @@
 import '../../common_enum/cafe/cafe_name.dart';
 
 class Api {
+  const Api._();
+
   static String cafeName = CafeNameType.seoul.name;
   static const API_VERSION = "v1";
   static const DOMAIN = "http://10.0.2.2:8080/api/$API_VERSION"; // 로컬 8080
@@ -20,7 +22,8 @@ class Api {
 
   //ticket
   static const API_USER_TICKET = "$DOMAIN/ticket/";
-  static const API_ADMIN_CHECK_SPECIFIC_USER_VALID_TICKET = "$DOMAIN/ticket/admin/lookup?userLoginId=";
+  static const API_ADMIN_CHECK_SPECIFIC_USER_VALID_TICKET =
+      "$DOMAIN/ticket/admin/lookup?userLoginId=";
 
   //seatReservationInfo
   static const API_USER_RESERVATION_INFO = "$DOMAIN/seatReservationInfo/";
@@ -34,8 +37,8 @@ class Api {
 
   //product
   static const API_ADMINISTRATE_PRODUCT = "$DOMAIN/product/admin/management/start-time/";
-  static const API_ADMIN_CHECK_SPECIFIC_USER_PRODUCT = "$DOMAIN/product/admin/management?userLoginId=";
-  static const API_CANCEL_PRODUCT = "$DOMAIN/product/admin/management/cancel/product?product-label=";
+  static const API_ADMIN_CHECK_SPECIFIC_USER_PRODUCT =
+      "$DOMAIN/product/admin/management?userLoginId=";
+  static const API_CANCEL_PRODUCT =
+      "$DOMAIN/product/admin/management/cancel/product?product-label=";
 }
-
-Api api = new Api();
