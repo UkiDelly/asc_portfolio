@@ -1,14 +1,58 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'package:asc_portfolio/server/dio_server.dart';
 
 import '../../style/app_color.dart';
 import '../home_page.dart';
 
-class SpecificSeatPage extends StatelessWidget {
-  const SpecificSeatPage({Key? key}) : super(key: key);
+class SpecificSeatPage extends StatefulWidget {
+  int selectedSeatNumber;
+  int selectedHour = 0;
+  SpecificSeatPage(this.selectedSeatNumber);
+  @override
+  State<SpecificSeatPage> createState() => _SpecificSeatPageState(selectedSeatNumber);
+}
+
+class _SpecificSeatPageState extends State<SpecificSeatPage> {
+
+  int selectedSeatNumber;
+  int selectedHour = 0;
+  double _progress = 0;
+  bool isNotCompleteLoading = true;
+
+  _SpecificSeatPageState(this.selectedSeatNumber);
+
+  Future<void> startTimer() async {
+    new Timer.periodic(
+      Duration(milliseconds: 50),
+          (Timer timer) => setState(
+            () {
+          if (_progress == 0.05) {
+            setState(() {
+              isNotCompleteLoading = false;
+            });
+            timer.cancel();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomePage()))
+                .then((value) {
+              setState(() {
+                didChangeDependencies();
+              });
+            });
+          } else {
+            _progress += 0.025;
+          }
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColor.appPurple,
@@ -25,6 +69,8 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('1,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 1;
+                  print(selectedHour);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -38,6 +84,8 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('2,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 2;
+                  print(selectedHour);
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -54,6 +102,7 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('4,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () async {
+                  selectedHour = 4;
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -70,6 +119,7 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('6,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 6;
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -86,6 +136,7 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('9,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 9;
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -102,6 +153,7 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('12,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 12;
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
@@ -118,17 +170,18 @@ class SpecificSeatPage extends StatelessWidget {
                 subtitle: const Text('24,000원 , 자유이용권은 무료'),
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
+                  selectedHour = 24;
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => _buildPopupDialog(context),
                   );
                 },
               ),
-              const Divider(
-                color: Colors.grey,
-              ),
-            ]
-        )
+            const Divider(
+              color: Colors.grey,
+          ),
+        ]
+      )
     );
   }
 
@@ -141,7 +194,7 @@ class SpecificSeatPage extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text('현재 선택한 좌석은 {%s}번 좌석입니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+              Text('현재 선택한 좌석은 $selectedSeatNumber번 좌석 입니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
             ],
           ),
         ],
@@ -150,7 +203,7 @@ class SpecificSeatPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("이용할 시간 : {%s}시간.", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+          Text("선택한 시간 : $selectedHour시간", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
         ],
       ),
       actions: <Widget>[
@@ -189,7 +242,7 @@ class SpecificSeatPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("좌석번호 : {%s}번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text("좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
             ],
           ),
         ],
@@ -237,7 +290,14 @@ class SpecificSeatPage extends StatelessWidget {
     );
   }
 
+
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
+
+    void _postStartReservation(int seatNumber) async {
+      String responseData = await server.postSeatReservationStart(context, seatNumber);
+      print("HomePageResponseData="+responseData);
+    }
+
     return AlertDialog(
       backgroundColor: AppColor.appPurple,
       title: Row(
@@ -253,13 +313,15 @@ class SpecificSeatPage extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        TextButton(
           onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialogChange(context),
-            );
+            _postStartReservation(selectedSeatNumber - 1);
+            await startTimer();
+
+            // await showDialog(
+            //   context: context,
+            //   builder: (BuildContext context) => _buildPopupDialogChange(context),
+            // );
           },
           child: const Text("OK", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
         ),

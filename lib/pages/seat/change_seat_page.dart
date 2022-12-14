@@ -1,10 +1,15 @@
+import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/home_page.dart';
+import 'package:asc_portfolio/service/change_seat_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
+import 'package:asc_portfolio/server/dio_server.dart';
 
+import '../../server/api/api.dart';
 import '../../style/app_color.dart';
+import 'dart:async';
 
 class ChangeSeatPage extends StatefulWidget {
   const ChangeSeatPage({Key? key}) : super(key: key);
@@ -14,25 +19,85 @@ class ChangeSeatPage extends StatefulWidget {
 }
 
 class _ChangeSeatPageState extends State<ChangeSeatPage> {
+
+  ChangeSeatController _changeSeatController = ChangeSeatController();
+  ChangeSeatService changeSeatService = ChangeSeatService();
+
+  int selectedSeatNumber = 0;
+  double _progress = 0;
+  bool isNotCompleteLoading = true;
+
+  Future<void> startTimer() async {
+    new Timer.periodic(
+      Duration(milliseconds: 50),
+          (Timer timer) => setState(
+            () {
+          if (_progress == 0.05) {
+            setState(() {
+              isNotCompleteLoading = false;
+            });
+            timer.cancel();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomePage()))
+                .then((value) {
+              setState(() {
+                didChangeDependencies();
+              });
+            });
+          } else {
+            _progress += 0.025;
+          }
+        },
+      ),
+    );
+  }
+
+  void _roomFetchGet() async {
+    final roomDatas = await server.getAllRoomStateReq(context);
+    setState(() {
+      _changeSeatController.seatDatas = roomDatas;
+    });
+  }
+
+  void _postStartReservation(int seatNumber) async {
+    String responseData = await server.postSeatReservationStart(context, seatNumber);
+    print("HomePageResponseData="+responseData);
+  }
+
+  @override
+  void initState() {
+    _roomFetchGet();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    List seatList = [];
+    for (int i=0; i< _changeSeatController.seatDatas.length; i++) {
+      seatList.add(_changeSeatController.seatDatas[i].toJson());
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
-        title: Image.asset("assets/images/logo.png", fit: BoxFit.fill,),
+        title: Text("좌석 이동"),
         centerTitle: true,
         shadowColor: Colors.white,
         elevation: 1,
       ),
-      body: Padding(
+      body:
+
+      Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
+
             Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: FloatingActionButton.extended(
-                  heroTag: 'Text',
-                  label: Text("이동할 좌석을 선택해주세요.",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
+                  heroTag: 'Text2',
+                  label: Text("${Api.cafeName}",style: TextStyle(fontSize: 22,color: Colors.white, fontWeight: FontWeight.w200),),// <-- Text
                   backgroundColor: AppColor.appPurple,
                   onPressed: ()  {
                   }
@@ -40,7 +105,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
             ),
             Card(
               color: AppColor.appPurple,
-              margin: EdgeInsets.all(20),
+              margin: EdgeInsets.all(15),
               child: Container(
                 padding: EdgeInsets.all(20),
                 width: 30,
@@ -48,15 +113,38 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                 child: TimerBuilder.periodic(Duration(seconds: 1),
                     builder: (context){
                       return Text(
-                        '현재시간 : ${DateFormat('yyyy-MM-dd h시 mm분 ss초 a').format(DateTime.now().add(Duration(hours: 9)))
+                        '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(Duration(hours: 9)))
                         }',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
                       );
-                    }),
+                    }
+                ),
               ),
             ),
             SizedBox(height: 20,),
             Container(width: 500,
                 child: Divider(color: Colors.black, thickness: 2.0)),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                FloatingActionButton.extended(
+                    heroTag: 'entrance2',
+                    label: Text('${Api.cafeName}'),// <-- Text
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: ()  {
+                    }
+                ),
+              ],
+            ),
+            SizedBox(height: 70),
+            FloatingActionButton.extended(
+                heroTag: 'Area1',
+                label: Text('좌석번호'),// <-- Text
+                backgroundColor: AppColor.appPurple,
+                onPressed: ()  {
+                  //server.getAllRoomStateReq(context);
+                  print(seatList);
+                }
+            ),
             SizedBox(height: 20),
             Card(
               color: Colors.grey,
@@ -79,185 +167,59 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                 ],
               ),
             ),
-            SizedBox(height: 100,),
-            Row(
-              children: [
-                FloatingActionButton.extended(
-                    heroTag: 'entrance',
-                    label: Text('입구 >>'),// <-- Text
-                    backgroundColor: AppColor.appPurple,
-                    onPressed: ()  {
-                    }
-                ),
-              ],
-            ),
-
-            SizedBox(height: 70),
-            FloatingActionButton.extended(
-                heroTag: 'Area1',
-                label: Text('1번구역'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                }
-            ),
-            SizedBox(height: 20),
-
-            GridView.builder(
-
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: (){
-                    if(index == 1) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => _buildPopupDialog(context),
-                      );
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 3,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white
-                    ),
-                    child: Text("index: $index"),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 70),
-            FloatingActionButton.extended(
-                heroTag: 'Area2',
-                label: Text('2번구역'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                }
-            ),
-            SizedBox(height: 20),
+            SizedBox(height: 40),
             GridView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
+                crossAxisCount: 4,
+                crossAxisSpacing: 6.0,
+                mainAxisSpacing: 10.0,
               ),
-              itemCount: 10,
+              itemCount: _changeSeatController.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: (){
-                    if(index == 1) {
-                      print("123");
+                  onTap: () {
+                    if (_changeSeatController.seatDatas[index].seatState.length == 10) {
+                      setState(() {
+                        selectedSeatNumber = index + 1;
+                      });
+                      showDialog(context: context,
+                          builder: _buildPopupDialog);
+                      print(selectedSeatNumber);
                     }
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 3,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white
+                      border: Border.all(
+                        color: Colors.black,
+                        style: BorderStyle.solid,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      color: changeSeatService.getRoomState(index, _changeSeatController) ? AppColor.appPurple : Colors.white,
                     ),
-                    child: Text("index: $index"),
+                    child: Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 4,),
+                          Text(
+                            "${_changeSeatController.seatDatas[index].seatNumber + 1}",
+                            style: TextStyle(
+                              color: changeSeatService.getRoomState(index, _changeSeatController) ? Colors.white : AppColor.appPurple,
+                              fontSize: 35,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
             ),
-            SizedBox(height: 70),
-            FloatingActionButton.extended(
-                heroTag: 'Area3',
-                label: Text('3번구역'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                }
-            ),
-            SizedBox(height: 20),
-            GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: (){
-                    if(index == 1) {
-                      print("123");
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 3,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white
-                    ),
-                    child: Text("index: $index"),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 70),
-            FloatingActionButton.extended(
-                heroTag: 'Area4',
-                label: Text('4번구역'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                }
-            ),
-            SizedBox(height: 20),
-            GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: (){
-                    if(index == 1) {
-                      print("123");
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 3,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white
-                    ),
-                    child: Text("index: $index"),
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 60),
+            SizedBox(height: 120),
           ],
         ),
       ),
@@ -280,7 +242,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("선택한 좌석번호 : {%s}번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text("선택한 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
             ],
           ),
         ],
@@ -288,11 +250,8 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
       actions: <Widget>[
         new TextButton(
           onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-            await showDialog(
-                context: context,
-                builder: (BuildContext context) => _buildPopupDialogChange(context),
-            );
+            server.postSeatReservationStart(context, selectedSeatNumber - 1);
+            startTimer();
           },
           child: const Text('Yes', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
         ),
@@ -316,7 +275,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("이동한 좌석번호 : {%s}번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text("이동한 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
             ],
           ),
         ],

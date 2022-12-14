@@ -1,7 +1,9 @@
+import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
 
 import '../../style/app_color.dart';
+import '../home_page.dart';
 
 class SignupPage extends StatefulWidget {
 
@@ -49,7 +51,8 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 children: <Widget>[
                   TextField(
-                    cursorColor: Colors.black,
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300 ),
                     controller: emailController,
                     decoration: InputDecoration(
                         labelText: 'EMAIL',
@@ -66,7 +69,8 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                    cursorColor: Colors.black,
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300 ),
                     controller: idController,
                     decoration: InputDecoration(
                         labelText: 'NAME ',
@@ -79,7 +83,8 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                    cursorColor: Colors.black,
+                    cursorColor: Colors.white,
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w300 ),
                     controller: passwordController,
                     decoration: InputDecoration(
                         labelText: 'PASSWORD',
@@ -103,13 +108,12 @@ class _SignupPageState extends State<SignupPage> {
                           String id = idController.text;
                           String password = passwordController.text;
                           String email = emailController.text;
-
                           server.postReqSignUp(id, password, email, context);
-
-                          showDialog(
+                          await showDialog(
                             context: context,
                             builder: (BuildContext context) => _buildPopupDialog(context),
                         );
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo()));
                       }
                     ),
                   ),
@@ -141,7 +145,7 @@ class _SignupPageState extends State<SignupPage> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const Text('이미 존재하는 Email 주소 입니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+          const Text('회원가입 되었습니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
         ],
       ),
       content: new Column(
@@ -151,7 +155,7 @@ class _SignupPageState extends State<SignupPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("다른 Email 주소를 사용하세요.", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 12, color: Colors.white),),
+              Text("알라딘 스터디 카페에 오신걸 환영합니다!", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 12, color: Colors.white),),
             ],
           ),
         ],

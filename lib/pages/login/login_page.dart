@@ -1,8 +1,11 @@
+import 'package:asc_portfolio/common_enum/user/user_enum.dart';
+import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/pages/home_page.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class LoginDemo extends StatefulWidget {
@@ -11,6 +14,8 @@ class LoginDemo extends StatefulWidget {
 }
 
 class _LoginDemoState extends State<LoginDemo> {
+
+  static final storage = FlutterSecureStorage();
 
   bool _obscureText = false;
 
@@ -24,7 +29,7 @@ class _LoginDemoState extends State<LoginDemo> {
           color: Colors.white,
           icon: const Icon(Icons.arrow_back),
           onPressed: () => {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
+          Navigator.pop(context),
           },
         ),
       ),
@@ -121,11 +126,15 @@ class _LoginDemoState extends State<LoginDemo> {
                   heroTag: 'Login',
                   label: Text('로그인'),// <-- Text
                   backgroundColor: Colors.black,
-                  onPressed: ()   {
-
-                    server.postReqLogin(context);
-
+                  onPressed: () async {
+                    await server.postReqLogin(context);
+                    String? roleType = await storage.read(key: 'roleType');
+                    if (roleType!.contains("USER")) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                    } else if (roleType!.contains("ADMIN")) {
+                      Navigator.pushNamedAndRemoveUntil(context, '/AdminMainPage' , (route) => false);
                   }
+                }
               ),
             ),
             SizedBox(
@@ -158,7 +167,7 @@ class _LoginDemoState extends State<LoginDemo> {
             Text('Copyright ©2022, All Rights Reserved.',
               style: TextStyle(color: Colors.white,fontSize: 12),),
             SizedBox(height: 10),
-            Text('Powered by padonan.',
+            Text('Powered by padonan, chan-hong',
               style: TextStyle(color: Colors.white,fontSize: 12),),
           ],
         ),

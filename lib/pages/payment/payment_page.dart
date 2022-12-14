@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/pages/home_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_one_day_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_period_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_time_page.dart';
@@ -13,6 +14,12 @@ class PaymentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         backgroundColor: AppColor.appPurple,
         title: Text('이용권 선택', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
         shadowColor: Colors.white,
