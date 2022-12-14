@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
 import 'package:timer_builder/timer_builder.dart';
 
-import '../../common_enum/product/product_enum.dart';
+import '../../constant/enum/product/product_enum.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 import '../home_page.dart';

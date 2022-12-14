@@ -1,10 +1,10 @@
-import 'package:asc_portfolio/server/auth_dio.dart';
+import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../dto/user_seat_dto.dart';
-import '../../dto/user_seat_reservation_info_dto.dart';
-import '../api/api.dart';
+import '../model/user_seat_model.dart';
+import '../model/user_seat_reservation_info_model.dart';
+import '../server/api/api.dart';
 
 final seatRepoProvider = Provider<SeatRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -16,24 +16,24 @@ class SeatRepository {
 
   SeatRepository(this.dio);
 
-  Future<List<UserSeatDto>> getAllRoomStateReq() async {
+  Future<List<UserSeatModel>> getAllRoomStateReq() async {
     Response response;
     Dio dio = Dio();
     response = await dio.get(Api.API_USER_SEAT + Api.cafeName);
-    List<UserSeatDto> rooms = (response.data).map<UserSeatDto>((json) {
-      return UserSeatDto.fromJson(json);
+    List<UserSeatModel> rooms = (response.data).map<UserSeatModel>((json) {
+      return UserSeatModel.fromJson(json);
     }).toList();
     return rooms;
   }
 
-  Future<UserSeatReservationInfoDto> getUserSeatReservationInfo() async {
+  Future<UserSeatResevationModel> getUserSeatReservationInfo() async {
     Response response;
 
-    print("좌석");
-    print("TICKET=${Api.cafeName}");
+    print('좌석');
+    print('TICKET=${Api.cafeName}');
     response = await dio.get(Api.API_USER_RESERVATION_INFO);
     print(response.data);
-    var userSeatReservationInfo = UserSeatReservationInfoDto.fromJson(response.data);
+    var userSeatReservationInfo = UserSeatResevationModel.fromJson(response.data);
     return userSeatReservationInfo;
   }
 
@@ -41,7 +41,7 @@ class SeatRepository {
     Response response;
 
     response = await dio.post(Api.API_START_SEAT_RESERVATION + seatNumber.toString());
-    print("reservationResponse=" + response.data);
+    print('reservationResponse=' + response.data);
     return response.data;
   }
 
@@ -49,7 +49,7 @@ class SeatRepository {
     Response response;
 
     response = await dio.post(Api.API_EXIT_SEAT);
-    print("exitResponse=" + response.data);
+    print('exitResponse=' + response.data);
     return response.data;
   }
 
@@ -57,7 +57,7 @@ class SeatRepository {
     Response response;
 
     response = await dio.post(Api.API_ADMIN_EXIT_SEAT + seatNumber.toString());
-    print("exitResponse=" + response.data);
+    print('exitResponse=' + response.data);
     return response.data;
   }
 }

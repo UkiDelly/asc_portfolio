@@ -1,5 +1,5 @@
-import '../dto/admin/admin_management_product_dto.dart';
-import '../dto/user_seat_dto.dart';
+import '../model/admin/admin_management_product_dto.dart';
+import '../model/user_seat_model.dart';
 
 class AdminController {
   int selectedIndex = 0;
@@ -7,10 +7,10 @@ class AdminController {
   bool weekHasPressed = false;
   bool monthHasPressed = false;
   bool selectHasPressed = false;
-  String title = "";
+  String title = '';
   List<AdminManagementProductDto> productList = [];
   int oneDaySales = 0;
   List<AdminManagementProductDto> oneDayProductList = [];
-  String loginId = "";
-  List<UserSeatDto> seatDatas = [];
+  String loginId = '';
+  List<UserSeatModel> seatDatas = [];
 }

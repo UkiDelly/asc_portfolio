@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:asc_portfolio/dto/admin/admin_check_user_info.dart';
-import 'package:asc_portfolio/server/auth_dio.dart';
-import 'package:asc_portfolio/server/secure_storage.dart';
+import 'package:asc_portfolio/model/admin/admin_check_user_info.dart';
+import 'package:asc_portfolio/model/token_model.dart';
+import 'package:asc_portfolio/model/user_qr_and_name_model.dart';
+import 'package:asc_portfolio/provider/dio_provider.dart';
+import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../dto/token_dto.dart';
-import '../../dto/user_qr_and_name_dto.dart';
-import '../api/api.dart';
+import '../server/api/api.dart';
 
 final userRepoProvider = Provider<UserRepository>((ref) {
   final repository = UserRepository(
@@ -29,13 +29,13 @@ class UserRepository {
   });
 
   static Map<String, String> loginAdminData = {
-    "loginId": "adminuser",
-    "password": "adminuser_password",
+    'loginId': 'adminuser',
+    'password': 'adminuser_password',
   };
 
   static Map<String, String> loginData = {
-    "loginId": "tUser_B_login",
-    "password": "tUser_B_password",
+    'loginId': 'tUser_B_login',
+    'password': 'tUser_B_password',
   };
 
   Future<void> postReqSignUp(String id, String password, String email) async {
@@ -45,11 +45,11 @@ class UserRepository {
     print(password);
     print(email.runtimeType);
     Map<String, dynamic> data = {
-      "loginId": "hello1234",
-      "password": "asdd1134",
-      "email": "email@gmail.com",
-      "name": null,
-      "nickname": null
+      'loginId': 'hello1234',
+      'password': 'asdd1134',
+      'email': 'email@gmail.com',
+      'name': null,
+      'nickname': null
     };
     response = await dio.post(
       Api.API_SIGN_UP,
@@ -58,11 +58,9 @@ class UserRepository {
   }
 
   Future<bool> getCheckLogin() async {
-    Response response;
-
-    response = await dio.get(Api.API_LOGIN_CHECK);
-    print("loginCheckResponseData=" + response.data);
-    if (response.data == "OK") {
+    Response response = await dio.get(Api.API_LOGIN_CHECK);
+    print('loginCheckResponseData=' + response.data);
+    if (response.data == 'OK') {
       return true;
     }
     return false;
@@ -74,14 +72,14 @@ class UserRepository {
     Map<String, String> data = loginData;
     response = await dio.post(Api.API_LOGIN, data: data);
     print(response.data);
-    var tokenInfo = TokenDto.fromJson(response.data);
+    var tokenInfo = TokenModel.fromJson(response.data);
     storage.write(key: 'accessToken', value: tokenInfo.accessToken);
     storage.write(key: 'roleType', value: tokenInfo.roleType);
   }
 
-  Future<UserQrAndNameDto> getUserQrAndNameReq() async {
+  Future<UserQrAndNameModel> getUserQrAndNameReq() async {
     Response response = await dio.get(Api.API_USER_QR_AND_NAME);
-    var userQrAndName = UserQrAndNameDto.fromJson(response.data);
+    var userQrAndName = UserQrAndNameModel.fromJson(response.data);
     return userQrAndName;
   }
 
@@ -89,12 +87,10 @@ class UserRepository {
     String userLoginId,
   ) async {
     Response response;
-    print("userLoginId=$userLoginId");
+    print('userLoginId=$userLoginId');
     response = await dio.get(Api.API_ADMIN_FIND_SPECIFIC_USER + userLoginId);
-    print("responseData=$response");
+    print('responseData=$response');
     var adminCheckUserInfo = AdminCheckUserInfo.fromJson(response.data);
     return adminCheckUserInfo;
   }
-
-  
 }

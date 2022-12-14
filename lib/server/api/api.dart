@@ -1,4 +1,4 @@
-import '../../common_enum/cafe/cafe_name.dart';
+import '../../constant/enum/cafe/cafe_name.dart';
 
 class Api {
   const Api._();

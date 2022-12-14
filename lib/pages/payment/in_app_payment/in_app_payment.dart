@@ -1,5 +1,5 @@
 import 'package:asc_portfolio/controller/InAppPayment_controller.dart';
-import 'package:asc_portfolio/dto/payment_data_dto.dart';
+import 'package:asc_portfolio/model/payment_data_model.dart';
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
-import '../../../common_enum/product/product_enum.dart';
+import '../../../constant/enum/product/product_enum.dart';
 import '../../../style/app_color.dart';
 import '../payment_page.dart';
 import 'dart:convert';

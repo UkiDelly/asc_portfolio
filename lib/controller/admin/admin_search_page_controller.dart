@@ -1,5 +1,5 @@
-import '../../dto/admin/admin_check_user_product.dart';
-import '../../dto/admin/admin_check_user_valid_ticket.dart';
+import '../../model/admin/admin_check_user_product.dart';
+import '../../model/admin/admin_check_user_valid_ticket.dart';
 
 class AdminSearchPageController {
   String loginId = "";

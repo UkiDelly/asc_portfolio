@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../common_enum/product/product_enum.dart';
+import '../../constant/enum/product/product_enum.dart';
 import '../../style/app_color.dart';
 import 'in_app_payment/in_app_payment.dart';
 

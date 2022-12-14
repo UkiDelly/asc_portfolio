@@ -1,6 +1,6 @@
-import '../dto/user_seat_dto.dart';
+import '../model/user_seat_model.dart';
 
 class ChangeSeatController {
-  List<UserSeatDto> seatDatas = [];
+  List<UserSeatModel> seatDatas = [];
 
 }
