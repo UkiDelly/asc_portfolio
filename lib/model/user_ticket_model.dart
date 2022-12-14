@@ -9,7 +9,7 @@ class UserTicketModel with _$UserTicketModel {
 
   const factory UserTicketModel({
     required String isValidTicket,
-    @Default('') required String fixedTermTicket,
+    @Default('') String fixedTermTicket,
     required String productLabel,
     @Default(0) int partTimeTicket,
     @Default(0) int remainingTime,

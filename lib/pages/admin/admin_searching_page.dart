@@ -174,7 +174,7 @@ class _AdminSearchingPageState extends ConsumerState<AdminSearchingPage> {
                           return const Text('');
                         },
                         type: StepperType.horizontal,
-                        currentStep: currentStep ?? 0,
+                        currentStep: currentStep,
                         onStepTapped: (step) => goTo(step),
                         steps: [
                           Step(

@@ -1,7 +1,6 @@
+import 'package:asc_portfolio/model/userSeatModel.dart';
 import 'package:asc_portfolio/model/user_ticket_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../model/user_seat_model.dart';
 
 part 'home_controller.freezed.dart';
 part 'home_controller.g.dart';
@@ -16,7 +15,7 @@ class HomeController with _$HomeController {
     @Default(0) int remainingTime,
     @Default(0) int selectedIndex,
     @Default(true) bool loginCheck,
-    @Default([]) List<UserSeatModel> seatDatas,
+    @Default([]) List<UsersSeatModel> seatDatas,
     @Default('') String userName,
     @Default('') String qrCode,
     @Default(0) int seatReservationSeatNumber,

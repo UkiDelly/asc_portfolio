@@ -1,8 +1,8 @@
+import 'package:asc_portfolio/model/userSeatModel.dart';
 import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/user_seat_model.dart';
 import '../model/user_seat_reservation_info_model.dart';
 import '../server/api/api.dart';
 
@@ -16,12 +16,12 @@ class SeatRepository {
 
   SeatRepository(this.dio);
 
-  Future<List<UserSeatModel>> getAllRoomStateReq() async {
+  Future<List<UsersSeatModel>> getAllRoomStateReq() async {
     Response response;
     Dio dio = Dio();
     response = await dio.get(Api.API_USER_SEAT + Api.cafeName);
-    List<UserSeatModel> rooms = (response.data).map<UserSeatModel>((json) {
-      return UserSeatModel.fromJson(json);
+    List<UsersSeatModel> rooms = (response.data).map<UsersSeatModel>((json) {
+      return UsersSeatModel.fromJson(json);
     }).toList();
     return rooms;
   }

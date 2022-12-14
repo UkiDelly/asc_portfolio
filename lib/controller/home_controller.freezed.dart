@@ -25,7 +25,7 @@ mixin _$HomeController {
   int get remainingTime => throw _privateConstructorUsedError;
   int get selectedIndex => throw _privateConstructorUsedError;
   bool get loginCheck => throw _privateConstructorUsedError;
-  List<UserSeatModel> get seatDatas => throw _privateConstructorUsedError;
+  List<UsersSeatModel> get seatDatas => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
   String get qrCode => throw _privateConstructorUsedError;
   int get seatReservationSeatNumber => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $HomeControllerCopyWith<$Res> {
       int remainingTime,
       int selectedIndex,
       bool loginCheck,
-      List<UserSeatModel> seatDatas,
+      List<UsersSeatModel> seatDatas,
       String userName,
       String qrCode,
       int seatReservationSeatNumber,
@@ -118,7 +118,7 @@ class _$HomeControllerCopyWithImpl<$Res, $Val extends HomeController>
       seatDatas: null == seatDatas
           ? _value.seatDatas
           : seatDatas // ignore: cast_nullable_to_non_nullable
-              as List<UserSeatModel>,
+              as List<UsersSeatModel>,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -181,7 +181,7 @@ abstract class _$$_HomeControllerCopyWith<$Res>
       int remainingTime,
       int selectedIndex,
       bool loginCheck,
-      List<UserSeatModel> seatDatas,
+      List<UsersSeatModel> seatDatas,
       String userName,
       String qrCode,
       int seatReservationSeatNumber,
@@ -245,7 +245,7 @@ class __$$_HomeControllerCopyWithImpl<$Res>
       seatDatas: null == seatDatas
           ? _value._seatDatas
           : seatDatas // ignore: cast_nullable_to_non_nullable
-              as List<UserSeatModel>,
+              as List<UsersSeatModel>,
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
@@ -291,7 +291,7 @@ class _$_HomeController extends _HomeController {
       this.remainingTime = 0,
       this.selectedIndex = 0,
       this.loginCheck = true,
-      final List<UserSeatModel> seatDatas = const [],
+      final List<UsersSeatModel> seatDatas = const [],
       this.userName = '',
       this.qrCode = '',
       this.seatReservationSeatNumber = 0,
@@ -320,10 +320,10 @@ class _$_HomeController extends _HomeController {
   @override
   @JsonKey()
   final bool loginCheck;
-  final List<UserSeatModel> _seatDatas;
+  final List<UsersSeatModel> _seatDatas;
   @override
   @JsonKey()
-  List<UserSeatModel> get seatDatas {
+  List<UsersSeatModel> get seatDatas {
     if (_seatDatas is EqualUnmodifiableListView) return _seatDatas;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_seatDatas);
@@ -435,7 +435,7 @@ abstract class _HomeController extends HomeController {
       final int remainingTime,
       final int selectedIndex,
       final bool loginCheck,
-      final List<UserSeatModel> seatDatas,
+      final List<UsersSeatModel> seatDatas,
       final String userName,
       final String qrCode,
       final int seatReservationSeatNumber,
@@ -460,7 +460,7 @@ abstract class _HomeController extends HomeController {
   @override
   bool get loginCheck;
   @override
-  List<UserSeatModel> get seatDatas;
+  List<UsersSeatModel> get seatDatas;
   @override
   String get userName;
   @override

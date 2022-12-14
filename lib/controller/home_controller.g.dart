@@ -17,7 +17,7 @@ _$_HomeController _$$_HomeControllerFromJson(Map<String, dynamic> json) =>
       selectedIndex: json['selectedIndex'] as int? ?? 0,
       loginCheck: json['loginCheck'] as bool? ?? true,
       seatDatas: (json['seatDatas'] as List<dynamic>?)
-              ?.map((e) => UserSeatModel.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => UsersSeatModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       userName: json['userName'] as String? ?? '',

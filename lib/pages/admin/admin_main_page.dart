@@ -1,14 +1,11 @@
 import 'dart:async';
 
-import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_searching_page.dart';
+import 'package:asc_portfolio/provider/admin_state/admin_state_notifier.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
-import 'package:asc_portfolio/repository/product_repository.dart';
-import 'package:asc_portfolio/repository/seat_repository.dart';
-import 'package:asc_portfolio/service/admin_main_service.dart';
+import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../server/api/api.dart';
@@ -16,9 +13,6 @@ import '../../style/app_color.dart';
 import '../home_page.dart';
 
 class AdminMainPage extends ConsumerStatefulWidget {
-  static String _selectedDate =
-      "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
-
   const AdminMainPage({Key? key}) : super(key: key);
 
   @override
@@ -26,10 +20,11 @@ class AdminMainPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMainPageState extends ConsumerState<AdminMainPage> {
-  static const storage = FlutterSecureStorage();
-  final AdminController _adminController = AdminController();
-  final AdminMainService _adminMainService = AdminMainService();
-  int todaySalePrice = 0;
+  late final _adminController = ref.watch(adminStateProvider);
+  late final _adminConttollerNotifier = ref.watch(adminStateProvider.notifier);
+  late final storage = ref.watch(secureStorageProvider);
+
+  late int todaySalePrice;
   int selectedSeatNumber = 0;
 
   String dailySales = DateTime.now().add(const Duration(days: -1)).toString().substring(0, 23);
@@ -38,51 +33,16 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   //2022-12-04 06:01:14.266
   //2022-11-03 01:01:32.526
 
-  double _progress = 0;
   bool isNotCompleteLoading = true;
 
   final _loginIdController = TextEditingController();
-
-  void _roomFetchGet() async {
-    final roomDatas = await ref.read(seatRepoProvider).getAllRoomStateReq();
-    setState(() {
-      _adminController.seatDatas = roomDatas;
-    });
-  }
-
-  void _fetchApi(String day) async {
-    var productList = await ref.read(productProvider).getProductInfoForAdmin(day);
-    if (mounted) {
-      setState(() {
-        _adminController.productList = productList;
-      });
-    }
-  }
-
-  void _fechOnlyOneDay() async {
-    var oneDayProductList = await ref.read(productProvider).getProductInfoForAdmin(dailySales);
-    if (mounted) {
-      setState(() {
-        _adminController.oneDayProductList = oneDayProductList;
-        int price = 0;
-        for (int i = 0; i < _adminController.oneDayProductList.length; i++) {
-          price += _adminController.oneDayProductList[i].productPrice;
-        }
-        todaySalePrice = price;
-      });
-    }
-  }
-
-  void _fetchAdminCancelSeat(int seatNumber) async {
-    await ref.read(seatRepoProvider).postAdminExitSeat(seatNumber);
-  }
 
   Future<void> startTimer() async {
     Timer.periodic(
       const Duration(milliseconds: 50),
       (Timer timer) => setState(
         () {
-          if (_progress == 0.05) {
+          if (_adminConttollerNotifier.progress == 0.05) {
             setState(() {
               isNotCompleteLoading = false;
             });
@@ -96,7 +56,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               });
             });
           } else {
-            _progress += 0.025;
+            _adminConttollerNotifier.progress += 0.025;
           }
         },
       ),
@@ -104,16 +64,12 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    print('AdminPage_didChangeDependencies실행');
-    _fetchApi(dailySales);
-    _roomFetchGet();
-    super.didChangeDependencies();
-  }
-
-  @override
   void initState() {
-    _fechOnlyOneDay();
+    // _fechOnlyOneDay();
+    _adminConttollerNotifier
+      ..fetchApi(dailySales)
+      ..fechOnlyOneDay(dailySales).then((value) => todaySalePrice = value);
+
     super.initState();
   }
 
@@ -132,7 +88,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
 
     int price = 0;
     for (int i = 0; i < _adminController.productList.length; i++) {
-      price += _adminController.productList[i].productPrice ?? 0;
+      price += _adminController.productList[i].productPrice;
     }
     final totalSales = price;
 
@@ -203,15 +159,16 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                     backgroundColor:
                         _adminController.oneHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
-                      setState(() {
-                        _fetchApi(dailySales);
-                        _adminController.oneHasPressed = true;
-                        _adminController.weekHasPressed = false;
-                        _adminController.monthHasPressed = false;
-                        _adminController.selectHasPressed = false;
-                        AdminMainPage._selectedDate =
-                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -24)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
-                      });
+                      // _fetchApi(dailySales);
+                      // _adminConttollerNotifier.fetchApi(dailySales);
+                      // _adminController.oneHasPressed = true;
+                      // _adminController.weekHasPressed = false;
+                      // _adminController.monthHasPressed = false;
+                      // _adminController.selectHasPressed = false;
+                      // AdminMainPage._selectedDate =
+                      // "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -24)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+
+                      _adminConttollerNotifier.dailySales(dailySales);
                     },
                   ),
                   const SizedBox(
@@ -227,15 +184,17 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                     backgroundColor:
                         _adminController.weekHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
-                      setState(() {
-                        _fetchApi(weeklySales);
-                        _adminController.weekHasPressed = true;
-                        _adminController.oneHasPressed = false;
-                        _adminController.monthHasPressed = false;
-                        _adminController.selectHasPressed = false;
-                        AdminMainPage._selectedDate =
-                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -168)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
-                      });
+                      // setState(() {
+                      //   _fetchApi(weeklySales);
+                      //   _adminController.weekHasPressed = true;
+                      //   _adminController.oneHasPressed = false;
+                      //   _adminController.monthHasPressed = false;
+                      //   _adminController.selectHasPressed = false;
+                      //   AdminMainPage._selectedDate =
+                      //       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -168)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                      // });
+
+                      _adminConttollerNotifier.weeklySales(weeklySales);
                     },
                   ),
                   const SizedBox(
@@ -251,15 +210,16 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                     backgroundColor:
                         _adminController.monthHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
-                      setState(() {
-                        _fetchApi(monthSales);
-                        _adminController.monthHasPressed = true;
-                        _adminController.oneHasPressed = false;
-                        _adminController.weekHasPressed = false;
-                        _adminController.selectHasPressed = false;
-                        AdminMainPage._selectedDate =
-                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -720)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
-                      });
+                      // setState(() {
+                      //   _fetchApi(monthSales);
+                      //   _adminController.monthHasPressed = true;
+                      //   _adminController.oneHasPressed = false;
+                      //   _adminController.weekHasPressed = false;
+                      //   _adminController.selectHasPressed = false;
+                      //   AdminMainPage._selectedDate =
+                      //       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -720)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                      // });
+                      _adminConttollerNotifier.monthSales(monthSales);
                     },
                   ),
                 ],
@@ -272,31 +232,48 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 backgroundColor:
                     _adminController.selectHasPressed ? AppColor.appPurple : Colors.grey,
                 onPressed: () {
-                  setState(() {
-                    _adminController.selectHasPressed = true;
-                    _adminController.monthHasPressed = false;
-                    _adminController.oneHasPressed = false;
-                    _adminController.weekHasPressed = false;
-                  });
-                  Future future = showDatePicker(
+                  // setState(() {
+                  //   _adminController.selectHasPressed = true;
+                  //   _adminController.monthHasPressed = false;
+                  //   _adminController.oneHasPressed = false;
+                  //   _adminController.weekHasPressed = false;
+                  // });
+                  _adminConttollerNotifier.select4();
+                  showDatePicker(
                     initialDatePickerMode: DatePickerMode.day,
                     context: context,
                     currentDate: DateTime.now(),
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2023),
                     initialDate: DateTime.now(),
-                  );
-                  future.then(
-                    (date) => {
-                      setState(() {
-                        print('date:$date');
-                        AdminMainPage._selectedDate =
-                            "${DateFormat('yyyy-MM-dd').format(date.add(const Duration(hours: 9)))}~${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
-                      }),
-                      _fetchApi(date.toString()),
-                      print(date.toString()),
-                    },
-                  );
+                  ).then((date) {
+                    print('date:$date');
+                    _adminConttollerNotifier.selectedDate =
+                        "${DateFormat('yyyy-MM-dd').format(date!.add(const Duration(hours: 9)))}~${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+
+                    _adminConttollerNotifier.fetchApi(date.toString());
+                    print(date.toString());
+                  });
+
+                  // Future future = showDatePicker(
+                  //   initialDatePickerMode: DatePickerMode.day,
+                  //   context: context,
+                  //   currentDate: DateTime.now(),
+                  //   firstDate: DateTime(2020),
+                  //   lastDate: DateTime(2023),
+                  //   initialDate: DateTime.now(),
+                  // );
+                  // future.then(
+                  //   (date) => {
+                  //     setState(() {
+                  //       print('date:$date');
+                  //       AdminMainPage._selectedDate =
+                  //           "${DateFormat('yyyy-MM-dd').format(date.add(const Duration(hours: 9)))}~${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                  //     }),
+                  //     _fetchApi(date.toString()),
+                  //     print(date.toString()),
+                  //   },
+                  // );
                 },
                 icon: const Icon(Icons.calendar_today),
                 label: const Text(
@@ -310,7 +287,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               FloatingActionButton.extended(
                 heroTag: 'select5',
                 label: Text(
-                  '선택한 날짜 : ${AdminMainPage._selectedDate}',
+                  '선택한 날짜 : ${_adminConttollerNotifier.selectedDate}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 16,
@@ -565,7 +542,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: _adminMainService.getRoomState(index, _adminController)
+                      color: _adminConttollerNotifier.getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -579,7 +556,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                           Text(
                             '${_adminController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: _adminMainService.getRoomState(index, _adminController)
+                              color: _adminConttollerNotifier.getRoomState(index)
                                   ? Colors.white
                                   : AppColor.appPurple,
                               fontSize: 35,
@@ -631,9 +608,11 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         unselectedFontSize: 14,
         currentIndex: _adminController.selectedIndex, //현재 선택된 Index
         onTap: (int index) {
-          setState(() {
-            _adminController.selectedIndex = index;
-          });
+          // setState(() {
+          //   _adminController = _adminController.copyWith(selectedIndex = index);
+          // });
+
+          _adminConttollerNotifier.setSelectedIndex(index);
         },
         items: const [
           BottomNavigationBarItem(
@@ -687,7 +666,8 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _fetchAdminCancelSeat(selectedSeatNumber - 1);
+            // _fetchAdminCancelSeat(selectedSeatNumber - 1);
+            _adminConttollerNotifier.fetchAdminCancelSeat(selectedSeatNumber - 1);
             startTimer();
           },
           child: const Text(

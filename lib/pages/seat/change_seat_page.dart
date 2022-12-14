@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/home_page.dart';
+import 'package:asc_portfolio/provider/admin_state/seat_state_notifier.dart';
 import 'package:asc_portfolio/repository/seat_repository.dart';
-import 'package:asc_portfolio/service/change_seat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +20,7 @@ class ChangeSeatPage extends ConsumerStatefulWidget {
 }
 
 class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
-  final ChangeSeatController _changeSeatController = ChangeSeatController();
-  ChangeSeatService changeSeatService = ChangeSeatService();
+  final ChangeSeatController _changeSeatController = const ChangeSeatController();
 
   int selectedSeatNumber = 0;
   double _progress = 0;
@@ -54,10 +53,7 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
   }
 
   void _roomFetchGet() async {
-    final roomDatas = await ref.watch(seatRepoProvider).getAllRoomStateReq();
-    setState(() {
-      _changeSeatController.seatDatas = roomDatas;
-    });
+    ref.read(seatStateProvider.notifier).getAllRoomStateReq();
   }
 
   void _postStartReservation(int seatNumber) async {
@@ -208,7 +204,7 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: changeSeatService.getRoomState(index, _changeSeatController)
+                      color: ref.watch(seatStateProvider.notifier).getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -220,9 +216,9 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
                             width: 4,
                           ),
                           Text(
-                            '${_changeSeatController.seatDatas[index].seatNumber + 1}',
+                            '${ref.watch(seatStateProvider).seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: changeSeatService.getRoomState(index, _changeSeatController)
+                              color: ref.watch(seatStateProvider.notifier).getRoomState(index)
                                   ? Colors.white
                                   : AppColor.appPurple,
                               fontSize: 35,

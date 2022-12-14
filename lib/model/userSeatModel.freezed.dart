@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user_seat_model.dart';
+part of 'userSeatModel.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,34 +14,34 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-UserSeatModel _$UserSeatModelFromJson(Map<String, dynamic> json) {
-  return _UserSeatModel.fromJson(json);
+UsersSeatModel _$UsersSeatModelFromJson(Map<String, dynamic> json) {
+  return _UsersSeatModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UserSeatModel {
+mixin _$UsersSeatModel {
   int get seatNumber => throw _privateConstructorUsedError;
   String get seatState => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserSeatModelCopyWith<UserSeatModel> get copyWith =>
+  $UsersSeatModelCopyWith<UsersSeatModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserSeatModelCopyWith<$Res> {
-  factory $UserSeatModelCopyWith(
-          UserSeatModel value, $Res Function(UserSeatModel) then) =
-      _$UserSeatModelCopyWithImpl<$Res, UserSeatModel>;
+abstract class $UsersSeatModelCopyWith<$Res> {
+  factory $UsersSeatModelCopyWith(
+          UsersSeatModel value, $Res Function(UsersSeatModel) then) =
+      _$UsersSeatModelCopyWithImpl<$Res, UsersSeatModel>;
   @useResult
   $Res call({int seatNumber, String seatState});
 }
 
 /// @nodoc
-class _$UserSeatModelCopyWithImpl<$Res, $Val extends UserSeatModel>
-    implements $UserSeatModelCopyWith<$Res> {
-  _$UserSeatModelCopyWithImpl(this._value, this._then);
+class _$UsersSeatModelCopyWithImpl<$Res, $Val extends UsersSeatModel>
+    implements $UsersSeatModelCopyWith<$Res> {
+  _$UsersSeatModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -68,22 +68,22 @@ class _$UserSeatModelCopyWithImpl<$Res, $Val extends UserSeatModel>
 }
 
 /// @nodoc
-abstract class _$$_UserSeatModelCopyWith<$Res>
-    implements $UserSeatModelCopyWith<$Res> {
-  factory _$$_UserSeatModelCopyWith(
-          _$_UserSeatModel value, $Res Function(_$_UserSeatModel) then) =
-      __$$_UserSeatModelCopyWithImpl<$Res>;
+abstract class _$$_UsersSeatModelCopyWith<$Res>
+    implements $UsersSeatModelCopyWith<$Res> {
+  factory _$$_UsersSeatModelCopyWith(
+          _$_UsersSeatModel value, $Res Function(_$_UsersSeatModel) then) =
+      __$$_UsersSeatModelCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int seatNumber, String seatState});
 }
 
 /// @nodoc
-class __$$_UserSeatModelCopyWithImpl<$Res>
-    extends _$UserSeatModelCopyWithImpl<$Res, _$_UserSeatModel>
-    implements _$$_UserSeatModelCopyWith<$Res> {
-  __$$_UserSeatModelCopyWithImpl(
-      _$_UserSeatModel _value, $Res Function(_$_UserSeatModel) _then)
+class __$$_UsersSeatModelCopyWithImpl<$Res>
+    extends _$UsersSeatModelCopyWithImpl<$Res, _$_UsersSeatModel>
+    implements _$$_UsersSeatModelCopyWith<$Res> {
+  __$$_UsersSeatModelCopyWithImpl(
+      _$_UsersSeatModel _value, $Res Function(_$_UsersSeatModel) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_UserSeatModelCopyWithImpl<$Res>
     Object? seatNumber = null,
     Object? seatState = null,
   }) {
-    return _then(_$_UserSeatModel(
+    return _then(_$_UsersSeatModel(
       seatNumber: null == seatNumber
           ? _value.seatNumber
           : seatNumber // ignore: cast_nullable_to_non_nullable
@@ -107,12 +107,12 @@ class __$$_UserSeatModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_UserSeatModel extends _UserSeatModel {
-  const _$_UserSeatModel({required this.seatNumber, required this.seatState})
+class _$_UsersSeatModel extends _UsersSeatModel {
+  _$_UsersSeatModel({required this.seatNumber, required this.seatState})
       : super._();
 
-  factory _$_UserSeatModel.fromJson(Map<String, dynamic> json) =>
-      _$$_UserSeatModelFromJson(json);
+  factory _$_UsersSeatModel.fromJson(Map<String, dynamic> json) =>
+      _$$_UsersSeatModelFromJson(json);
 
   @override
   final int seatNumber;
@@ -121,14 +121,14 @@ class _$_UserSeatModel extends _UserSeatModel {
 
   @override
   String toString() {
-    return 'UserSeatModel(seatNumber: $seatNumber, seatState: $seatState)';
+    return 'UsersSeatModel(seatNumber: $seatNumber, seatState: $seatState)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserSeatModel &&
+            other is _$_UsersSeatModel &&
             (identical(other.seatNumber, seatNumber) ||
                 other.seatNumber == seatNumber) &&
             (identical(other.seatState, seatState) ||
@@ -142,25 +142,25 @@ class _$_UserSeatModel extends _UserSeatModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserSeatModelCopyWith<_$_UserSeatModel> get copyWith =>
-      __$$_UserSeatModelCopyWithImpl<_$_UserSeatModel>(this, _$identity);
+  _$$_UsersSeatModelCopyWith<_$_UsersSeatModel> get copyWith =>
+      __$$_UsersSeatModelCopyWithImpl<_$_UsersSeatModel>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserSeatModelToJson(
+    return _$$_UsersSeatModelToJson(
       this,
     );
   }
 }
 
-abstract class _UserSeatModel extends UserSeatModel {
-  const factory _UserSeatModel(
+abstract class _UsersSeatModel extends UsersSeatModel {
+  factory _UsersSeatModel(
       {required final int seatNumber,
-      required final String seatState}) = _$_UserSeatModel;
-  const _UserSeatModel._() : super._();
+      required final String seatState}) = _$_UsersSeatModel;
+  _UsersSeatModel._() : super._();
 
-  factory _UserSeatModel.fromJson(Map<String, dynamic> json) =
-      _$_UserSeatModel.fromJson;
+  factory _UsersSeatModel.fromJson(Map<String, dynamic> json) =
+      _$_UsersSeatModel.fromJson;
 
   @override
   int get seatNumber;
@@ -168,6 +168,6 @@ abstract class _UserSeatModel extends UserSeatModel {
   String get seatState;
   @override
   @JsonKey(ignore: true)
-  _$$_UserSeatModelCopyWith<_$_UserSeatModel> get copyWith =>
+  _$$_UsersSeatModelCopyWith<_$_UsersSeatModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -29,12 +29,14 @@ mixin _$UserTicketModel {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserTicketModelCopyWith<UserTicketModel> get copyWith => throw _privateConstructorUsedError;
+  $UserTicketModelCopyWith<UserTicketModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $UserTicketModelCopyWith<$Res> {
-  factory $UserTicketModelCopyWith(UserTicketModel value, $Res Function(UserTicketModel) then) =
+  factory $UserTicketModelCopyWith(
+          UserTicketModel value, $Res Function(UserTicketModel) then) =
       _$UserTicketModelCopyWithImpl<$Res, UserTicketModel>;
   @useResult
   $Res call(
@@ -96,7 +98,8 @@ class _$UserTicketModelCopyWithImpl<$Res, $Val extends UserTicketModel>
 }
 
 /// @nodoc
-abstract class _$$_UserTicketModelCopyWith<$Res> implements $UserTicketModelCopyWith<$Res> {
+abstract class _$$_UserTicketModelCopyWith<$Res>
+    implements $UserTicketModelCopyWith<$Res> {
   factory _$$_UserTicketModelCopyWith(
           _$_UserTicketModel value, $Res Function(_$_UserTicketModel) then) =
       __$$_UserTicketModelCopyWithImpl<$Res>;
@@ -163,7 +166,7 @@ class __$$_UserTicketModelCopyWithImpl<$Res>
 class _$_UserTicketModel extends _UserTicketModel {
   const _$_UserTicketModel(
       {required this.isValidTicket,
-      required this.fixedTermTicket,
+      this.fixedTermTicket = '',
       required this.productLabel,
       this.partTimeTicket = 0,
       this.remainingTime = 0,
@@ -204,7 +207,8 @@ class _$_UserTicketModel extends _UserTicketModel {
                 other.isValidTicket == isValidTicket) &&
             (identical(other.fixedTermTicket, fixedTermTicket) ||
                 other.fixedTermTicket == fixedTermTicket) &&
-            (identical(other.productLabel, productLabel) || other.productLabel == productLabel) &&
+            (identical(other.productLabel, productLabel) ||
+                other.productLabel == productLabel) &&
             (identical(other.partTimeTicket, partTimeTicket) ||
                 other.partTimeTicket == partTimeTicket) &&
             (identical(other.remainingTime, remainingTime) ||
@@ -214,8 +218,8 @@ class _$_UserTicketModel extends _UserTicketModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, isValidTicket, fixedTermTicket, productLabel,
-      partTimeTicket, remainingTime, period);
+  int get hashCode => Object.hash(runtimeType, isValidTicket, fixedTermTicket,
+      productLabel, partTimeTicket, remainingTime, period);
 
   @JsonKey(ignore: true)
   @override
@@ -234,14 +238,15 @@ class _$_UserTicketModel extends _UserTicketModel {
 abstract class _UserTicketModel extends UserTicketModel {
   const factory _UserTicketModel(
       {required final String isValidTicket,
-      required final String fixedTermTicket,
+      final String fixedTermTicket,
       required final String productLabel,
       final int partTimeTicket,
       final int remainingTime,
       final int period}) = _$_UserTicketModel;
   const _UserTicketModel._() : super._();
 
-  factory _UserTicketModel.fromJson(Map<String, dynamic> json) = _$_UserTicketModel.fromJson;
+  factory _UserTicketModel.fromJson(Map<String, dynamic> json) =
+      _$_UserTicketModel.fromJson;
 
   @override
   String get isValidTicket;
