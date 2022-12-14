@@ -1,22 +1,31 @@
 import 'package:asc_portfolio/model/user_ticket_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../model/user_seat_model.dart';
 
-abstract class HomeControllerBase {}
+part 'home_controller.freezed.dart';
+part 'home_controller.g.dart';
 
-class HomeController {
-  UserTicketModel? userTicketInfo;
-  int period = 0;
-  int remainingTime = 0;
-  int selectedIndex = 0;
-  bool loginCheck = true;
-  List<UserSeatModel> seatDatas = [];
-  String userName = '';
-  String qrCode = '';
-  int seatReservationSeatNumber = 0;
-  int seatReservationStartTime = 0;
-  String seatReservationCreateDate = '';
-  String seatReservationPeriod = '';
-  String format = '';
-  int seatReservationTimeInUse = 0;
+@freezed
+class HomeController with _$HomeController {
+  const HomeController._();
+
+  factory HomeController({
+    UserTicketModel? userTicketInfo,
+    @Default(0) int period,
+    @Default(0) int remainingTime,
+    @Default(0) int selectedIndex,
+    @Default(true) bool loginCheck,
+    @Default([]) List<UserSeatModel> seatDatas,
+    @Default('') String userName,
+    @Default('') String qrCode,
+    @Default(0) int seatReservationSeatNumber,
+    @Default(0) int seatReservationStartTime,
+    @Default('') String seatReservationCreateDate,
+    @Default('') String seatReservationPeriod,
+    @Default('') String format,
+    @Default(0) int seatReservationTimeInUse,
+  }) = _HomeController;
+
+  factory HomeController.fromJson(Map<String, dynamic> json) => _$HomeControllerFromJson(json);
 }

@@ -1,26 +1,26 @@
+import 'dart:async';
+
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/home_page.dart';
+import 'package:asc_portfolio/repository/seat_repository.dart';
 import 'package:asc_portfolio/service/change_seat_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:timer_builder/timer_builder.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
 
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
-import 'dart:async';
 
-class ChangeSeatPage extends StatefulWidget {
+class ChangeSeatPage extends ConsumerStatefulWidget {
   const ChangeSeatPage({Key? key}) : super(key: key);
 
   @override
-  State<ChangeSeatPage> createState() => _ChangeSeatPageState();
+  ConsumerState<ChangeSeatPage> createState() => _ChangeSeatPageState();
 }
 
-class _ChangeSeatPageState extends State<ChangeSeatPage> {
-
-  ChangeSeatController _changeSeatController = ChangeSeatController();
+class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
+  final ChangeSeatController _changeSeatController = ChangeSeatController();
   ChangeSeatService changeSeatService = ChangeSeatService();
 
   int selectedSeatNumber = 0;
@@ -28,18 +28,19 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
   bool isNotCompleteLoading = true;
 
   Future<void> startTimer() async {
-    new Timer.periodic(
-      Duration(milliseconds: 50),
-          (Timer timer) => setState(
-            () {
+    Timer.periodic(
+      const Duration(milliseconds: 50),
+      (Timer timer) => setState(
+        () {
           if (_progress == 0.05) {
             setState(() {
               isNotCompleteLoading = false;
             });
             timer.cancel();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomePage()))
-                .then((value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            ).then((value) {
               setState(() {
                 didChangeDependencies();
               });
@@ -53,15 +54,15 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
   }
 
   void _roomFetchGet() async {
-    final roomDatas = await server.getAllRoomStateReq(context);
+    final roomDatas = await ref.watch(seatRepoProvider).getAllRoomStateReq();
     setState(() {
       _changeSeatController.seatDatas = roomDatas;
     });
   }
 
   void _postStartReservation(int seatNumber) async {
-    String responseData = await server.postSeatReservationStart(context, seatNumber);
-    print("HomePageResponseData="+responseData);
+    String responseData = await ref.watch(seatRepoProvider).postSeatReservationStart(seatNumber);
+    print('HomePageResponseData=$responseData');
   }
 
   @override
@@ -72,106 +73,114 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
 
   @override
   Widget build(BuildContext context) {
-
     List seatList = [];
-    for (int i=0; i< _changeSeatController.seatDatas.length; i++) {
+    for (int i = 0; i < _changeSeatController.seatDatas.length; i++) {
       seatList.add(_changeSeatController.seatDatas[i].toJson());
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
-        title: Text("좌석 이동"),
+        title: const Text('좌석 이동'),
         centerTitle: true,
         shadowColor: Colors.white,
         elevation: 1,
       ),
-      body:
-
-      Padding(
+      body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: FloatingActionButton.extended(
-                  heroTag: 'Text2',
-                  label: Text("${Api.cafeName}",style: TextStyle(fontSize: 22,color: Colors.white, fontWeight: FontWeight.w200),),// <-- Text
-                  backgroundColor: AppColor.appPurple,
-                  onPressed: ()  {
-                  }
+                heroTag: 'Text2',
+                label: Text(
+                  Api.cafeName,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ), // <-- Text
+                backgroundColor: AppColor.appPurple,
+                onPressed: () {},
               ),
             ),
             Card(
               color: AppColor.appPurple,
-              margin: EdgeInsets.all(15),
+              margin: const EdgeInsets.all(15),
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 width: 30,
                 height: 60,
-                child: TimerBuilder.periodic(Duration(seconds: 1),
-                    builder: (context){
-                      return Text(
-                        '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(Duration(hours: 9)))
-                        }',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                      );
-                    }
+                child: TimerBuilder.periodic(
+                  const Duration(seconds: 1),
+                  builder: (context) {
+                    return Text(
+                      '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(const Duration(hours: 9)))}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-            SizedBox(height: 20,),
-            Container(width: 500,
-                child: Divider(color: Colors.black, thickness: 2.0)),
-            SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
+            const SizedBox(
+              width: 500,
+              child: Divider(color: Colors.black, thickness: 2.0),
+            ),
+            const SizedBox(height: 20),
             Row(
               children: [
                 FloatingActionButton.extended(
-                    heroTag: 'entrance2',
-                    label: Text('${Api.cafeName}'),// <-- Text
-                    backgroundColor: AppColor.appPurple,
-                    onPressed: ()  {
-                    }
+                  heroTag: 'entrance2',
+                  label: Text(Api.cafeName), // <-- Text
+                  backgroundColor: AppColor.appPurple,
+                  onPressed: () {},
                 ),
               ],
             ),
-            SizedBox(height: 70),
+            const SizedBox(height: 70),
             FloatingActionButton.extended(
-                heroTag: 'Area1',
-                label: Text('좌석번호'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                  //server.getAllRoomStateReq(context);
-                  print(seatList);
-                }
+              heroTag: 'Area1',
+              label: const Text('좌석번호'), // <-- Text
+              backgroundColor: AppColor.appPurple,
+              onPressed: () {
+                //server.getAllRoomStateReq(context);
+                print(seatList);
+              },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Card(
               color: Colors.grey,
               child: Row(
                 children: [
                   FloatingActionButton.small(
-                      heroTag: 'colorSelect',
-                      backgroundColor: Colors.white,
-                      onPressed: ()  {
-                      }
+                    heroTag: 'colorSelect',
+                    backgroundColor: Colors.white,
+                    onPressed: () {},
                   ),
-                  Text(" : 사용가능"),
+                  const Text(' : 사용가능'),
                   FloatingActionButton.small(
-                      heroTag: 'colorSelect2',
-                      backgroundColor: AppColor.appPurple,
-                      onPressed: ()  {
-                      }
+                    heroTag: 'colorSelect2',
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: () {},
                   ),
-                  Text(" : 사용불가능"),
+                  const Text(' : 사용불가능'),
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
@@ -184,8 +193,10 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                       setState(() {
                         selectedSeatNumber = index + 1;
                       });
-                      showDialog(context: context,
-                          builder: _buildPopupDialog);
+                      showDialog(
+                        context: context,
+                        builder: _buildPopupDialog,
+                      );
                       print(selectedSeatNumber);
                     }
                   },
@@ -197,17 +208,23 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: changeSeatService.getRoomState(index, _changeSeatController) ? AppColor.appPurple : Colors.white,
+                      color: changeSeatService.getRoomState(index, _changeSeatController)
+                          ? AppColor.appPurple
+                          : Colors.white,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Row(
                         children: [
-                          SizedBox(width: 4,),
+                          const SizedBox(
+                            width: 4,
+                          ),
                           Text(
-                            "${_changeSeatController.seatDatas[index].seatNumber + 1}",
+                            '${_changeSeatController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: changeSeatService.getRoomState(index, _changeSeatController) ? Colors.white : AppColor.appPurple,
+                              color: changeSeatService.getRoomState(index, _changeSeatController)
+                                  ? Colors.white
+                                  : AppColor.appPurple,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),
@@ -219,7 +236,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
                 );
               },
             ),
-            SizedBox(height: 120),
+            const SizedBox(height: 120),
           ],
         ),
       ),
@@ -231,29 +248,39 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
       backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text('해당 좌석으로 이동하시겠습니까?', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+        children: const [
+          Text(
+            '해당 좌석으로 이동하시겠습니까?',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ],
       ),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("선택한 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text(
+                '선택한 좌석번호 : $selectedSeatNumber번',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+              ),
             ],
           ),
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        TextButton(
           onPressed: () async {
-            server.postSeatReservationStart(context, selectedSeatNumber - 1);
+            ref.watch(seatRepoProvider).postSeatReservationStart(selectedSeatNumber - 1);
             startTimer();
           },
-          child: const Text('Yes', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+          child: const Text(
+            'Yes',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ),
       ],
     );
@@ -264,28 +291,38 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
       backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text('좌석이동이 완료되었습니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+        children: const [
+          Text(
+            '좌석이동이 완료되었습니다.',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ],
       ),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("이동한 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text(
+                '이동한 좌석번호 : $selectedSeatNumber번',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+              ),
             ],
           ),
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        TextButton(
           onPressed: () async {
             Navigator.pop(context);
           },
-          child: const Text("OK", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+          child: const Text(
+            'OK',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ),
       ],
     );

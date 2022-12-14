@@ -1,45 +1,42 @@
+import 'dart:convert';
+
 import 'package:asc_portfolio/controller/InAppPayment_controller.dart';
 import 'package:asc_portfolio/model/payment_data_model.dart';
+import 'package:asc_portfolio/repository/payment_repository.dart';
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/item.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/stat_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../constant/enum/product/product_enum.dart';
 import '../../../style/app_color.dart';
 import '../payment_page.dart';
-import 'dart:convert';
 
-class InAppPaymentSecond extends StatefulWidget {
-
+class InAppPaymentSecond extends ConsumerStatefulWidget {
   late Product product;
 
-  InAppPaymentSecond({required this.product});
+  InAppPaymentSecond({super.key, required this.product});
 
-  _InAppPaymentSecondState createState() => _InAppPaymentSecondState(product: product);
-
-
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _InAppPaymentSecondState();
 }
 
-class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
-
+class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
   Payload payload = Payload();
   InAppPaymentController inAppPaymentController = InAppPaymentController();
 
-  late Product product;
-
-  _InAppPaymentSecondState({required this.product});
+  late Product product = widget.product;
 
   String get applicationId {
     return Bootpay().applicationId(
-        inAppPaymentController.webApplicationId,
-        inAppPaymentController.androidApplicationId,
-        inAppPaymentController.iosApplicationId
+      inAppPaymentController.webApplicationId,
+      inAppPaymentController.androidApplicationId,
+      inAppPaymentController.iosApplicationId,
     );
   }
 
@@ -55,46 +52,67 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-            backgroundColor: AppColor.appPurple,
-            title: Text('결제진행', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 20),),
-            shadowColor: Colors.white,
-            elevation: 1,
-          ),
-      body: Builder(builder: (BuildContext context) {
-        return Container(
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: FloatingActionButton.extended(
+      appBar: AppBar(
+        backgroundColor: AppColor.appPurple,
+        title: const Text(
+          '결제진행',
+          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+        ),
+        shadowColor: Colors.white,
+        elevation: 1,
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          return Container(
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: FloatingActionButton.extended(
                       heroTag: 'Text2',
-                      label: Text("${product.name} order 테스트",style: TextStyle(fontSize: 15,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
+                      label: Text(
+                        '${product.name} order 테스트',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ), // <-- Text
                       backgroundColor: AppColor.appPurple,
                       onPressed: () async {
-                        server.getPaymentConfirm("638af347cf9f6d001f64695e", context);
-                    }
+                        ref.read(paymentRepoProvider).getPaymentConfirm('638af347cf9f6d001f64695e');
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: 20,),
-                Center(
-                  child: FloatingActionButton.extended(
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: FloatingActionButton.extended(
                       heroTag: 'Text',
-                      label: Text("${product.name} 결제진행",style: TextStyle(fontSize: 15,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
+                      label: Text(
+                        '${product.name} 결제진행',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ), // <-- Text
                       backgroundColor: AppColor.appPurple,
                       onPressed: () {
                         goBootpayTest(context);
-                      }
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: 10)
-              ],
+                  const SizedBox(height: 10)
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 
@@ -115,12 +133,12 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
   //통계용 함수
   bootpayAnalyticsUserTrace() async {
     await Bootpay().userTrace(
-        // id: 'user_1234',
-        // email: 'user1234@gmail.com',
-        // gender: -1,
-        // birth: '19941014',
-        // area: '서울',
-        applicationId: applicationId
+      // id: 'user_1234',
+      // email: 'user1234@gmail.com',
+      // gender: -1,
+      // birth: '19941014',
+      // area: '서울',
+      applicationId: applicationId,
     );
   }
 
@@ -136,11 +154,11 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
     List<StatItem> items = [item1];
 
     await Bootpay().pageTrace(
-        // url: 'main_1234',
-        // pageType: 'sub_page_1234',
-        applicationId: applicationId,
-        //userId: 'user_1234',
-        items: items
+      // url: 'main_1234',
+      // pageType: 'sub_page_1234',
+      applicationId: applicationId,
+      //userId: 'user_1234',
+      items: items,
     );
   }
 
@@ -155,9 +173,9 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
     List<Item> itemList = [item1];
 
     payload.webApplicationId = inAppPaymentController.webApplicationId; // web application id
-    payload.androidApplicationId = inAppPaymentController.androidApplicationId; // android application id
+    payload.androidApplicationId =
+        inAppPaymentController.androidApplicationId; // android application id
     payload.iosApplicationId = inAppPaymentController.androidApplicationId; // ios application id
-
 
     payload.pg = '나이스페이';
     // payload.method = '카드';
@@ -165,15 +183,13 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
     payload.orderName = product.name; //결제할 상품명
     payload.price = product.price; //정기결제시 0 혹은 주석
 
-
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 
-
     payload.metadata = {
-      "callbackParam1" : "value12",
-      "callbackParam2" : "value34",
-      "callbackParam3" : "value56",
-      "callbackParam4" : "value78",
+      'callbackParam1': 'value12',
+      'callbackParam2': 'value34',
+      'callbackParam3': 'value56',
+      'callbackParam4': 'value78',
     }; // 전달할 파라미터, 결제 후 되돌려 주는 값
     payload.items = itemList; // 상품정보 배열
 
@@ -187,7 +203,7 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutterExample';
 
-    if(BootpayConfig.DEBUG) {
+    if (BootpayConfig.DEBUG) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
     }
 
@@ -204,10 +220,9 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
     // payload.extra?.openType = "iframe";
   }
 
-
   //버튼클릭시 부트페이 결제요청 실행
   void goBootpayTest(BuildContext context) {
-    if(kIsWeb) {
+    if (kIsWeb) {
       payload.extra?.openType = 'iframe';
     }
     Bootpay().requestPayment(
@@ -217,37 +232,38 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
       // closeButton: Icon(Icons.close, size: 35.0, color: Colors.black54),
       onCancel: (String data) {
         print('------- onCancel: $data');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentPage()));
       },
       onError: (String data) {
         print('------- onError: $data');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentPage()));
       },
       onClose: () {
         print('------- onClose');
         Bootpay().dismiss(context); //명시적으로 부트페이 뷰 종료 호출
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentPage()));
         //TODO - 원하시는 라우터로 페이지 이동
       },
       onIssued: (String data) {
         print('------- onIssued: $data');
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentPage()));
       },
       onConfirmAsync: (String data) async {
-        Map<String, dynamic> mapData = jsonDecode(data) ;
-        var paymentDataDto = PaymentDataDto.fromJson(mapData);
+        Map<String, dynamic> mapData = jsonDecode(data);
+        var paymentDataDto = PaymendDataModel.fromJson(mapData);
         Map<String, dynamic> orderData = {
-          "orderProduct" : product.toString().substring(8),
-          "orderPrice" : product.price,
-          "productLabel" : product.label + DateTime.now().millisecondsSinceEpoch.toString(),
-          "receiptOrderId" : paymentDataDto.receiptOrderId,
+          'orderProduct': product.toString().substring(8),
+          'orderPrice': product.price,
+          'productLabel': product.label + DateTime.now().millisecondsSinceEpoch.toString(),
+          'receiptOrderId': paymentDataDto.receiptOrderId,
         };
         // print(paymentString);
-        server.postProductReq(orderData, context);
-        print("Order inserted by server");
-        String cofirmCode = await server.getPaymentConfirm(paymentDataDto.receiptOrderId, context);
+        ref.read(paymentRepoProvider).postProductReq(orderData);
+        print('Order inserted by server');
+        String cofirmCode =
+            await ref.read(paymentRepoProvider).getPaymentConfirm(paymentDataDto.receiptOrderId);
         print('------- onConfirmAsync11: $data');
-        if(cofirmCode == "OK") {
+        if (cofirmCode == 'OK') {
           return true;
         }
         return false;
@@ -261,7 +277,7 @@ class _InAppPaymentSecondState extends State<InAppPaymentSecond> {
   Future<void> checkQtyFromServer(String data) async {
     //TODO 서버로부터 재고파악을 한다
     print('checkQtyFromServer start: $data');
-    return Future.delayed(Duration(seconds: 1), () {
+    return Future.delayed(const Duration(seconds: 1), () {
       print('checkQtyFromServer end: $data');
 
       return true;

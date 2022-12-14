@@ -1,20 +1,21 @@
 import 'package:asc_portfolio/constant/assets.dart';
+import 'package:asc_portfolio/repository/payment_repository.dart';
 import 'package:asc_portfolio/server/api/api.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/enum/cafe/cafe_name.dart';
 import '../../style/app_color.dart';
 import '../home_page.dart';
 
-class SelectCafePage extends StatefulWidget {
+class SelectCafePage extends ConsumerStatefulWidget {
   @override
   _SelectCafePageState createState() => _SelectCafePageState();
 }
 
-class _SelectCafePageState extends State<SelectCafePage> {
+class _SelectCafePageState extends ConsumerState<SelectCafePage> {
   void _fetchChangeCafe(String cafeName) async {
-    await server.postChangeCafe(context, cafeName);
+    await ref.read(paymentRepoProvider).postChangeCafe(cafeName);
   }
 
   @override

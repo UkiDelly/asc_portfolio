@@ -1,6 +1,5 @@
 import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/admin/admin_check_user_valid_ticket.dart';
@@ -29,7 +28,6 @@ class TicketRepository {
 
   Future<AdminCheckUserValidTicket> getAdminCheckUserValidTicket(
     String userLoginId,
-    BuildContext context,
   ) async {
     Response response;
 

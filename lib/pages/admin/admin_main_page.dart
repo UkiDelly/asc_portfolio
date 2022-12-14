@@ -2,42 +2,39 @@ import 'dart:async';
 
 import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_searching_page.dart';
+import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/repository/product_repository.dart';
+import 'package:asc_portfolio/repository/seat_repository.dart';
 import 'package:asc_portfolio/service/admin_main_service.dart';
-import 'package:asc_portfolio/service/home_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
-import 'package:timer_builder/timer_builder.dart';
 
-import '../../constant/enum/product/product_enum.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 import '../home_page.dart';
 
-class AdminMainPage extends StatefulWidget {
-
-  static String _selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9))) + " ~ "
-      + DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9)));
+class AdminMainPage extends ConsumerStatefulWidget {
+  static String _selectedDate =
+      "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
 
   const AdminMainPage({Key? key}) : super(key: key);
 
   @override
-  State<AdminMainPage> createState() => _AdminMainPageState();
+  ConsumerState<AdminMainPage> createState() => _AdminMainPageState();
 }
 
-class _AdminMainPageState extends State<AdminMainPage> {
-
-  static final storage = FlutterSecureStorage();
-  AdminController _adminController = AdminController();
-  AdminMainService _adminMainService = AdminMainService();
+class _AdminMainPageState extends ConsumerState<AdminMainPage> {
+  static const storage = FlutterSecureStorage();
+  final AdminController _adminController = AdminController();
+  final AdminMainService _adminMainService = AdminMainService();
   int todaySalePrice = 0;
   int selectedSeatNumber = 0;
 
-  String dailySales = DateTime.now().add(Duration(days: -1)).toString().substring(0,23);
-  String weeklySales = DateTime.now().add(Duration(days: -7)).toString().substring(0,23);
-  String monthSales = DateTime.now().add(Duration(days: -30)).toString().substring(0,23);
+  String dailySales = DateTime.now().add(const Duration(days: -1)).toString().substring(0, 23);
+  String weeklySales = DateTime.now().add(const Duration(days: -7)).toString().substring(0, 23);
+  String monthSales = DateTime.now().add(const Duration(days: -30)).toString().substring(0, 23);
   //2022-12-04 06:01:14.266
   //2022-11-03 01:01:32.526
 
@@ -47,15 +44,15 @@ class _AdminMainPageState extends State<AdminMainPage> {
   final _loginIdController = TextEditingController();
 
   void _roomFetchGet() async {
-    final roomDatas = await server.getAllRoomStateReq(context);
+    final roomDatas = await ref.read(seatRepoProvider).getAllRoomStateReq();
     setState(() {
       _adminController.seatDatas = roomDatas;
     });
   }
 
-  void _fetchApi(String day) async{
-    var productList = await server.getProductInfoForAdmin(context, day);
-    if (this.mounted) {
+  void _fetchApi(String day) async {
+    var productList = await ref.read(productProvider).getProductInfoForAdmin(day);
+    if (mounted) {
       setState(() {
         _adminController.productList = productList;
       });
@@ -63,13 +60,13 @@ class _AdminMainPageState extends State<AdminMainPage> {
   }
 
   void _fechOnlyOneDay() async {
-    var oneDayProductList = await server.getProductInfoForAdmin(context, dailySales);
-    if (this.mounted) {
+    var oneDayProductList = await ref.read(productProvider).getProductInfoForAdmin(dailySales);
+    if (mounted) {
       setState(() {
         _adminController.oneDayProductList = oneDayProductList;
         int price = 0;
-        for(int i=0; i < _adminController.oneDayProductList.length; i++) {
-          price += _adminController.oneDayProductList[i].productPrice ?? 0;
+        for (int i = 0; i < _adminController.oneDayProductList.length; i++) {
+          price += _adminController.oneDayProductList[i].productPrice;
         }
         todaySalePrice = price;
       });
@@ -77,21 +74,23 @@ class _AdminMainPageState extends State<AdminMainPage> {
   }
 
   void _fetchAdminCancelSeat(int seatNumber) async {
-    await server.postAdminExitSeat(context, seatNumber);
+    await ref.read(seatRepoProvider).postAdminExitSeat(seatNumber);
   }
+
   Future<void> startTimer() async {
-    new Timer.periodic(
-      Duration(milliseconds: 50),
-          (Timer timer) => setState(
-            () {
+    Timer.periodic(
+      const Duration(milliseconds: 50),
+      (Timer timer) => setState(
+        () {
           if (_progress == 0.05) {
             setState(() {
               isNotCompleteLoading = false;
             });
             timer.cancel();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AdminMainPage()))
-                .then((value) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminMainPage()),
+            ).then((value) {
               setState(() {
                 didChangeDependencies();
               });
@@ -106,7 +105,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
 
   @override
   void didChangeDependencies() {
-    print("AdminPage_didChangeDependencies실행");
+    print('AdminPage_didChangeDependencies실행');
     _fetchApi(dailySales);
     _roomFetchGet();
     super.didChangeDependencies();
@@ -126,210 +125,291 @@ class _AdminMainPageState extends State<AdminMainPage> {
 
   @override
   Widget build(BuildContext context) {
-
     List seatList = [];
-    for (int i=0; i< _adminController.seatDatas.length; i++) {
+    for (int i = 0; i < _adminController.seatDatas.length; i++) {
       seatList.add(_adminController.seatDatas[i].toJson());
     }
 
     int price = 0;
-    for(int i=0; i < _adminController.productList.length; i++) {
+    for (int i = 0; i < _adminController.productList.length; i++) {
       price += _adminController.productList[i].productPrice ?? 0;
     }
     final totalSales = price;
 
     List widgetOption = [
-          ListView(
+      ListView(
+        children: [
+          Column(
             children: [
-              Column(
-              children: [
-                SizedBox(height: 40,),
-                SizedBox(
-                  width: 350,
-                  height: 100,
-                  child: Card(
-                      color: AppColor.appPurple,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("금일 매출액", style: TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.w300),),
-                              ),
-                              Icon(Icons.arrow_drop_down, color: Colors.white),
-                              SizedBox(width: 80,),
-                              Icon(Icons.add_chart, color: Colors.white),
-                              SizedBox(width: 10,),
-                            ],
-                          ),
-                        Text("$todaySalePrice 원", style: TextStyle(fontSize: 25,color: Colors.white, fontWeight: FontWeight.w300),),
-                      ],
-                    )
-                  ),
-                ),
-                  SizedBox(height: 20,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              const SizedBox(
+                height: 40,
+              ),
+              SizedBox(
+                width: 350,
+                height: 100,
+                child: Card(
+                  color: AppColor.appPurple,
+                  child: Column(
                     children: [
-                      FloatingActionButton.extended(
-                          heroTag: 'select1',
-                          label: Text("1일 매출",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
-                          backgroundColor: _adminController.oneHasPressed ? AppColor.appPurple : Colors.grey,
-                          onPressed: () async {
-                            setState(() {
-                            _fetchApi(dailySales);
-                            _adminController.oneHasPressed = true;
-                            _adminController.weekHasPressed = false;
-                            _adminController.monthHasPressed = false;
-                            _adminController.selectHasPressed = false;
-                            AdminMainPage._selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: -24))) +" ~ " + DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9)));;
-                          });
-                        }
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              '금일 매출액',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.arrow_drop_down, color: Colors.white),
+                          SizedBox(
+                            width: 80,
+                          ),
+                          Icon(Icons.add_chart, color: Colors.white),
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10,),
-                      FloatingActionButton.extended(
-                          heroTag: 'select2',
-                          label: Text("7일 매출",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
-                          backgroundColor: _adminController.weekHasPressed ? AppColor.appPurple : Colors.grey,
-                          onPressed: () async {
-                            setState(() {
-                            _fetchApi(weeklySales);
-                            _adminController.weekHasPressed = true;
-                            _adminController.oneHasPressed = false;
-                            _adminController.monthHasPressed = false;
-                            _adminController.selectHasPressed = false;
-                            AdminMainPage._selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: -168))) +" ~ " + DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9)));;
-                            });
-                          }
-                      ),
-                      SizedBox(width: 10,),
-                      FloatingActionButton.extended(
-                          heroTag: 'select3',
-                          label: Text("30일 매출",style: TextStyle(fontSize: 13,color: Colors.white, fontWeight: FontWeight.w300),),// <-- Text
-                          backgroundColor: _adminController.monthHasPressed ? AppColor.appPurple : Colors.grey,
-                          onPressed: () async {
-                            setState(() {
-                            _fetchApi(monthSales);
-                            _adminController.monthHasPressed = true;
-                            _adminController.oneHasPressed = false;
-                            _adminController.weekHasPressed = false;
-                            _adminController.selectHasPressed = false;
-                            AdminMainPage._selectedDate = DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: -720))) +" ~ " + DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9)));
-                          });
-                        }
+                      Text(
+                        '$todaySalePrice 원',
+                        style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 20,),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   FloatingActionButton.extended(
-                    heroTag: 'select4',
-                    backgroundColor: _adminController.selectHasPressed ? AppColor.appPurple : Colors.grey,
-                    onPressed: () {
+                    heroTag: 'select1',
+                    label: const Text(
+                      '1일 매출',
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
+                    ), // <-- Text
+                    backgroundColor:
+                        _adminController.oneHasPressed ? AppColor.appPurple : Colors.grey,
+                    onPressed: () async {
                       setState(() {
-                      _adminController.selectHasPressed = true;
-                      _adminController.monthHasPressed = false;
-                      _adminController.oneHasPressed = false;
-                      _adminController.weekHasPressed = false;
-                      });
-                      Future future = showDatePicker(
-                        initialDatePickerMode: DatePickerMode.day,
-                        context: context,
-                        currentDate: DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime(2023),
-                        initialDate: DateTime.now(),
-                      );
-                      future.then((date) => {
-                        setState(() {
-                          print("date:"+date.toString());
-                          AdminMainPage._selectedDate = DateFormat('yyyy-MM-dd').format(date.add(Duration(hours: 9))) + "~" + DateFormat('yyyy-MM-dd').format(DateTime.now().add(Duration(hours: 9)));
-                        }),
-                        _fetchApi(date.toString()),
-                      print(date.toString()),
+                        _fetchApi(dailySales);
+                        _adminController.oneHasPressed = true;
+                        _adminController.weekHasPressed = false;
+                        _adminController.monthHasPressed = false;
+                        _adminController.selectHasPressed = false;
+                        AdminMainPage._selectedDate =
+                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -24)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
                       });
                     },
-                    icon: Icon(Icons.calendar_today),
-                    label: Text(
-                      '개별날짜선택',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                    ),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   FloatingActionButton.extended(
-                      heroTag: 'select5',
-                      label: Text(
-                        '선택한 날짜 : ${AdminMainPage._selectedDate
-                        }',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                      ),
-                      backgroundColor: AppColor.appPurple,
-                      onPressed: () {
-                      }
+                    heroTag: 'select2',
+                    label: const Text(
+                      '7일 매출',
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
+                    ), // <-- Text
+                    backgroundColor:
+                        _adminController.weekHasPressed ? AppColor.appPurple : Colors.grey,
+                    onPressed: () async {
+                      setState(() {
+                        _fetchApi(weeklySales);
+                        _adminController.weekHasPressed = true;
+                        _adminController.oneHasPressed = false;
+                        _adminController.monthHasPressed = false;
+                        _adminController.selectHasPressed = false;
+                        AdminMainPage._selectedDate =
+                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -168)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                      });
+                    },
                   ),
-                  SizedBox(height: 20,),
-                  SizedBox(
-                    width: 250,
-                    height: 100,
-                    child: Card(
-                      color: AppColor.appPurple,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text("매출액", style: TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.w300),),
-                              ),
-                              Icon(Icons.arrow_drop_down, color: Colors.white),
-                              SizedBox(width: 80,),
-                            ],
-                          ),
-                          Text("$price 원", style: TextStyle(fontSize: 25,color: Colors.white, fontWeight: FontWeight.w300),),
-                        ],
-                      ),
-                    ),
+                  const SizedBox(
+                    width: 10,
                   ),
-                  SizedBox(height: 30,),
                   FloatingActionButton.extended(
-                    backgroundColor: AppColor.appPurple,
-                    onPressed: () {},
-                    tooltip: 'salelist3',
-                    icon: Icon(Icons.view_list_outlined),
-                    label: Text(
-                      '해당 기간 결제리스트',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                  SizedBox(height: 20,),
-                  Container(
-                    width: 400,
-                    height: 500,
-                    child: ListView.builder(
-                      itemCount: _adminController.productList.length,
-                        itemBuilder: (BuildContext context, int idx) {
-                      return Card(
-                        elevation: 5,
-                          shadowColor: AppColor.appPurple,
-                          surfaceTintColor: AppColor.appPurple,
-                          margin: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Icon(Icons.paypal, size: 40,color: Colors.black,),
-                            title: Text(_adminController.productList[idx].productNameTypeString),
-                            subtitle: Text('금액: ${_adminController.productList[idx].productPrice},'
-                                ' 일시 : ${_adminController.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
-                                ' 제품번호: ${_adminController.productList[idx].productLabel},'
-                                ' 상태: ${_adminController.productList[idx].productState}'),
-                            onTap: () {
-                          },
-                        ),
-                      );
-                    }),
+                    heroTag: 'select3',
+                    label: const Text(
+                      '30일 매출',
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
+                    ), // <-- Text
+                    backgroundColor:
+                        _adminController.monthHasPressed ? AppColor.appPurple : Colors.grey,
+                    onPressed: () async {
+                      setState(() {
+                        _fetchApi(monthSales);
+                        _adminController.monthHasPressed = true;
+                        _adminController.oneHasPressed = false;
+                        _adminController.weekHasPressed = false;
+                        _adminController.selectHasPressed = false;
+                        AdminMainPage._selectedDate =
+                            "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -720)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                      });
+                    },
                   ),
                 ],
-               ),
-              ]
-            ),
-
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              FloatingActionButton.extended(
+                heroTag: 'select4',
+                backgroundColor:
+                    _adminController.selectHasPressed ? AppColor.appPurple : Colors.grey,
+                onPressed: () {
+                  setState(() {
+                    _adminController.selectHasPressed = true;
+                    _adminController.monthHasPressed = false;
+                    _adminController.oneHasPressed = false;
+                    _adminController.weekHasPressed = false;
+                  });
+                  Future future = showDatePicker(
+                    initialDatePickerMode: DatePickerMode.day,
+                    context: context,
+                    currentDate: DateTime.now(),
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2023),
+                    initialDate: DateTime.now(),
+                  );
+                  future.then(
+                    (date) => {
+                      setState(() {
+                        print('date:$date');
+                        AdminMainPage._selectedDate =
+                            "${DateFormat('yyyy-MM-dd').format(date.add(const Duration(hours: 9)))}~${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
+                      }),
+                      _fetchApi(date.toString()),
+                      print(date.toString()),
+                    },
+                  );
+                },
+                icon: const Icon(Icons.calendar_today),
+                label: const Text(
+                  '개별날짜선택',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              FloatingActionButton.extended(
+                heroTag: 'select5',
+                label: Text(
+                  '선택한 날짜 : ${AdminMainPage._selectedDate}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: AppColor.appPurple,
+                onPressed: () {},
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: 250,
+                height: 100,
+                child: Card(
+                  color: AppColor.appPurple,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              '매출액',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+                          Icon(Icons.arrow_drop_down, color: Colors.white),
+                          SizedBox(
+                            width: 80,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '$price 원',
+                        style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              FloatingActionButton.extended(
+                backgroundColor: AppColor.appPurple,
+                onPressed: () {},
+                tooltip: 'salelist3',
+                icon: const Icon(Icons.view_list_outlined),
+                label: const Text(
+                  '해당 기간 결제리스트',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: 400,
+                height: 500,
+                child: ListView.builder(
+                  itemCount: _adminController.productList.length,
+                  itemBuilder: (BuildContext context, int idx) {
+                    return Card(
+                      elevation: 5,
+                      shadowColor: AppColor.appPurple,
+                      surfaceTintColor: AppColor.appPurple,
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.paypal,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        title: Text(_adminController.productList[idx].productNameTypeString),
+                        subtitle: Text('금액: ${_adminController.productList[idx].productPrice},'
+                            ' 일시 : ${_adminController.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
+                            ' 제품번호: ${_adminController.productList[idx].productLabel},'
+                            ' 상태: ${_adminController.productList[idx].productState}'),
+                        onTap: () {},
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
       SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -338,63 +418,71 @@ class _AdminMainPageState extends State<AdminMainPage> {
               backgroundColor: AppColor.appPurple,
               onPressed: () {},
               tooltip: 'salelist4',
-              icon: Icon(Icons.view_list_outlined),
-              label: Text(
-                '사용자 검색',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),
+              icon: const Icon(Icons.view_list_outlined),
+              label: const Text(
+                '사용자 검색',
+                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
               ),
             ),
-            SizedBox(height: 20),
-            Container(
+            const SizedBox(height: 20),
+            SizedBox(
               height: 50,
               width: 350,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
                   controller: _loginIdController,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.name,
                   autofocus: false,
                   decoration: InputDecoration(
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                        )
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
                       ),
+                    ),
                     focusColor: Colors.black,
                     filled: true,
                     fillColor: Colors.white,
                     hintText: '유저 로그인 ID',
-                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                    )),
+                    contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Container(
               height: 50,
               width: 250,
               decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(20)),
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(20),
+              ),
               child: FloatingActionButton.extended(
-                  heroTag: 'Login',
-                  label: Text('사용자 조회'),// <-- Text
-                  backgroundColor: Colors.black,
-                  onPressed: () async {
-                    print(_loginIdController.text);
-                    if(_loginIdController.text != "") {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (context) =>
-                          AdminSearchingPage(_loginIdController.text)));
+                heroTag: 'Login',
+                label: const Text('사용자 조회'), // <-- Text
+                backgroundColor: Colors.black,
+                onPressed: () async {
+                  print(_loginIdController.text);
+                  if (_loginIdController.text != '') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdminSearchingPage(_loginIdController.text),
+                      ),
+                    );
                   }
-                }
+                },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
           ],
@@ -404,55 +492,52 @@ class _AdminMainPageState extends State<AdminMainPage> {
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 FloatingActionButton.extended(
-                    heroTag: 'entrance2',
-                    label: Text("좌석 강제 종료"),// <-- Text
-                    backgroundColor: AppColor.appPurple,
-                    onPressed: ()  {
-                    }
+                  heroTag: 'entrance2',
+                  label: const Text('좌석 강제 종료'), // <-- Text
+                  backgroundColor: AppColor.appPurple,
+                  onPressed: () {},
                 ),
               ],
             ),
-            SizedBox(height: 70),
+            const SizedBox(height: 70),
             FloatingActionButton.extended(
-                heroTag: 'Area1',
-                label: Text('좌석번호'),// <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: ()  {
-                  //server.getAllRoomStateReq(context);
-                  print(seatList);
-                }
+              heroTag: 'Area1',
+              label: const Text('좌석번호'), // <-- Text
+              backgroundColor: AppColor.appPurple,
+              onPressed: () {
+                //server.getAllRoomStateReq(context);
+                print(seatList);
+              },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Card(
               color: Colors.grey,
               child: Row(
                 children: [
                   FloatingActionButton.small(
-                      heroTag: 'colorSelect',
-                      backgroundColor: Colors.white,
-                      onPressed: ()  {
-                      }
+                    heroTag: 'colorSelect',
+                    backgroundColor: Colors.white,
+                    onPressed: () {},
                   ),
-                  Text(" : 사용가능"),
+                  const Text(' : 사용가능'),
                   FloatingActionButton.small(
-                      heroTag: 'colorSelect2',
-                      backgroundColor: AppColor.appPurple,
-                      onPressed: ()  {
-                      }
+                    heroTag: 'colorSelect2',
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: () {},
                   ),
-                  Text(" : 사용불가능"),
+                  const Text(' : 사용불가능'),
                 ],
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             GridView.builder(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
@@ -460,15 +545,16 @@ class _AdminMainPageState extends State<AdminMainPage> {
               itemCount: _adminController.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: ()  {
+                  onTap: () {
                     if (_adminController.seatDatas[index].seatState.length == 8) {
                       setState(() {
                         selectedSeatNumber = index + 1;
                       });
                       print(selectedSeatNumber);
                       showDialog(
-                          context: context,
-                          builder: _buildPopupDialog);
+                        context: context,
+                        builder: _buildPopupDialog,
+                      );
                     }
                   },
                   child: Container(
@@ -479,17 +565,23 @@ class _AdminMainPageState extends State<AdminMainPage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: _adminMainService.getRoomState(index, _adminController) ? AppColor.appPurple : Colors.white,
+                      color: _adminMainService.getRoomState(index, _adminController)
+                          ? AppColor.appPurple
+                          : Colors.white,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Row(
                         children: [
-                          SizedBox(width: 4,),
+                          const SizedBox(
+                            width: 4,
+                          ),
                           Text(
-                            "${_adminController.seatDatas[index].seatNumber + 1}",
+                            '${_adminController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: _adminMainService.getRoomState(index, _adminController) ? Colors.white : AppColor.appPurple,
+                              color: _adminMainService.getRoomState(index, _adminController)
+                                  ? Colors.white
+                                  : AppColor.appPurple,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),
@@ -501,7 +593,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
                 );
               },
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
           ],
         ),
       ),
@@ -511,7 +603,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColor.appPurple,
-        title: Text("${Api.cafeName} 관리자 페이지"),
+        title: Text('${Api.cafeName} 관리자 페이지'),
         centerTitle: true,
         shadowColor: Colors.white,
         elevation: 1,
@@ -519,18 +611,17 @@ class _AdminMainPageState extends State<AdminMainPage> {
           IconButton(
             color: Colors.white,
             onPressed: () => {
-                setState(() {
+              setState(() {
                 storage.deleteAll();
                 //storage.write(key: 'accessToken', value: null);
-                HomePageState.isLogined = false;
-                }),
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage())),
+                ref.watch(homeStateProvider.notifier).isLogin = false;
+              }),
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage())),
             },
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: AppColor.appPurple,
@@ -544,17 +635,17 @@ class _AdminMainPageState extends State<AdminMainPage> {
             _adminController.selectedIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
-            label: "판매량",
+            label: '판매량',
             icon: Icon(Icons.attach_money_sharp),
           ),
           BottomNavigationBarItem(
-            label: "사용자 검색, 환불",
+            label: '사용자 검색, 환불',
             icon: Icon(Icons.accessibility_sharp),
           ),
           BottomNavigationBarItem(
-            label: "좌석강제종료",
+            label: '좌석강제종료',
             icon: Icon(Icons.airline_seat_recline_normal_sharp),
           ),
         ],
@@ -570,29 +661,39 @@ class _AdminMainPageState extends State<AdminMainPage> {
       backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text('해당 좌석을 강제 종료 시킵니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+        children: const [
+          Text(
+            '해당 좌석을 강제 종료 시킵니다.',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ],
       ),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("선택한 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text(
+                '선택한 좌석번호 : $selectedSeatNumber번',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+              ),
             ],
           ),
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        TextButton(
           onPressed: () async {
             _fetchAdminCancelSeat(selectedSeatNumber - 1);
             startTimer();
           },
-          child: const Text('확인', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+          child: const Text(
+            '확인',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ),
       ],
     );
@@ -603,28 +704,38 @@ class _AdminMainPageState extends State<AdminMainPage> {
       backgroundColor: AppColor.appPurple,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text('강제 종료 되었습니다.', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white), ),
+        children: const [
+          Text(
+            '강제 종료 되었습니다.',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ],
       ),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text("종료시킨 좌석번호 : $selectedSeatNumber번", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+              Text(
+                '종료시킨 좌석번호 : $selectedSeatNumber번',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+              ),
             ],
           ),
         ],
       ),
       actions: <Widget>[
-        new TextButton(
+        TextButton(
           onPressed: () async {
             Navigator.pop(context);
           },
-          child: const Text("OK", style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),
+          child: const Text(
+            'OK',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
+          ),
         ),
       ],
     );

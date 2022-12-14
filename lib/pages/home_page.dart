@@ -1,13 +1,13 @@
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/constant/enum/product/product_enum.dart';
-import 'package:asc_portfolio/controller/home_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_page.dart';
 import 'package:asc_portfolio/pages/nav_drawer/nav_drawer_page.dart';
 import 'package:asc_portfolio/pages/payment/in_app_payment/in_app_payment.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:asc_portfolio/pages/seat/specific_seat_page.dart';
-import 'package:asc_portfolio/service/home_service.dart';
+import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,19 +26,13 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class HomePageState extends ConsumerState<HomePage> {
-  static bool isLogined = false;
+  late bool isLogined = ref.watch(homeStateProvider.notifier).isLogin;
   String rolyType = '';
-  int selectedSeatNumber = 0;
+  late int selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
-  final HomeController _homeController = HomeController();
-  final HomeService _homeService = HomeService();
-
-  void _roomFetchGet() async {
-    final roomDatas = await server.getAllRoomStateReq(context);
-    setState(() {
-      _homeController.seatDatas = roomDatas;
-    });
-  }
+  // final HomeController _homeController = HomeController();
+  late final homeController = ref.watch(homeStateProvider);
+  late final storage = ref.read(secureStorageProvider);
 
   void getRolyType() async {
     String? rolyType = await storage.read(key: 'roleType');
@@ -48,73 +42,6 @@ class HomePageState extends ConsumerState<HomePage> {
     if (rolyType == 'ADMIN') {
       Navigator.popAndPushNamed(context, '/AdminMainPage');
     }
-  }
-
-  void _loginCheckAndFetch() async {
-    bool checkLoginValid = await server.getCheckLogin(context);
-    setState(() {
-      isLogined = checkLoginValid;
-    });
-    if (isLogined == true) {
-      final userQrAndNameData = await server.getUserQrAndNameReq(context);
-      setState(() {
-        _homeController.qrCode = userQrAndNameData.qrCode;
-        _homeController.userName = userQrAndNameData.userName;
-      });
-      final userTicketInfo = await server.getUserTicketInfo(context);
-      print('userTicketproductLabel=${userTicketInfo.productLabel}');
-      setState(() {
-        _homeController.userTicketInfo = userTicketInfo;
-
-        if (userTicketInfo.productLabel.contains('PART-TIME')) {
-          _homeController.period = userTicketInfo.remainingTime ?? 0;
-        } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
-          _homeController.period = userTicketInfo.period ?? 0;
-        }
-      });
-      final userSeatReservationInfo = await server.getUserSeatReservationInfo(context);
-      setState(() {
-        _homeController.seatReservationSeatNumber = userSeatReservationInfo.seatNumber;
-        _homeController.seatReservationStartTime = userSeatReservationInfo.startTime;
-        _homeController.seatReservationCreateDate = userSeatReservationInfo.createDate;
-        _homeController.seatReservationPeriod = userSeatReservationInfo.period;
-        _homeController.seatReservationTimeInUse = userSeatReservationInfo.timeInUse;
-        _homeController.format = DateFormat('HH시 mm분').format(
-          DateTime.parse(_homeController.seatReservationCreateDate).subtract(
-            Duration(
-              days: DateTime.now().day,
-              hours: DateTime.now().hour + 9,
-              minutes: DateTime.now().minute,
-            ),
-          ),
-        );
-      });
-      print('_loginCheckAndFetch실행');
-      print('seatReservationCreateDate=${_homeController.seatReservationCreateDate}');
-      print('seatReservationSeatNumber=${_homeController.seatReservationSeatNumber}');
-      print('seatReservationStartTime=${_homeController.seatReservationStartTime}');
-      print('seatReservationPeriod=${_homeController.seatReservationPeriod}');
-      print('userQrAndName=${_homeController.qrCode}');
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    print('didChangeDependencies실행');
-    _loginCheckAndFetch();
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    getRolyType();
-    _roomFetchGet();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -136,9 +63,9 @@ class HomePageState extends ConsumerState<HomePage> {
     print('DateTime=${DateTime.now()}');
     //.replaceAll(' ', '').replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')
     String validTime = DateFormat('yyyy-MM-dd h시 mm분까지')
-        .format(DateTime.now().add(Duration(hours: 9, minutes: _homeController.period)));
-    for (int i = 0; i < _homeController.seatDatas.length; i++) {
-      seatList.add(_homeController.seatDatas[i].toJson());
+        .format(DateTime.now().add(Duration(hours: 9, minutes: homeController.period)));
+    for (int i = 0; i < homeController.seatDatas.length; i++) {
+      seatList.add(homeController.seatDatas[i].toJson());
     }
 
     List widgetOptions = [
@@ -299,13 +226,13 @@ class HomePageState extends ConsumerState<HomePage> {
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
               ),
-              itemCount: _homeController.seatDatas.length,
+              itemCount: homeController.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
                     if (isLogined == true &&
-                        _homeController.seatDatas[index].seatState.length == 10 &&
-                        _homeController.userTicketInfo?.isValidTicket == 'VALID') {
+                        homeController.seatDatas[index].seatState.length == 10 &&
+                        homeController.userTicketInfo?.isValidTicket == 'VALID') {
                       setState(() {
                         selectedSeatNumber = index + 1;
                       });
@@ -326,7 +253,7 @@ class HomePageState extends ConsumerState<HomePage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: _homeService.getRoomState(index, _homeController)
+                      color: ref.watch(homeStateProvider.notifier).getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -338,9 +265,9 @@ class HomePageState extends ConsumerState<HomePage> {
                             width: 4,
                           ),
                           Text(
-                            '${_homeController.seatDatas[index].seatNumber + 1}',
+                            '${homeController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: _homeService.getRoomState(index, _homeController)
+                              color: ref.watch(homeStateProvider.notifier).getRoomState(index)
                                   ? Colors.white
                                   : AppColor.appPurple,
                               fontSize: 35,
@@ -369,7 +296,7 @@ class HomePageState extends ConsumerState<HomePage> {
               width: 300,
               height: 300,
               child: QrImage(
-                data: _homeController.qrCode,
+                data: homeController.qrCode,
                 version: QrVersions.auto,
                 backgroundColor: Colors.white,
               ),
@@ -383,9 +310,9 @@ class HomePageState extends ConsumerState<HomePage> {
           FloatingActionButton.extended(
             heroTag: 'UserName',
             icon: const Icon(Icons.account_box),
-            label: _homeController.userName != ''
+            label: homeController.userName != ''
                 ? Text(
-                    '${_homeController.userName}님',
+                    '${homeController.userName}님',
                     style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -400,9 +327,9 @@ class HomePageState extends ConsumerState<HomePage> {
           FloatingActionButton.extended(
             heroTag: 'UserSeat',
             icon: const Icon(Icons.event_seat),
-            label: _homeController.seatReservationSeatNumber != 0
+            label: homeController.seatReservationSeatNumber != 0
                 ? Text(
-                    '내 좌석번호 : ${_homeController.seatReservationSeatNumber + 1}번',
+                    '내 좌석번호 : ${homeController.seatReservationSeatNumber + 1}번',
                     style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -417,9 +344,9 @@ class HomePageState extends ConsumerState<HomePage> {
           FloatingActionButton.extended(
             heroTag: 'UserTime',
             icon: const Icon(Icons.timer),
-            label: _homeController.seatReservationStartTime != 0
+            label: homeController.seatReservationStartTime != 0
                 ? Text(
-                    '좌석 남은시간: ${_homeController.format}',
+                    '좌석 남은시간: ${homeController.format}',
                     style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -465,7 +392,7 @@ class HomePageState extends ConsumerState<HomePage> {
           FloatingActionButton.extended(
             heroTag: 'Pass',
             icon: const Icon(Icons.timelapse_rounded),
-            label: _homeController.period == 0
+            label: homeController.period == 0
                 ? const Text('이용권이 없습니다')
                 : Text(
                     '티켓남은기간: $validTime ',
@@ -512,7 +439,10 @@ class HomePageState extends ConsumerState<HomePage> {
                 }
               else if (isLogined == false)
                 {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo())),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginDemo()),
+                  ),
                 }
             },
             icon: isLogined ? const Icon(Icons.add_card) : const Icon(Icons.login),
@@ -527,12 +457,10 @@ class HomePageState extends ConsumerState<HomePage> {
             isLogined ? Colors.white.withOpacity(.60) : Colors.white.withOpacity(.10),
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        currentIndex: _homeController.selectedIndex, //현재 선택된 Index
+        currentIndex: homeController.selectedIndex, //현재 선택된 Index
         onTap: (int index) {
           if (isLogined == true) {
-            setState(() {
-              _homeController.selectedIndex = index;
-            });
+            ref.read(homeStateProvider.notifier).setSelectedIndex = index;
           }
         },
         items: const [
@@ -551,7 +479,7 @@ class HomePageState extends ConsumerState<HomePage> {
         ],
       ),
       body: Center(
-        child: widgetOptions.elementAt(_homeController.selectedIndex),
+        child: widgetOptions.elementAt(homeController.selectedIndex),
       ),
     );
   }

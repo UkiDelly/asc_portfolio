@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
+import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -11,14 +13,14 @@ import '../home_page.dart';
 import '../login/login_page.dart';
 import '../seat/change_seat_page.dart';
 
-class NavDrawer extends StatefulWidget {
+class NavDrawer extends ConsumerStatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
 
   @override
-  State<NavDrawer> createState() => _NavDrawerState();
+  ConsumerState<NavDrawer> createState() => _NavDrawerState();
 }
 
-class _NavDrawerState extends State<NavDrawer> {
+class _NavDrawerState extends ConsumerState<NavDrawer> {
   static const storage = FlutterSecureStorage();
   double _progress = 0;
   bool isNotCompleteLoading = true;
@@ -61,7 +63,7 @@ class _NavDrawerState extends State<NavDrawer> {
   }
 
   void _fetchExitSeat() async {
-    await server.postExitSeat(context);
+    await ref.read(seatRepoProvider).postExitSeat();
   }
 
   @override
@@ -82,7 +84,7 @@ class _NavDrawerState extends State<NavDrawer> {
               '',
             ),
           ),
-          HomePageState.isLogined
+          ref.watch(homeStateProvider.notifier).isLogin // HomePageState.isLogined
               ? ListTile(
                   leading: const Icon(Icons.unpublished, color: AppColor.appPurple),
                   title: const Text(
@@ -97,7 +99,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   },
                 )
               : const Text(''),
-          HomePageState.isLogined
+          ref.watch(homeStateProvider.notifier).isLogin
               ? ListTile(
                   leading: const Icon(
                     Icons.airline_seat_individual_suite_sharp,
@@ -116,28 +118,28 @@ class _NavDrawerState extends State<NavDrawer> {
                 )
               : const Text(''),
           ListTile(
-            leading: HomePageState.isLogined
+            leading: ref.watch(homeStateProvider.notifier).isLogin
                 ? const Icon(Icons.logout, color: AppColor.appPurple)
                 : const Icon(Icons.login, color: AppColor.appPurple),
-            title: HomePageState.isLogined
+            title: ref.watch(homeStateProvider.notifier).isLogin
                 ? const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400))
                 : const Text('로그인', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
-              if (HomePageState.isLogined == true) {
+              if (ref.watch(homeStateProvider.notifier).isLogin == true) {
                 setState(() {
                   storage.deleteAll();
                   //storage.write(key: 'accessToken', value: null);
-                  HomePageState.isLogined = false;
+                  ref.watch(homeStateProvider.notifier).isLogin = false;
                 });
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialogLogOutCheck(context),
                 );
-              } else if (HomePageState.isLogined == false) {
+              } else if (ref.watch(homeStateProvider.notifier).isLogin == false) {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginDemo()),
+                  MaterialPageRoute(builder: (context) => const LoginDemo()),
                 );
               }
             },

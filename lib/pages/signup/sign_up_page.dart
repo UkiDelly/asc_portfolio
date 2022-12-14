@@ -1,17 +1,17 @@
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/login/login_page.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
+import 'package:asc_portfolio/repository/user_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../style/app_color.dart';
-import '../home_page.dart';
 
-class SignupPage extends StatefulWidget {
+class SignupPage extends ConsumerStatefulWidget {
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupPageState extends ConsumerState<SignupPage> {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -114,12 +114,16 @@ class _SignupPageState extends State<SignupPage> {
                       String id = idController.text;
                       String password = passwordController.text;
                       String email = emailController.text;
-                      server.postReqSignUp(id, password, email, context);
+                      ref.read(userRepoProvider).postReqSignUp(id, password, email);
+
                       await showDialog(
                         context: context,
                         builder: (BuildContext context) => _buildPopupDialog(context),
                       );
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginDemo()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginDemo()),
+                      );
                     },
                   ),
                 ),

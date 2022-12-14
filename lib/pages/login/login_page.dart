@@ -1,22 +1,23 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/constant/enum/user/user_enum.dart';
-import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/pages/home_page.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
-import 'package:asc_portfolio/server/dio_server.dart';
+import 'package:asc_portfolio/provider/secure_storage_provider.dart';
+import 'package:asc_portfolio/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LoginDemo extends StatefulWidget {
+class LoginDemo extends ConsumerStatefulWidget {
+  const LoginDemo({super.key});
+
   @override
   _LoginDemoState createState() => _LoginDemoState();
 }
 
-class _LoginDemoState extends State<LoginDemo> {
-  static final storage = const FlutterSecureStorage();
-
+class _LoginDemoState extends ConsumerState<LoginDemo> {
   bool _obscureText = false;
+  late FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -130,13 +131,20 @@ class _LoginDemoState extends State<LoginDemo> {
                 label: const Text('로그인'), // <-- Text
                 backgroundColor: Colors.black,
                 onPressed: () async {
-                  await server.postReqLogin(context);
-                  String? roleType = await storage.read(key: 'roleType');
+                  ref.read(userRepoProvider).postReqLogin();
+
+                  final roleType = await storage.read(key: 'roleType');
                   if (roleType!.contains('USER')) {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => const HomePage()));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(),
+                      ),
+                    );
+
+                    // );
                   } else if (roleType.contains('ADMIN')) {
-                    Navigator.pushNamedAndRemoveUntil(context, '/AdminMainPage', (route) => false);
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/AdminMainPage', (route) => false);
                   }
                 },
               ),
