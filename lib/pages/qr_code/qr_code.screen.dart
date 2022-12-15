@@ -13,7 +13,7 @@ class QRCodeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -76,6 +76,41 @@ class QRCodeScreen extends ConsumerWidget {
                           .headlineSmall!
                           .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
                     ),
+              const SizedBox(
+                height: 30,
+              ),
+              if (homeController.seatReservationSeatNumber != 0)
+                Card(
+                  elevation: 5,
+                  color: AppColor.appPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.timer,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            '남은 시간: ${homeController.format}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
             ],
           ),
         ),
