@@ -9,7 +9,7 @@ class Api {
   static const API_VERSION = 'v1';
   static final DOMAIN = Platform.isAndroid
       ? 'http://10.0.2.2:8080/api/$API_VERSION'
-      : 'http://loacalhost:8080/api/$API_VERSION'; // 로컬 8080
+      : 'http://localhost:8080/api/$API_VERSION'; // 로컬 8080
 
   //user
   static final API_SIGN_UP = '$DOMAIN/user/signup';

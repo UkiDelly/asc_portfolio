@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../constant/enum/product/product_enum.dart';
 import '../../style/app_color.dart';
-import '../main_page.dart';
+import '../main_screen.dart';
 import 'in_app_payment/in_app_payment.dart';
 
 class PaymentDetailOneDayPage extends StatelessWidget {

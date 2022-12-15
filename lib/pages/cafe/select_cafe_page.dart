@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/enum/cafe/cafe_name.dart';
 import '../../style/app_color.dart';
-import '../main_page.dart';
+import '../main_screen.dart';
 
 class SelectCafePage extends ConsumerStatefulWidget {
   @override
@@ -79,7 +79,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.seoul.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(
@@ -99,7 +99,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.busan.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(
@@ -118,7 +118,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.incheon.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(
@@ -137,7 +137,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.daegue.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(
@@ -156,7 +156,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.daejeon.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(
@@ -175,7 +175,7 @@ class _SelectCafePageState extends ConsumerState<SelectCafePage> {
               setState(() {
                 Api.cafeName = CafeNameType.gwangju.name;
               });
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             },
           ),
           const Divider(

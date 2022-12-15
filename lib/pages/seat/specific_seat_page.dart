@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../style/app_color.dart';
-import '../main_page.dart';
+import '../main_screen.dart';
 
 class SpecificSeatPage extends ConsumerStatefulWidget {
   int selectedSeatNumber;
@@ -34,7 +34,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             timer.cancel();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const MainPage()),
+              MaterialPageRoute(builder: (context) => const MainScreen()),
             ).then((value) {
               setState(() {
                 didChangeDependencies();
@@ -353,7 +353,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
     void _postStartReservation(int seatNumber) async {
       String responseData = await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber);
-      print('HomePageResponseData=$responseData');
+      print('HomeScreenResponseData=$responseData');
     }
 
     return AlertDialog(

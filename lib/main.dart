@@ -1,6 +1,6 @@
 import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/pages/login/login_page.dart';
-import 'package:asc_portfolio/pages/main_page.dart';
+import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       themeMode: ThemeMode.light,
-      home: const MainPage(),
+      home: const MainScreen(),
       routes: {
-        '/HomePage': (context) => const MainPage(),
+        '/HomeScreen': (context) => const MainScreen(),
         '/LoginPage': (context) => const LoginDemo(),
         '/AdminMainPage': (context) => const AdminMainPage(),
       },

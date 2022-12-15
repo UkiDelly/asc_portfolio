@@ -1,5 +1,5 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/pages/main_page.dart';
+import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/repository/user_repository.dart';
@@ -137,7 +137,7 @@ class _LoginDemoState extends ConsumerState<LoginDemo> {
                   if (roleType!.contains('USER')) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const MainPage(),
+                        builder: (context) => const MainScreen(),
                       ),
                     );
 

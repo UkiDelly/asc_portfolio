@@ -28,12 +28,12 @@ class UserRepository {
     required this.storage,
   });
 
-  static Map<String, String> loginAdminData = {
+  Map<String, String> loginAdminData = {
     'loginId': 'adminuser',
     'password': 'adminuser_password',
   };
 
-  static Map<String, String> loginData = {
+  Map<String, String> loginData = {
     'loginId': 'tUser_B_login',
     'password': 'tUser_B_password',
   };

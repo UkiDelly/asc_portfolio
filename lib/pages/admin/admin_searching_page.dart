@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/controller/admin/admin_search_page_controller.dart';
-import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/repository/product_repository.dart';
 import 'package:asc_portfolio/repository/ticket_repository.dart';
 import 'package:asc_portfolio/repository/user_repository.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../style/app_color.dart';
+import 'admin_main_page.dart';
 
 class AdminSearchingPage extends ConsumerStatefulWidget {
   String loginId;
@@ -137,7 +137,10 @@ class _AdminSearchingPageState extends ConsumerState<AdminSearchingPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminMainPage()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminMainPage()),
+            );
           },
         ),
         backgroundColor: AppColor.appPurple,
@@ -388,7 +391,10 @@ class _AdminSearchingPageState extends ConsumerState<AdminSearchingPage> {
                   _adminSearchPageController.adminCheckUserValidTicket!.productLabel,
                 );
             print(responseData);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminMainPage()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminMainPage()),
+            );
             showDialog(
               context: context,
               builder: (BuildContext context) => _buildPopupDialogChange(context),

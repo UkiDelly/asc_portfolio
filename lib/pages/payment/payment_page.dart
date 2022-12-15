@@ -1,4 +1,4 @@
-import 'package:asc_portfolio/pages/main_page.dart';
+import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_one_day_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_period_page.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_time_page.dart';
@@ -16,7 +16,7 @@ class PaymentPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -37,9 +37,14 @@ class PaymentPage extends StatelessWidget {
               tileColor: Colors.black12,
               title: Container(
                 padding: const EdgeInsets.all(10),
-                child: const Text('자유석',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600, color: Colors.black45, fontSize: 20)),
+                child: const Text(
+                  '자유석',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black45,
+                    fontSize: 20,
+                  ),
+                ),
               ),
               onTap: () {},
             ),
@@ -54,8 +59,10 @@ class PaymentPage extends StatelessWidget {
             subtitle: const Text('일정 기간내 무제한 이용 (2주, 4주)'),
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PaymentDetailPeriodPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaymentDetailPeriodPage()),
+              );
             },
           ),
           const Divider(
@@ -72,7 +79,9 @@ class PaymentPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const PaymentDetailTimePage()));
+                context,
+                MaterialPageRoute(builder: (context) => const PaymentDetailTimePage()),
+              );
             },
           ),
           const Divider(
@@ -88,8 +97,10 @@ class PaymentPage extends StatelessWidget {
             subtitle: const Text('구매 후 시간차감, 당일 이용권 소멸'),
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PaymentDetailOneDayPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaymentDetailOneDayPage()),
+              );
             },
           ),
           const Divider(

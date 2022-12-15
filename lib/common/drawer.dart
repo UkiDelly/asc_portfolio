@@ -9,9 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../login/login_page.dart';
-import '../main_page.dart';
-import '../seat/change_seat_page.dart';
+import '../pages/login/login_page.dart';
+import '../pages/main_screen.dart';
+import '../pages/seat/change_seat_page.dart';
 
 class NavDrawer extends ConsumerStatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             timer.cancel();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const MainPage()),
+              MaterialPageRoute(builder: (context) => const MainScreen()),
             ).then((value) {
               setState(() {
                 didChangeDependencies();
@@ -69,22 +69,18 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: AppColor.appPurple,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(AppAssets.logoMini),
-              ),
-            ),
-            child: Text(
-              '',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 40),
+            color: AppColor.appPurple,
+            child: Image.asset(
+              AppAssets.logoMini,
             ),
           ),
-          ref.watch(homeStateProvider.notifier).isLogin // HomePageState.isLogined
+
+          ref.watch(homeStateProvider.notifier).isLogin // HomeScreenState.isLogined
               ? ListTile(
                   leading: const Icon(Icons.unpublished, color: AppColor.appPurple),
                   title: const Text(
@@ -131,7 +127,10 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                   //storage.write(key: 'accessToken', value: null);
                   ref.watch(homeStateProvider.notifier).isLogin = false;
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MainScreen()),
+                );
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialogLogOutCheck(context),
@@ -171,20 +170,25 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
               ),
             },
           ),
-          const SizedBox(height: 100),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: ListTile(
-              title: const Text(
-                'Copyright ©2022 All Rights Reserved',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
-              ),
-              subtitle: const Text(
-                'Powered by padonan, chan-hong',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
-              ),
-              onTap: () => {},
+          const Spacer(),
+          SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Text(
+                  'Copyright ©2022 All Rights Reserved',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+                ),
+                Text(
+                  'Powered by padonan, chan-hong',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+                ),
+              ],
             ),
+          ),
+
+          const SizedBox(
+            height: 50,
           ),
         ],
       ),
@@ -216,7 +220,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
             await showDialog(
               context: context,
               builder: (BuildContext context) => _buildPopupDialogChange(context),
