@@ -2,6 +2,7 @@ import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QRCodeScreen extends ConsumerWidget {
@@ -79,7 +80,7 @@ class QRCodeScreen extends ConsumerWidget {
               const SizedBox(
                 height: 30,
               ),
-              if (homeController.seatReservationSeatNumber != 0)
+              if (homeController.seatReservationSeatNumber == 0)
                 Card(
                   elevation: 5,
                   color: AppColor.appPurple,
@@ -99,7 +100,7 @@ class QRCodeScreen extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
-                            '남은 시간: ${homeController.format}',
+                            '남은 시간: ${DateFormat('hh시간 mm분').format(DateTime.now())}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w300,
                               color: Colors.white,

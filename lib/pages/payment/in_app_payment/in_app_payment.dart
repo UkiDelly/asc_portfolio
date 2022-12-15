@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:asc_portfolio/controller/InAppPayment_controller.dart';
 import 'package:asc_portfolio/model/payment_data_model.dart';
-import 'package:asc_portfolio/repository/payment_repository.dart';
+import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:bootpay/model/extra.dart';

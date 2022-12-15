@@ -2,7 +2,7 @@ import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
-import 'package:asc_portfolio/repository/user_repository.dart';
+import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

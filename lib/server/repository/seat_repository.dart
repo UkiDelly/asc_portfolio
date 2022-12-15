@@ -3,8 +3,8 @@ import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/user_seat_reservation_info_model.dart';
-import '../server/api/api.dart';
+import '../../model/user_seat_reservation_info_model.dart';
+import '../api/api.dart';
 
 final seatRepoProvider = Provider<SeatRepository>((ref) {
   final dio = ref.watch(dioProvider);

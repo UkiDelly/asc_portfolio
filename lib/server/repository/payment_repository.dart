@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../server/api/api.dart';
-import '../provider/dio_provider.dart';
+import '../api/api.dart';
+import '../../provider/dio_provider.dart';
 
 final paymentRepoProvider = Provider<PaymentRepository>((ref) {
   final dio = ref.watch(dioProvider);

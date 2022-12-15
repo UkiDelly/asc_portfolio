@@ -255,7 +255,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.large(
-        onPressed: () => pageController.jumpToPage(1),
+        onPressed: () => pageController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        ),
         child: const SizedBox(
           width: 70,
           child: Icon(
@@ -282,7 +286,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
                   onTap: () {
-                    pageController.jumpToPage(0);
+                    pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -335,39 +343,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
           ),
         ),
       ),
-      // BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   backgroundColor: AppColor.appPurple,
-      //   selectedItemColor: Colors.white,
-      //   unselectedItemColor:
-      //       isLogined ? Colors.white.withOpacity(.60) : Colors.white.withOpacity(.10),
-      //   selectedFontSize: 14,
-      //   unselectedFontSize: 14,
-      //   currentIndex: currentPage, //현재 선택된 Index
-      //   onTap: (int index) {
-      //     if (isLogined == true) {
-      //       // ref.read(homeStateProvider.notifier).setSelectedIndex = index;
-      //       setState(() {
-      //         currentPage = index;
-      //         pageController.jumpToPage(index);
-      //       });
-      //     }
-      //   },
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       label: '좌석',
-      //       icon: Icon(Icons.event_seat),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       label: 'QR코드',
-      //       icon: Icon(Icons.qr_code_2),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       label: '내 이용권',
-      //       icon: Icon(Icons.account_circle_rounded),
-      //     ),
-      //   ],
-      // ),
+
       body: SafeArea(
         child: PageView(
           physics: const NeverScrollableScrollPhysics(),

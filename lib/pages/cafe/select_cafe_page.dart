@@ -1,5 +1,5 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/repository/payment_repository.dart';
+import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:asc_portfolio/server/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

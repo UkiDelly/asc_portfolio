@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/controller/admin/admin_search_page_controller.dart';
-import 'package:asc_portfolio/repository/product_repository.dart';
-import 'package:asc_portfolio/repository/ticket_repository.dart';
-import 'package:asc_portfolio/repository/user_repository.dart';
+import 'package:asc_portfolio/server/repository/product_repository.dart';
+import 'package:asc_portfolio/server/repository/ticket_repository.dart';
+import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

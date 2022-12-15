@@ -1,6 +1,6 @@
 import 'package:asc_portfolio/controller/admin_controller.dart';
-import 'package:asc_portfolio/repository/product_repository.dart';
-import 'package:asc_portfolio/repository/seat_repository.dart';
+import 'package:asc_portfolio/server/repository/product_repository.dart';
+import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 

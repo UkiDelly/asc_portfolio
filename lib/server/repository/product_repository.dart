@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/admin/admin_check_user_product.dart';
-import '../model/admin/admin_management_product_model.dart';
-import '../provider/dio_provider.dart';
-import '../server/api/api.dart';
+import '../../model/admin/admin_check_user_product.dart';
+import '../../model/admin/admin_management_product_model.dart';
+import '../../provider/dio_provider.dart';
+import '../api/api.dart';
 
 final productProvider = Provider<ProductRepository>((ref) {
   final dio = ref.watch(dioProvider);

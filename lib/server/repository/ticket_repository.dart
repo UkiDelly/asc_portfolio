@@ -2,9 +2,9 @@ import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/admin/admin_check_user_valid_ticket.dart';
-import '../model/user_ticket_model.dart';
-import '../server/api/api.dart';
+import '../../model/admin/admin_check_user_valid_ticket.dart';
+import '../../model/user_ticket_model.dart';
+import '../api/api.dart';
 
 final ticketRepoProvider = Provider<TicketRepository>((ref) {
   final dio = ref.watch(dioProvider);

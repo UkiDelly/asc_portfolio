@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/provider/admin_state/seat_state_notifier.dart';
-import 'package:asc_portfolio/repository/seat_repository.dart';
+import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';

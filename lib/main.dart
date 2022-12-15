@@ -1,6 +1,7 @@
 import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
 import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
+import 'package:asc_portfolio/router/router.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,16 +16,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       themeMode: ThemeMode.light,
-      home: const MainScreen(),
-      routes: {
-        '/HomeScreen': (context) => const MainScreen(),
-        '/LoginPage': (context) => const LoginDemo(),
-        '/AdminMainPage': (context) => const AdminMainPage(),
-      },
+      // home: const MainScreen(),
+      // routes: {
+      //   '/HomeScreen': (context) => const MainScreen(),
+      //   '/LoginPage': (context) => const LoginDemo(),
+      //   '/AdminMainPage': (context) => const AdminMainPage(),
+      // },
     );
   }
 }

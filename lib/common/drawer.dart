@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
-import 'package:asc_portfolio/repository/seat_repository.dart';
+import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

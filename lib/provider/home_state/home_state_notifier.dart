@@ -1,7 +1,7 @@
 import 'package:asc_portfolio/controller/home_controller.dart';
-import 'package:asc_portfolio/repository/seat_repository.dart';
-import 'package:asc_portfolio/repository/ticket_repository.dart';
-import 'package:asc_portfolio/repository/user_repository.dart';
+import 'package:asc_portfolio/server/repository/seat_repository.dart';
+import 'package:asc_portfolio/server/repository/ticket_repository.dart';
+import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 

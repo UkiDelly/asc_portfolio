@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../server/api/api.dart';
+import '../api/api.dart';
 
 final userRepoProvider = Provider<UserRepository>((ref) {
   final repository = UserRepository(
