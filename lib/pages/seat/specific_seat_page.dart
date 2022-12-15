@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../style/app_color.dart';
-import '../home_page.dart';
+import '../main_page.dart';
 
 class SpecificSeatPage extends ConsumerStatefulWidget {
   int selectedSeatNumber;
@@ -34,7 +34,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             timer.cancel();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const MainPage()),
             ).then((value) {
               setState(() {
                 didChangeDependencies();

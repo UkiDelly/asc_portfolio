@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
-import 'package:asc_portfolio/pages/home_page.dart';
+import 'package:asc_portfolio/pages/main_page.dart';
 import 'package:asc_portfolio/provider/admin_state/seat_state_notifier.dart';
 import 'package:asc_portfolio/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
             timer.cancel();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const MainPage()),
             ).then((value) {
               setState(() {
                 didChangeDependencies();

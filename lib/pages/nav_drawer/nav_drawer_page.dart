@@ -9,8 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../home_page.dart';
 import '../login/login_page.dart';
+import '../main_page.dart';
 import '../seat/change_seat_page.dart';
 
 class NavDrawer extends ConsumerStatefulWidget {
@@ -48,7 +48,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             timer.cancel();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const MainPage()),
             ).then((value) {
               setState(() {
                 didChangeDependencies();
@@ -131,7 +131,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                   //storage.write(key: 'accessToken', value: null);
                   ref.watch(homeStateProvider.notifier).isLogin = false;
                 });
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialogLogOutCheck(context),
@@ -216,7 +216,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
             await showDialog(
               context: context,
               builder: (BuildContext context) => _buildPopupDialogChange(context),

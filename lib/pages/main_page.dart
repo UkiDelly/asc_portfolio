@@ -18,30 +18,39 @@ import 'package:timer_builder/timer_builder.dart';
 import '../server/api/api.dart';
 import 'login/login_page.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainPage extends ConsumerStatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<HomePage> createState() => HomePageState();
+  ConsumerState<MainPage> createState() => MainPageState();
 }
 
-class HomePageState extends ConsumerState<HomePage> {
+class MainPageState extends ConsumerState<MainPage> {
   late bool isLogined = ref.watch(homeStateProvider.notifier).isLogin;
-  String rolyType = '';
+  String? rolyType;
   late int selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
+  int currentPage = 0;
+  PageController pageController = PageController(initialPage: 0);
 
   // final HomeController _homeController = HomeController();
   late final homeController = ref.watch(homeStateProvider);
-  late final storage = ref.read(secureStorageProvider);
+  late final storage = ref.watch(secureStorageProvider);
 
   void getRolyType() async {
-    String? rolyType = await storage.read(key: 'roleType');
+    rolyType = await storage.read(key: 'roleType') ?? '';
     setState(() {
-      rolyType = rolyType ?? '';
+      rolyType;
     });
     if (rolyType == 'ADMIN') {
-      Navigator.popAndPushNamed(context, '/AdminMainPage');
+      Navigator.of(context).popAndPushNamed('/AdminMainPage');
+      // Navigator.popAndPushNamed(context, '/AdminMainPage');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRolyType();
   }
 
   @override
@@ -457,10 +466,14 @@ class HomePageState extends ConsumerState<HomePage> {
             isLogined ? Colors.white.withOpacity(.60) : Colors.white.withOpacity(.10),
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        currentIndex: homeController.selectedIndex, //현재 선택된 Index
+        currentIndex: currentPage, //현재 선택된 Index
         onTap: (int index) {
           if (isLogined == true) {
-            ref.read(homeStateProvider.notifier).setSelectedIndex = index;
+            // ref.read(homeStateProvider.notifier).setSelectedIndex = index;
+            setState(() {
+              currentPage = index;
+              pageController.jumpToPage(index);
+            });
           }
         },
         items: const [
@@ -478,9 +491,12 @@ class HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: widgetOptions.elementAt(homeController.selectedIndex),
+      body: PageView(
+        controller: pageController,
+        children: const [],
       ),
+
+      // child: widgetOptions.elementAt(homeController.selectedIndex),
     );
   }
 }

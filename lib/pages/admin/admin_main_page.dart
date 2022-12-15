@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
-import '../home_page.dart';
+import '../main_page.dart';
 
 class AdminMainPage extends ConsumerStatefulWidget {
   const AdminMainPage({Key? key}) : super(key: key);
@@ -593,7 +593,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 //storage.write(key: 'accessToken', value: null);
                 ref.watch(homeStateProvider.notifier).isLogin = false;
               }),
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage())),
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage())),
             },
             icon: const Icon(Icons.logout),
           ),

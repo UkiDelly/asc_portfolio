@@ -32,8 +32,9 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
     final oneDayProductList = await productProvider.getProductInfoForAdmin(dailySales);
     state = state.copyWith(oneDayProductList: oneDayProductList);
     int price = 0;
-    for (int i = 0; i < oneDayProductList.length; i++) {
-      price += state.oneDayProductList[i].productPrice;
+
+    for (var item in oneDayProductList) {
+      price += item.productPrice;
     }
 
     return price;
