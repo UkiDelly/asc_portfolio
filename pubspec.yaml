@@ -1,15 +1,12 @@
 name: asc_portfolio
 description: aladin_study_cafe_portfolio
 
-
-publish_to: 'none'
-
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
-
+  sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,22 +29,19 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
   go_router: ^5.2.4
-
-
+  logger: ^1.1.0
+  custom_timer: ^0.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
   flutter_lints: ^2.0.0
   build_runner: ^2.3.2
   freezed: ^2.3.2
   json_serializable: ^6.5.4
 
-
 flutter:
-
   uses-material-design: true
 
   assets:
@@ -57,4 +51,3 @@ fonts:
   - family: Jalnan
     fonts:
       - assets: assets/font/Jalnan/JalnanOTF.otf
-

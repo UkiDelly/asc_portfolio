@@ -7,6 +7,7 @@ import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
+  initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',

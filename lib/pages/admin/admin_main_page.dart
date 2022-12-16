@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_searching_page.dart';
 import 'package:asc_portfolio/provider/admin_state/admin_state_notifier.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../server/api/api.dart';
@@ -20,11 +22,11 @@ class AdminMainPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMainPageState extends ConsumerState<AdminMainPage> {
-  late final _adminController = ref.watch(adminStateProvider);
-  late final _adminConttollerNotifier = ref.watch(adminStateProvider.notifier);
-  late final storage = ref.watch(secureStorageProvider);
+  late AdminController _adminController;
+  late AdminStateNotifier _adminConttollerNotifier;
+  late FlutterSecureStorage storage;
 
-  late int todaySalePrice;
+  late int todaySalePrice = 0;
   int selectedSeatNumber = 0;
 
   String dailySales = DateTime.now().add(const Duration(days: -1)).toString().substring(0, 23);
@@ -65,12 +67,22 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
 
   @override
   void initState() {
-    // _fechOnlyOneDay();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _adminController = ref.watch(adminStateProvider);
+    _adminConttollerNotifier = ref.watch(adminStateProvider.notifier);
+    storage = ref.watch(secureStorageProvider);
     _adminConttollerNotifier
       ..fetchApi(dailySales)
-      ..fechOnlyOneDay(dailySales).then((value) => todaySalePrice = value);
-
-    super.initState();
+      ..fechOnlyOneDay(dailySales).then(
+        (value) => setState(
+          () => todaySalePrice = value,
+        ),
+      );
+    super.didChangeDependencies();
   }
 
   @override

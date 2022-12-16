@@ -6,8 +6,6 @@ import 'package:asc_portfolio/provider/admin_state/seat_state_notifier.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:timer_builder/timer_builder.dart';
 
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
@@ -102,28 +100,28 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
                 onPressed: () {},
               ),
             ),
-            Card(
-              color: AppColor.appPurple,
-              margin: const EdgeInsets.all(15),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                width: 30,
-                height: 60,
-                child: TimerBuilder.periodic(
-                  const Duration(seconds: 1),
-                  builder: (context) {
-                    return Text(
-                      '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(const Duration(hours: 9)))}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            // Card(
+            //   color: AppColor.appPurple,
+            //   margin: const EdgeInsets.all(15),
+            //   child: Container(
+            //     padding: const EdgeInsets.all(20),
+            //     width: 30,
+            //     height: 60,
+            //     child: TimerBuilder.periodic(
+            //       const Duration(seconds: 1),
+            //       builder: (context) {
+            //         return Text(
+            //           '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(const Duration(hours: 9)))}',
+            //           style: const TextStyle(
+            //             fontWeight: FontWeight.w300,
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
             const SizedBox(
               height: 20,
             ),

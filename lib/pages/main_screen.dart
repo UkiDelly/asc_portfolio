@@ -1,9 +1,7 @@
 import 'package:asc_portfolio/common/drawer.dart';
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/controller/home_controller.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_page.dart';
 import 'package:asc_portfolio/pages/home/home.dart';
-import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
@@ -11,11 +9,7 @@ import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/intl.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
-import '../server/api/api.dart';
-import 'login/login_page.dart';
+import 'package:go_router/go_router.dart';
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -27,15 +21,20 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class MainScreenState extends ConsumerState<MainScreen> {
-  late bool isLogined;
-  String? rolyType;
-  late int selectedSeatNumber;
+  String rolyType = '';
+  int selectedSeatNumber = 0;
+  late FlutterSecureStorage storage;
 
   PageController pageController = PageController(initialPage: 0);
 
   // final HomeController _homeController = HomeController();
-  late final HomeController homeController;
-  late final FlutterSecureStorage storage;
+
+  @override
+  void initState() {
+    super.initState();
+    storage = ref.read(secureStorageProvider);
+    getRolyType();
+  }
 
   void getRolyType() async {
     rolyType = await storage.read(key: 'roleType') ?? '';
@@ -43,162 +42,32 @@ class MainScreenState extends ConsumerState<MainScreen> {
       rolyType;
     });
     if (rolyType == 'ADMIN') {
-      Navigator.of(context).popAndPushNamed('/AdminMainPage');
+      context.go('/admin');
+      // Navigator.of(context).popAndPushNamed('/AdminMainPage');
       // Navigator.popAndPushNamed(context, '/AdminMainPage');
     }
+    return;
   }
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    storage = ref.watch(secureStorageProvider);
-    homeController = ref.watch(homeStateProvider);
-    isLogined = ref.watch(homeStateProvider.notifier).isLogin;
-    selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
-    getRolyType();
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List seatList = [];
+    bool isLogined = ref.watch(homeStateProvider.notifier).isLogin;
+    selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
-    print('DateTime=${DateTime.now()}');
+    // print('DateTime=${DateTime.now()}');
     //.replaceAll(' ', '').replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')
-    String validTime = DateFormat('yyyy-MM-dd h시 mm분까지')
-        .format(DateTime.now().add(Duration(hours: 9, minutes: homeController.period)));
-    for (int i = 0; i < homeController.seatDatas.length; i++) {
-      seatList.add(homeController.seatDatas[i].toJson());
-    }
+    // String validTime = DateFormat('yyyy-MM-dd h시 mm분까지')
+    //     .format(DateTime.now().add(Duration(hours: 9, minutes: homeController.period)));
+    // for (int i = 0; i < homeController.seatDatas.length; i++) {
+    //   seatList.add(homeController.seatDatas[i].toJson());
+    // }
 
-    List widgetOptions = [
-      Column(
-        children: [
-          Card(
-            margin: const EdgeInsets.all(50.0),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-            elevation: 6.0,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              width: 300,
-              height: 300,
-              child: QrImage(
-                data: homeController.qrCode,
-                version: QrVersions.auto,
-                backgroundColor: Colors.white,
-              ),
-            ),
-          ),
-          const Text(
-            '주의 ! QR코드를 타인에게 노출하지마세요.',
-            style: TextStyle(fontWeight: FontWeight.w300, color: Colors.black, fontSize: 16),
-          ),
-          const SizedBox(height: 30),
-          FloatingActionButton.extended(
-            heroTag: 'UserName',
-            icon: const Icon(Icons.account_box),
-            label: homeController.userName != ''
-                ? Text(
-                    '${homeController.userName}님',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )
-                : const Text('로그인 후 사용해주세요'),
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton.extended(
-            heroTag: 'UserSeat',
-            icon: const Icon(Icons.event_seat),
-            label: homeController.seatReservationSeatNumber != 0
-                ? Text(
-                    '내 좌석번호 : ${homeController.seatReservationSeatNumber + 1}번',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )
-                : const Text('사용중인 좌석이 없습니다'), // <-- Text
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton.extended(
-            heroTag: 'UserTime',
-            icon: const Icon(Icons.timer),
-            label: homeController.seatReservationStartTime != 0
-                ? Text(
-                    '좌석 남은시간: ${homeController.format}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )
-                : const Text('사용중인 좌석이 없습니다'), // <-- Text
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-        ],
-      ),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton.extended(
-            heroTag: 'Pass3',
-            icon: const Icon(Icons.credit_card_outlined),
-            label: const Text(
-              '내 이용권정보',
-              style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 16),
-            ), // <-- Text
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton.extended(
-            heroTag: 'Pass2',
-            label: Text(
-              Api.cafeName,
-              style:
-                  const TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 16),
-            ), // <-- Text
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-          Image.asset(
-            AppAssets.logoPass,
-            width: 400,
-            height: 400,
-          ),
-          const SizedBox(height: 10),
-          FloatingActionButton.extended(
-            heroTag: 'Pass',
-            icon: const Icon(Icons.timelapse_rounded),
-            label: homeController.period == 0
-                ? const Text('이용권이 없습니다')
-                : Text(
-                    '티켓남은기간: $validTime ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w300,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ), // <-- Text
-            backgroundColor: AppColor.appPurple,
-            onPressed: () {},
-          ),
-        ],
-      )
-    ];
     return Scaffold(
       key: _scaffoldKey,
       drawer: const NavDrawer(),
@@ -206,7 +75,9 @@ class MainScreenState extends ConsumerState<MainScreen> {
         // backgroundColor: AppColor.appPurple,
         title: Image.asset(
           AppAssets.logo,
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
+          width: 150,
+          height: 150,
         ),
         centerTitle: true,
         shadowColor: Colors.white,
@@ -224,33 +95,31 @@ class MainScreenState extends ConsumerState<MainScreen> {
             size: 35,
           ),
         ),
+
         actions: [
           IconButton(
             color: Colors.white,
             onPressed: () => {
               Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCafePage())),
             },
-            icon: const Icon(Icons.storefront_outlined),
+            icon: const Icon(Icons.storefront_outlined, size: 35),
           ),
           IconButton(
+            padding: const EdgeInsets.fromLTRB(8, 8, 25, 8),
             color: Colors.white,
-            onPressed: () => {
-              if (isLogined == true)
-                {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PaymentPage()),
-                  )
-                }
-              else if (isLogined == false)
-                {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginDemo()),
-                  ),
-                }
+            onPressed: () {
+              if (!isLogined) context.go('/login');
+              context.go('/payment');
             },
-            icon: isLogined ? const Icon(Icons.add_card) : const Icon(Icons.login),
+            icon: isLogined
+                ? const Icon(
+                    Icons.add_card,
+                    size: 35,
+                  )
+                : const Icon(
+                    Icons.login,
+                    size: 35,
+                  ),
           )
         ],
       ),

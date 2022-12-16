@@ -1,15 +1,19 @@
-import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
-import 'package:asc_portfolio/pages/login/login_page.dart';
-import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/router/router.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
+
+final logger = Logger();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,6 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
+
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       themeMode: ThemeMode.light,

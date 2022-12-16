@@ -1,5 +1,4 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
@@ -7,6 +6,7 @@ import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginDemo extends ConsumerStatefulWidget {
   const LoginDemo({super.key});
@@ -134,17 +134,13 @@ class _LoginDemoState extends ConsumerState<LoginDemo> {
                   ref.read(userRepoProvider).postReqLogin();
 
                   final roleType = await storage.read(key: 'roleType');
+                  print(roleType);
                   if (roleType!.contains('USER')) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MainScreen(),
-                      ),
-                    );
+                    context.go('/');
 
                     // );
                   } else if (roleType.contains('ADMIN')) {
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/AdminMainPage', (route) => false);
+                    context.go('/admin');
                   }
                 },
               ),

@@ -111,8 +111,8 @@ class HomeScreen extends ConsumerWidget {
               margin: const EdgeInsets.all(15),
               child: Container(
                 padding: const EdgeInsets.all(20),
-                width: 30,
-                height: 60,
+                // width: 30,
+                // height: 60,
                 child: TimerBuilder.periodic(
                   const Duration(seconds: 1),
                   builder: (context) {
