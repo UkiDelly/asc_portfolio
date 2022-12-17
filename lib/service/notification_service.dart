@@ -7,7 +7,7 @@ Future<void> initNotificationSettings() async {
 
   // Android Notification 설정
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('app_icon');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   // iOS Notification 설정 request...:true -> 앱을 키자마자 사용자에게 허용을 요청
   const DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(

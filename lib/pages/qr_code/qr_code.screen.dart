@@ -19,7 +19,7 @@ class QRCodeScreen extends ConsumerStatefulWidget {
 }
 
 class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
-  Duration startTime = const Duration(seconds: 10);
+  Duration startTime = const Duration(minutes: 10, seconds: 10);
   Duration timeLeft = const Duration();
   final CustomTimerController timercontroller = CustomTimerController();
   final iosNotification = const DarwinNotificationDetails();
@@ -57,7 +57,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     return remainingTimeStr;
   }
 
-  void schedulNotification() async {
+  void sendTimeOutNotification() async {
     // set timezone
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
@@ -76,12 +76,27 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
-    // notificationsPlugin.show(
-    //   0,
-    //   'Aladin',
-    //   '남은 시간을 모두 소진했어요!',
-    //   notificationDetails,
-    // );
+  }
+
+  void send10MinleftNotification() async {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduledDate =
+        tz.TZDateTime.now(tz.local).add(startTime).subtract(const Duration(minutes: 10));
+
+    logger.i('now: $now \nscheduledDate: $scheduledDate');
+
+    await notificationsPlugin.zonedSchedule(
+      1,
+      'Aladin',
+      '이용권이 10분 남았어요!',
+      scheduledDate,
+      notificationDetails,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
   }
 
   @override
@@ -226,7 +241,8 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 onPressed: () {
                   // timer.start();
                   timercontroller.start();
-                  schedulNotification();
+                  if (startTime > const Duration(minutes: 10)) send10MinleftNotification();
+                  sendTimeOutNotification();
                 },
                 child: const Text('Start timer'),
               ),
