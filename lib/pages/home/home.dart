@@ -1,7 +1,6 @@
+import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:timer_builder/timer_builder.dart';
 
 import '../../constant/assets.dart';
 import '../../constant/enum/product/product_enum.dart';
@@ -106,28 +105,7 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: () {},
               ),
             ),
-            Card(
-              color: AppColor.appPurple,
-              margin: const EdgeInsets.all(15),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                // width: 30,
-                // height: 60,
-                child: TimerBuilder.periodic(
-                  const Duration(seconds: 1),
-                  builder: (context) {
-                    return Text(
-                      '현재시간 : ${DateFormat('yyyy년 MM월 dd일 h시 mm분 ss초 a').format(DateTime.now().add(const Duration(hours: 9)))}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        fontSize: 16,
-                        color: Colors.white,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+            const CurrentTime(),
             const SizedBox(
               height: 20,
             ),

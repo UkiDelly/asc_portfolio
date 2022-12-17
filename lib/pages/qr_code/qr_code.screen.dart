@@ -3,8 +3,13 @@ import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
+import '../../provider/local_notification_provider.dart';
 
 class QRCodeScreen extends ConsumerStatefulWidget {
   const QRCodeScreen({super.key});
@@ -14,10 +19,21 @@ class QRCodeScreen extends ConsumerStatefulWidget {
 }
 
 class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
-  Duration startTime = const Duration(hours: 1, seconds: 10);
+  Duration startTime = const Duration(seconds: 10);
   Duration timeLeft = const Duration();
-  // TimerModel timer = TimerModel(hour: 0, minute: 0, second: 10);
   final CustomTimerController timercontroller = CustomTimerController();
+  final iosNotification = const DarwinNotificationDetails();
+  late NotificationDetails notificationDetails;
+  late FlutterLocalNotificationsPlugin notificationsPlugin;
+
+  final androidNotification = const AndroidNotificationDetails(
+    'id',
+    '남은 시간을 모두 소진했어요!',
+    channelDescription: '남은 시간을 모두 소진했어요!',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+  );
 
   String getRemainingTime(CustomTimerRemainingTime time) {
     Duration remainingTime = Duration(
@@ -25,9 +41,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
       minutes: int.parse(time.minutes),
       seconds: int.parse(time.seconds),
     );
-
     String remainingTimeStr = '';
-
     if (remainingTime.inHours > 0 && remainingTime.inMinutes > 0 && remainingTime.inSeconds > 0) {
       remainingTimeStr =
           '${remainingTime.inHours}시간 ${remainingTime.inMinutes % 60}분 ${remainingTime.inSeconds % 60}초 ';
@@ -36,12 +50,45 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     } else if (remainingTime.inSeconds > 0) {
       remainingTimeStr = '${remainingTime.inSeconds % 60}초 ';
     } else {
-      remainingTimeStr = '남은 시간을 모두 소진하였습니다.';
+      remainingTimeStr = '0초';
     }
 
     timeLeft = remainingTime;
-
     return remainingTimeStr;
+  }
+
+  void schedulNotification() async {
+    // set timezone
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduledDate = tz.TZDateTime.now(tz.local).add(startTime);
+
+    logger.i('now: $now \nscheduledDate: $scheduledDate');
+
+    await notificationsPlugin.zonedSchedule(
+      0,
+      'Aladin',
+      '남은 시간을 모두 소진했어요!',
+      scheduledDate,
+      notificationDetails,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+    );
+    // notificationsPlugin.show(
+    //   0,
+    //   'Aladin',
+    //   '남은 시간을 모두 소진했어요!',
+    //   notificationDetails,
+    // );
+  }
+
+  @override
+  void initState() {
+    notificationDetails = NotificationDetails(android: androidNotification, iOS: iosNotification);
+    notificationsPlugin = ref.read(notificationProvider);
+    super.initState();
   }
 
   @override
@@ -124,35 +171,54 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Container(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.timer,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        CustomTimer(
-                          begin: startTime,
-                          end: const Duration(),
-                          controller: timercontroller,
-                          builder: (time) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                getRemainingTime(time),
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.timer,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          CustomTimer(
+                            begin: startTime,
+                            end: const Duration(),
+                            controller: timercontroller,
+                            stateBuilder: (timer, state) {
+                              if (state == CustomTimerState.finished) {
+                                return const Center(
+                                  child: Text(
+                                    '남은 시간을 모두 소진하였습니다.',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                );
+                              }
+                              return null;
+                            },
+                            builder: (time) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Text(
+                                  getRemainingTime(time),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -160,18 +226,21 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 onPressed: () {
                   // timer.start();
                   timercontroller.start();
-                  setState(() {});
+                  schedulNotification();
                 },
-                child: null,
+                child: const Text('Start timer'),
               ),
               ElevatedButton(
                 onPressed: () {
                   // timer.reset();
-                  timercontroller.pause();
+                  timercontroller.reset();
 
                   logger.w(timeLeft);
                 },
-                child: null,
+                child: const Text('reset Timer'),
+              ),
+              const SizedBox(
+                height: 100,
               )
             ],
           ),
