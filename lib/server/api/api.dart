@@ -17,13 +17,14 @@ class Api {
   static const API_START_SEAT_RESERVATION = "$DOMAIN/seat/reservation/";
   static const API_EXIT_SEAT = "$DOMAIN/seat/exit";
   static const API_ADMIN_EXIT_SEAT = "$DOMAIN/seat/exit-admin/";
+  static const API_USER_RESERVATION_INFO = "$DOMAIN/seat/one";
 
   //ticket
   static const API_USER_TICKET = "$DOMAIN/ticket/";
   static const API_ADMIN_CHECK_SPECIFIC_USER_VALID_TICKET = "$DOMAIN/ticket/admin/lookup?userLoginId=";
 
   //seatReservationInfo
-  static const API_USER_RESERVATION_INFO = "$DOMAIN/seatReservationInfo/";
+
 
   //pay
   static const API_PRODUCT_PAY = "$DOMAIN/pay/order/";

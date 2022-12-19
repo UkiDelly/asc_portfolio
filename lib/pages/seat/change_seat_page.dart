@@ -60,7 +60,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
   }
 
   void _postStartReservation(int seatNumber) async {
-    String responseData = await server.postSeatReservationStart(context, seatNumber);
+    String responseData = await server.postSeatReservationStart(context, seatNumber, selectedSeatNumber);
     print("HomePageResponseData="+responseData);
   }
 
@@ -250,7 +250,7 @@ class _ChangeSeatPageState extends State<ChangeSeatPage> {
       actions: <Widget>[
         new TextButton(
           onPressed: () async {
-            server.postSeatReservationStart(context, selectedSeatNumber - 1);
+            server.postSeatReservationStart(context, selectedSeatNumber - 1, 0);
             startTimer();
           },
           child: const Text('Yes', style: TextStyle(fontWeight: FontWeight.w300,fontSize: 16, color: Colors.white),),

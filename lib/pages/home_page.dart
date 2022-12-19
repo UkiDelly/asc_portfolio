@@ -1,6 +1,5 @@
 import 'package:asc_portfolio/common_enum/product/product_enum.dart';
 import 'package:asc_portfolio/controller/home_controller.dart';
-import 'package:asc_portfolio/dto/user_ticket_dto.dart';
 import 'package:asc_portfolio/pages/nav_drawer/nav_drawer_page.dart';
 import 'package:asc_portfolio/pages/payment/in_app_payment/in_app_payment.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
@@ -69,7 +68,6 @@ class HomePageState extends State<HomePage> {
       print("userTicketproductLabel="+userTicketInfo.productLabel);
       setState(() {
         _homeController.userTicketInfo = userTicketInfo;
-
         if (userTicketInfo.productLabel.contains("PART-TIME")) {
           _homeController.period = userTicketInfo.remainingTime ?? 0;
         } else if (userTicketInfo.productLabel.contains("FIXED-TERM")) {
@@ -80,17 +78,15 @@ class HomePageState extends State<HomePage> {
       setState(() {
         _homeController.seatReservationSeatNumber = userSeatReservationInfo.seatNumber;
         _homeController.seatReservationStartTime = userSeatReservationInfo.startTime;
-        _homeController.seatReservationCreateDate = userSeatReservationInfo.createDate;
-        _homeController.seatReservationPeriod = userSeatReservationInfo.period;
         _homeController.seatReservationTimeInUse = userSeatReservationInfo.timeInUse;
-        _homeController.format = DateFormat('HH시 mm분').format(DateTime.parse(_homeController.seatReservationCreateDate).subtract(
+        _homeController.format = DateFormat('HH시 mm분').format(
+            DateTime.parse(_homeController.seatReservationCreateDate).subtract(
             Duration(days: DateTime.now().day, hours: DateTime.now().hour + 9, minutes: DateTime.now().minute)));
       });
       print("_loginCheckAndFetch실행");
-      print("seatReservationCreateDate=" + _homeController.seatReservationCreateDate);
       print("seatReservationSeatNumber=" + _homeController.seatReservationSeatNumber.toString());
       print("seatReservationStartTime=" + _homeController.seatReservationStartTime.toString());
-      print('seatReservationPeriod='+ _homeController.seatReservationPeriod);
+      print('seatReservationTimeInUse='+ _homeController.seatReservationTimeInUse.toString());
       print("userQrAndName=" + _homeController.qrCode);
     }
   }
@@ -98,7 +94,6 @@ class HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     print("didChangeDependencies실행");
-    _loginCheckAndFetch();
     super.didChangeDependencies();
   }
 
@@ -106,6 +101,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     getRolyType();
     _roomFetchGet();
+    _loginCheckAndFetch();
     super.initState();
   }
 
@@ -143,7 +139,6 @@ class HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(10.0),
         child: ListView(
           children: <Widget>[
-
             Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -345,7 +340,7 @@ class HomePageState extends State<HomePage> {
           FloatingActionButton.extended(
               heroTag: 'UserSeat',
               icon: Icon(Icons.event_seat),
-              label: _homeController.seatReservationSeatNumber != 0 ? Text('내 좌석번호 : ${_homeController.seatReservationSeatNumber + 1}번',
+              label: _homeController.seatReservationSeatNumber != -1 ? Text('내 좌석번호 : ${_homeController.seatReservationSeatNumber + 1}번',
                 style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16)) : Text('사용중인 좌석이 없습니다'),// <-- Text
               backgroundColor: AppColor.appPurple,
               onPressed: ()  {
@@ -356,7 +351,7 @@ class HomePageState extends State<HomePage> {
               heroTag: 'UserTime',
               icon: Icon(Icons.timer),
               label: _homeController.seatReservationStartTime != 0 ?
-              Text('좌석 남은시간: ${_homeController.format}',
+              Text('좌석 남은시간: ${_homeController.seatReservationStartTime - _homeController.seatReservationTimeInUse}분',
                 style: TextStyle(fontWeight: FontWeight.w300,color: Colors.white,fontSize: 16),) : Text('사용중인 좌석이 없습니다'),// <-- Text
               backgroundColor: AppColor.appPurple,
               onPressed: ()  {

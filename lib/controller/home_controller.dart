@@ -3,7 +3,6 @@ import 'package:asc_portfolio/server/dio_server.dart';
 import '../dto/user_seat_dto.dart';
 
 
-
 class HomeController {
 
   UserTicketDto? userTicketInfo;
@@ -14,7 +13,7 @@ class HomeController {
   List<UserSeatDto> seatDatas = [];
   String userName = '';
   String qrCode = "";
-  int seatReservationSeatNumber = 0;
+  int seatReservationSeatNumber = -1;
   int seatReservationStartTime = 0;
   String seatReservationCreateDate = '';
   String seatReservationPeriod = '';

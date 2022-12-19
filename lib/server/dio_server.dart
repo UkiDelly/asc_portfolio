@@ -130,10 +130,10 @@ class Server{
     return userSeatReservationInfo;
   }
 
-  Future<String> postSeatReservationStart(BuildContext context, int seatNumber) async {
+  Future<String> postSeatReservationStart(BuildContext context, int seatNumber, int startTime) async {
     Response response;
     var dio = await authDio(context);
-    response = await dio.post(Api.API_START_SEAT_RESERVATION + seatNumber.toString());
+    response = await dio.post(Api.API_START_SEAT_RESERVATION + "?seat=" + seatNumber.toString() + "&time=" + startTime.toString());
     print("reservationResponse="+response.data);
     return response.data;
   }

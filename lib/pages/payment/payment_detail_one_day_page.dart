@@ -34,10 +34,10 @@ class PaymentDetailOneDayPage extends StatelessWidget {
                 trailing: Icon(Icons.chevron_right, color: Colors.black),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => InAppPaymentSecond(product: Product.TODAY_FIXED_TERM_TICKET,)));
-                },
-              ),
-            ]
-        )
+            },
+          ),
+        ]
+      )
     );
   }
 }

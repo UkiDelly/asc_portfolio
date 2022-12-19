@@ -13,6 +13,7 @@ enum Product {
   UNDEFINED('undefined', 0, '');
 
   const Product(this.name, this.price, this.label);
+
   final String name;
   final double price;
   final String label;

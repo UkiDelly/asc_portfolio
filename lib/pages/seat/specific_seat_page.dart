@@ -293,8 +293,8 @@ class _SpecificSeatPageState extends State<SpecificSeatPage> {
 
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
 
-    void _postStartReservation(int seatNumber) async {
-      String responseData = await server.postSeatReservationStart(context, seatNumber);
+    void _postStartReservation(int seatNumber, int selectedHour) async {
+      String responseData = await server.postSeatReservationStart(context, seatNumber, selectedHour);
       print("HomePageResponseData="+responseData);
     }
 
@@ -315,7 +315,7 @@ class _SpecificSeatPageState extends State<SpecificSeatPage> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _postStartReservation(selectedSeatNumber - 1);
+            _postStartReservation(selectedSeatNumber - 1, selectedHour * 60);
             await startTimer();
 
             // await showDialog(

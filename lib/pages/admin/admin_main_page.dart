@@ -53,7 +53,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
     });
   }
 
-  void _fetchApi(String day) async{
+  void _fetchApi(String day) async {
     var productList = await server.getProductInfoForAdmin(context, day);
     if (this.mounted) {
       setState(() {
@@ -79,8 +79,9 @@ class _AdminMainPageState extends State<AdminMainPage> {
   void _fetchAdminCancelSeat(int seatNumber) async {
     await server.postAdminExitSeat(context, seatNumber);
   }
+
   Future<void> startTimer() async {
-    new Timer.periodic(
+    Timer.periodic(
       Duration(milliseconds: 50),
           (Timer timer) => setState(
             () {
@@ -99,6 +100,8 @@ class _AdminMainPageState extends State<AdminMainPage> {
           } else {
             _progress += 0.025;
           }
+          showDialog(context: context,
+              builder: _buildPopupDialogChange);
         },
       ),
     );
