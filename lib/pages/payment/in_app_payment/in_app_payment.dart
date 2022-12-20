@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:asc_portfolio/controller/InAppPayment_controller.dart';
 import 'package:asc_portfolio/model/payment_data_model.dart';
 import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:bootpay/bootpay.dart';
@@ -14,13 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../constant/enum/product/product_enum.dart';
+import '../../../controller/payment_controller.dart';
 import '../../../style/app_color.dart';
 import '../payment_page.dart';
 
 class InAppPaymentSecond extends ConsumerStatefulWidget {
-  late Product product;
+  final Product product;
 
-  InAppPaymentSecond({super.key, required this.product});
+  const InAppPaymentSecond({super.key, required this.product});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _InAppPaymentSecondState();
@@ -42,7 +42,6 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     bootpayAnalyticsUserTrace(); //통계용 함수 호출
     bootpayAnalyticsPageTrace(); //통계용 함수 호출

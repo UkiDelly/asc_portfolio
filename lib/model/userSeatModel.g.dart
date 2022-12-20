@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'userSeatModel.dart';
+part of 'user_seat_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

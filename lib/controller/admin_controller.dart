@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../model/admin/admin_management_product_model.dart';
-import '../model/userSeatModel.dart';
+import '../model/user_seat_model.dart';
 
 // class AdminController {
 //   int selectedIndex = 0;

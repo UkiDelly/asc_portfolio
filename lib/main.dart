@@ -4,6 +4,8 @@ import 'package:asc_portfolio/pages/home/seat_screen.dart';
 import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
+import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
+import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
-
-import 'provider/secure_storage_provider.dart';
 
 void main() async {
   await initializeDateFormatting('ko_KR');
@@ -39,17 +39,16 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(
-      initialLocation: '/login',
+      initialLocation: '/',
       routes: [
         GoRoute(
           path: '/',
           builder: (context, state) => const MainScreen(),
           redirect: (context, state) async {
-            // get the secure storage from the povider
-            final secureStorage = ref.read(secureStorageProvider);
-            final tokenExist = await secureStorage.containsKey(key: 'accessToken');
-            if (tokenExist) {
-              return '/home';
+            final userLogin = await ref.read(userRepoProvider).getCheckLogin();
+
+            if (userLogin) {
+              return '/';
             } else {
               return '/login';
             }
@@ -63,7 +62,11 @@ class MyApp extends ConsumerWidget {
         ),
         GoRoute(
           path: '/login',
-          builder: (context, state) => const LoginDemo(),
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/sign_up',
+          builder: (context, state) => SignupPage(),
         ),
         GoRoute(
           path: '/admin',

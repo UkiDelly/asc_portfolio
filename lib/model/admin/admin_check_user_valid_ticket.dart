@@ -11,23 +11,30 @@ class AdminCheckUserValidTicket {
   final int period;
 
   AdminCheckUserValidTicket({
-    required this.isValidTicket, required this.fixedTermTicket, required this.partTimeTicket,
-    required this.remainingTime, required this.productLabel, required this.ticketPrice,
-    required this.createDate, required this.modifiedDate, required this.productNameType,
-    required this.period});
+    required this.isValidTicket,
+    required this.fixedTermTicket,
+    required this.partTimeTicket,
+    required this.remainingTime,
+    required this.productLabel,
+    required this.ticketPrice,
+    required this.createDate,
+    required this.modifiedDate,
+    required this.productNameType,
+    required this.period,
+  });
 
   factory AdminCheckUserValidTicket.fromJson(Map<String, dynamic> json) {
     return AdminCheckUserValidTicket(
-        isValidTicket: json['isValidTicket'] ?? "",
-        fixedTermTicket: json['fixedTermTicket'] ?? "",
-        partTimeTicket: json['partTimeTicket'] ?? 0,
-        remainingTime: json['remainingTime'] ?? 0,
-        productLabel: json['productLabel'] ?? "",
-        ticketPrice: json ['ticketPrice'] ?? 0,
-        createDate: json['createDate'] ?? "",
-        modifiedDate: json['modifiedDate'] ?? "",
-        productNameType: json ['productNameType'] ?? "",
-        period: json['period'] ?? 0
+      isValidTicket: json['isValidTicket'] ?? '',
+      fixedTermTicket: json['fixedTermTicket'] ?? '',
+      partTimeTicket: json['partTimeTicket'] ?? 0,
+      remainingTime: json['remainingTime'] ?? 0,
+      productLabel: json['productLabel'] ?? '',
+      ticketPrice: json['ticketPrice'] ?? 0,
+      createDate: json['createDate'] ?? '',
+      modifiedDate: json['modifiedDate'] ?? '',
+      productNameType: json['productNameType'] ?? '',
+      period: json['period'] ?? 0,
     );
   }
 }

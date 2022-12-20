@@ -6,8 +6,7 @@ part of 'admin_management_product_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_AdminManagementProductModel _$$_AdminManagementProductModelFromJson(
-        Map<String, dynamic> json) =>
+_$_AdminManagementProductModel _$$_AdminManagementProductModelFromJson(Map<String, dynamic> json) =>
     _$_AdminManagementProductModel(
       createDate: json['createDate'] as String,
       modifiedDate: json['modifiedDate'] as String,

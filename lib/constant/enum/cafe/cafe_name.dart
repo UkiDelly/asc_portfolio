@@ -11,10 +11,10 @@ enum CafeNameType {
   final String area;
   final String name;
 
-  factory CafeNameType.getByCode(String name){
-    return CafeNameType.values.firstWhere((value) => value.name == name,
-        orElse: () => CafeNameType.undefined);
+  factory CafeNameType.getByCode(String name) {
+    return CafeNameType.values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => CafeNameType.undefined,
+    );
   }
 }
-
-

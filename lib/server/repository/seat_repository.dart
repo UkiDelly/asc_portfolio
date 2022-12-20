@@ -1,4 +1,4 @@
-import 'package:asc_portfolio/model/userSeatModel.dart';
+import 'package:asc_portfolio/model/user_seat_model.dart';
 import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +33,7 @@ class SeatRepository {
     print('TICKET=${Api.cafeName}');
     response = await dio.get(Api.API_USER_RESERVATION_INFO);
     print(response.data);
+    // FIXME: 여기서 에러가 발생하는 왜 발생하는지 모르겠다.
     var userSeatReservationInfo = UserSeatResevationModel.fromJson(response.data);
     return userSeatReservationInfo;
   }

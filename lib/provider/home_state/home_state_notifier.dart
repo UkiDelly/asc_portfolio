@@ -26,7 +26,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     required this.seatRepository,
   }) : super(HomeController()) {
     roomFetchGet();
-    checkLogin();
+    init();
   }
 
   bool isLogin = false;
@@ -38,12 +38,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     state = state.copyWith(selectedIndex: index);
   }
 
-  void checkLogin() async {
-    isLogin = await userRepository.getCheckLogin();
-
-    if (!isLogin) {
-      return;
-    }
+  void init() async {
     final userQrandName = await userRepository.getUserQrAndNameReq();
     final userTicketInfo = await ticketRepository.getUserTicketInfo();
     final userSeatReservationInfo = await seatRepository.getUserSeatReservationInfo();

@@ -1,4 +1,4 @@
-import 'package:asc_portfolio/model/userSeatModel.dart';
+import 'package:asc_portfolio/model/user_seat_model.dart';
 import 'package:asc_portfolio/model/user_ticket_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

@@ -138,7 +138,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
               } else if (ref.watch(homeStateProvider.notifier).isLogin == false) {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginDemo()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 );
               }
             },

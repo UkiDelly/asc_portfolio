@@ -122,7 +122,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
                       );
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginDemo()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                     },
                   ),

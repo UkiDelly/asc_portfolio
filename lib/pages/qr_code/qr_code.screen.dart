@@ -19,10 +19,13 @@ class QRCodeScreen extends ConsumerStatefulWidget {
 }
 
 class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
+  // state들
+  // TODO: 서버가 정상적으로 작동하게 되면 startTime을 homeStateNotifier에서 받아와야 함
   Duration startTime = const Duration(minutes: 10, seconds: 10);
   Duration timeLeft = const Duration();
-  final CustomTimerController timercontroller = CustomTimerController();
+  CustomTimerController timercontroller = CustomTimerController();
 
+  // Notification 관련 변수들
   final iosNotification = const DarwinNotificationDetails();
   late NotificationDetails notificationDetails;
   late FlutterLocalNotificationsPlugin notificationsPlugin;
@@ -35,6 +38,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     ticker: 'ticker',
   );
 
+  // 남은 시간 구하는 함수
   String getRemainingTime(CustomTimerRemainingTime time) {
     Duration remainingTime = Duration(
       hours: int.parse(time.hours),
@@ -58,6 +62,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     return remainingTimeStr;
   }
 
+  // 이용권 시간이 다 되었을때
   void sendTimeOutNotification() async {
     // set timezone
     tz.initializeTimeZones();
@@ -98,6 +103,13 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+  }
+
+  // 유저가 이용중지를 누르면 모든 알림을 취소
+  void cancelNotification() {
+    // cancel notification
+    notificationsPlugin.cancel(0);
+    notificationsPlugin.cancel(1);
   }
 
   @override
