@@ -18,6 +18,16 @@ class LoginDemo extends ConsumerStatefulWidget {
 class _LoginDemoState extends ConsumerState<LoginDemo> {
   bool _obscureText = false;
   late FlutterSecureStorage storage = ref.watch(secureStorageProvider);
+  final idController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool isLoading = false;
+
+  @override
+  void dispose() {
+    idController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +63,7 @@ class _LoginDemoState extends ConsumerState<LoginDemo> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
+                  controller: idController,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
                   autofocus: false,
@@ -85,6 +96,7 @@ class _LoginDemoState extends ConsumerState<LoginDemo> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
+                  controller: passwordController,
                   cursorColor: Colors.black,
                   obscureText: _obscureText ? false : true,
                   autofocus: false,
@@ -126,23 +138,40 @@ class _LoginDemoState extends ConsumerState<LoginDemo> {
                 color: Colors.black,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: FloatingActionButton.extended(
-                heroTag: 'Login',
-                label: const Text('로그인'), // <-- Text
-                backgroundColor: Colors.black,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
                 onPressed: () async {
-                  ref.read(userRepoProvider).postReqLogin();
+                  setState(() {
+                    isLoading = true;
+                  });
 
+                  ref
+                      .read(userRepoProvider)
+                      .postReqLogin(id: idController.text, password: passwordController.text);
+
+                  final storage = ref.watch(secureStorageProvider);
+                  final tokenExist = await storage.containsKey(key: 'accessToken');
                   final roleType = await storage.read(key: 'roleType');
-                  print(roleType);
-                  if (roleType!.contains('USER')) {
+                  if (tokenExist && roleType == 'USER') {
+                    setState(() {
+                      isLoading = false;
+                    });
                     context.go('/');
-
-                    // );
-                  } else if (roleType.contains('ADMIN')) {
+                  } else if (tokenExist && roleType == 'ADMIN') {
+                    setState(() {
+                      isLoading = false;
+                    });
                     context.go('/admin');
+                  } else {
+                    print('error');
                   }
                 },
+                child: const Text('로그인'),
               ),
             ),
             const SizedBox(

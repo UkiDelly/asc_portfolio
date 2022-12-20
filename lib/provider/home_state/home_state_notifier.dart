@@ -89,10 +89,10 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   bool getRoomState(int index) {
     final roomState = state.seatDatas[index].toJson();
     if (roomState.values.toString() == '(RESERVED)') {
-      print("seat:${roomState.values}");
+      print('seat:${roomState.values}');
       return true;
     } else {
-      print("seat:${roomState.values}");
+      print('seat:${roomState.values}');
       return false;
     }
   }

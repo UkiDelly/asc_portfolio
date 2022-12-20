@@ -60,21 +60,28 @@ class UserRepository {
   Future<bool> getCheckLogin() async {
     Response response = await dio.get(Api.API_LOGIN_CHECK);
     print('loginCheckResponseData=' + response.data);
-    if (response.data == 'OK') {
+    if (response.statusCode == 200) {
       return true;
     }
     return false;
   }
 
-  Future<void> postReqLogin() async {
-    Response response;
+  Future<void> postReqLogin({required String id, required String password}) async {
+    try {
+      Response response = await dio.post(
+        Api.API_LOGIN,
+        data: {
+          'loginId': id,
+          'password': password,
+        },
+      );
 
-    Map<String, String> data = loginData;
-    response = await dio.post(Api.API_LOGIN, data: data);
-    print(response.data);
-    var tokenInfo = TokenModel.fromJson(response.data);
-    storage.write(key: 'accessToken', value: tokenInfo.accessToken);
-    storage.write(key: 'roleType', value: tokenInfo.roleType);
+      final tokenInfo = TokenModel.fromJson(response.data);
+      storage.write(key: 'accessToken', value: tokenInfo.accessToken);
+      storage.write(key: 'roleType', value: tokenInfo.roleType);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<UserQrAndNameModel> getUserQrAndNameReq() async {

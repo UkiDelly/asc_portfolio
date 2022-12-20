@@ -80,7 +80,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             ),
           ),
 
-          ref.watch(homeStateProvider.notifier).isLogin // HomeScreenState.isLogined
+          ref.watch(homeStateProvider.notifier).isLogin // SeatScreenState.isLogined
               ? ListTile(
                   leading: const Icon(Icons.unpublished, color: AppColor.appPurple),
                   title: const Text(

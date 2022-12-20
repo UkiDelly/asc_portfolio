@@ -56,7 +56,7 @@ class _ChangeSeatPageState extends ConsumerState<ChangeSeatPage> {
 
   void _postStartReservation(int seatNumber) async {
     String responseData = await ref.watch(seatRepoProvider).postSeatReservationStart(seatNumber);
-    print('HomeScreenResponseData=$responseData');
+    print('SeatScreenResponseData=$responseData');
   }
 
   @override

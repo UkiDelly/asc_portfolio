@@ -353,7 +353,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
     void _postStartReservation(int seatNumber) async {
       String responseData = await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber);
-      print('HomeScreenResponseData=$responseData');
+      print('SeatScreenResponseData=$responseData');
     }
 
     return AlertDialog(

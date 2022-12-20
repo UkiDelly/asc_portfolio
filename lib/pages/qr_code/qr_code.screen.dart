@@ -22,10 +22,10 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   Duration startTime = const Duration(minutes: 10, seconds: 10);
   Duration timeLeft = const Duration();
   final CustomTimerController timercontroller = CustomTimerController();
+
   final iosNotification = const DarwinNotificationDetails();
   late NotificationDetails notificationDetails;
   late FlutterLocalNotificationsPlugin notificationsPlugin;
-
   final androidNotification = const AndroidNotificationDetails(
     'id',
     '남은 시간을 모두 소진했어요!',
@@ -41,6 +41,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
       minutes: int.parse(time.minutes),
       seconds: int.parse(time.seconds),
     );
+
     String remainingTimeStr = '';
     if (remainingTime.inHours > 0 && remainingTime.inMinutes > 0 && remainingTime.inSeconds > 0) {
       remainingTimeStr =
@@ -107,158 +108,175 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   }
 
   @override
+  void dispose() {
+    timercontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     logger.i(startTime);
     final homeController = ref.watch(homeStateProvider);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                '${homeController.userName}님의 QR코드',
-                style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                width: 300,
-                height: 300,
-                child: QrImage(
-                  data: homeController.qrCode,
-                  version: QrVersions.auto,
-                  backgroundColor: Colors.white,
-                ),
-              ),
-              const Text(
-                '주의 ! QR코드를 타인에게 노출하지마세요.',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent, fontSize: 20),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              homeController.seatReservationSeatNumber != 0
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '내 좌석번호: ',
-                          style: Theme.of(context)
-                              .primaryTextTheme
-                              .headlineSmall!
-                              .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
-                        ),
-                        Container(
-                          width: 60,
-                          height: 60,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColor.appPurple,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColor.appPurple, width: 3),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${homeController.seatReservationSeatNumber}',
-                              style: const TextStyle(fontSize: 30, color: Colors.white),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-                  : Text(
-                      '좌석이 없습니다.',
-                      style: Theme.of(context)
-                          .primaryTextTheme
-                          .headlineSmall!
-                          .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
-                    ),
-              const SizedBox(
-                height: 30,
-              ),
-              if (homeController.seatReservationSeatNumber == 0)
-                Card(
-                  elevation: 5,
-                  color: AppColor.appPurple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text(
+          '${homeController.userName}님의 QR코드',
+        ),
+        titleTextStyle: const TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      backgroundColor: AppColor.appPurple,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  width: 300,
+                  height: 300,
+                  child: QrImage(
+                    data: homeController.qrCode,
+                    version: QrVersions.auto,
+                    backgroundColor: Colors.white,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: SizedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
+                ),
+                const Text(
+                  '주의 ! QR코드를 타인에게 노출하지마세요.',
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent, fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                homeController.seatReservationSeatNumber != 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.timer,
-                            color: Colors.white,
-                            size: 30,
+                          Text(
+                            '내 좌석번호: ',
+                            style: Theme.of(context)
+                                .primaryTextTheme
+                                .headlineSmall!
+                                .copyWith(color: Colors.black, fontWeight: FontWeight.w600),
                           ),
-                          CustomTimer(
-                            begin: startTime,
-                            end: const Duration(),
-                            controller: timercontroller,
-                            stateBuilder: (timer, state) {
-                              if (state == CustomTimerState.finished) {
-                                return const Center(
+                          Container(
+                            width: 60,
+                            height: 60,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: AppColor.appPurple,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColor.appPurple, width: 3),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${homeController.seatReservationSeatNumber}',
+                                style: const TextStyle(fontSize: 30, color: Colors.white),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Text(
+                        '좌석이 없습니다.',
+                        style: Theme.of(context)
+                            .primaryTextTheme
+                            .headlineSmall!
+                            .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
+                const SizedBox(
+                  height: 30,
+                ),
+                if (homeController.seatReservationSeatNumber == 0)
+                  Card(
+                    elevation: 5,
+                    color: AppColor.appPurple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: SizedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.timer,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            CustomTimer(
+                              begin: startTime,
+                              end: const Duration(),
+                              controller: timercontroller,
+                              stateBuilder: (timer, state) {
+                                if (state == CustomTimerState.finished) {
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    child: Text(
+                                      '남은 시간을 모두 소진하였습니다.',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return null;
+                              },
+                              builder: (time) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
                                   child: Text(
-                                    '남은 시간을 모두 소진하였습니다.',
-                                    style: TextStyle(
-                                      fontSize: 20,
+                                    getRemainingTime(time),
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 30,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 );
-                              }
-                              return null;
-                            },
-                            builder: (time) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Text(
-                                  getRemainingTime(time),
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 30,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                ElevatedButton(
+                  onPressed: () {
+                    // timer.start();
+                    timercontroller.start();
+                    if (startTime > const Duration(minutes: 10)) send10MinleftNotification();
+                    sendTimeOutNotification();
+                  },
+                  child: const Text('Start timer'),
                 ),
-              ElevatedButton(
-                onPressed: () {
-                  // timer.start();
-                  timercontroller.start();
-                  if (startTime > const Duration(minutes: 10)) send10MinleftNotification();
-                  sendTimeOutNotification();
-                },
-                child: const Text('Start timer'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // timer.reset();
-                  timercontroller.reset();
+                ElevatedButton(
+                  onPressed: () {
+                    // timer.reset();
+                    timercontroller.reset();
 
-                  logger.w(timeLeft);
-                },
-                child: const Text('reset Timer'),
-              ),
-              const SizedBox(
-                height: 100,
-              )
-            ],
+                    logger.w(timeLeft);
+                  },
+                  child: const Text('reset Timer'),
+                ),
+                const SizedBox(
+                  height: 100,
+                )
+              ],
+            ),
           ),
         ),
       ),

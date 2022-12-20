@@ -1,7 +1,8 @@
+import 'package:animations/animations.dart';
 import 'package:asc_portfolio/common/drawer.dart';
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_page.dart';
-import 'package:asc_portfolio/pages/home/home.dart';
+import 'package:asc_portfolio/pages/home/seat_screen.dart';
 import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+
+import 'my_ticket/my_ticker_screen.dart';
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -123,20 +126,27 @@ class MainScreenState extends ConsumerState<MainScreen> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton.large(
-        onPressed: () => pageController.animateToPage(
-          1,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        ),
-        child: const SizedBox(
-          width: 70,
-          child: Icon(
-            Icons.qr_code_2,
-            size: 50,
+      floatingActionButton: OpenContainer(
+        closedElevation: 10,
+        closedColor: AppColor.appPurple,
+        transitionDuration: const Duration(seconds: 1),
+        middleColor: AppColor.appPurple,
+        closedShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(50),
           ),
         ),
+        closedBuilder: (context, action) => const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Icon(
+            Icons.qr_code_2,
+            size: 55,
+            color: Colors.white,
+          ),
+        ),
+        openBuilder: (context, action) => const QRCodeScreen(),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -188,7 +198,11 @@ class MainScreenState extends ConsumerState<MainScreen> {
                 child: InkWell(
                   splashFactory: NoSplash.splashFactory,
                   highlightColor: Colors.transparent,
-                  onTap: () {},
+                  onTap: () => pageController.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeInOut,
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -217,7 +231,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
         child: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController,
-          children: const [HomeScreen(), QRCodeScreen()],
+          children: const [SeatScreen(), MyTicketScreen()],
         ),
       ),
 

@@ -11,8 +11,8 @@ import '../admin/admin_main_page.dart';
 import '../payment/in_app_payment/in_app_payment.dart';
 import '../seat/specific_seat_page.dart';
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+class SeatScreen extends ConsumerWidget {
+  const SeatScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
