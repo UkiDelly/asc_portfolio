@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'userSeatModel.freezed.dart';
-part 'userSeatModel.g.dart';
+part 'user_seat_model.freezed.dart';
+part 'user_seat_model.g.dart';
 
 @freezed
 class UsersSeatModel with _$UsersSeatModel {

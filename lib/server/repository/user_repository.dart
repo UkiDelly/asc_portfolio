@@ -76,6 +76,8 @@ class UserRepository {
         },
       );
 
+      print(response.data);
+
       final tokenInfo = TokenModel.fromJson(response.data);
       storage.write(key: 'accessToken', value: tokenInfo.accessToken);
       storage.write(key: 'roleType', value: tokenInfo.roleType);
@@ -86,7 +88,8 @@ class UserRepository {
 
   Future<UserQrAndNameModel> getUserQrAndNameReq() async {
     Response response = await dio.get(Api.API_USER_QR_AND_NAME);
-    var userQrAndName = UserQrAndNameModel.fromJson(response.data);
+    print(response.data);
+    final userQrAndName = UserQrAndNameModel.fromJson(response.data);
     return userQrAndName;
   }
 

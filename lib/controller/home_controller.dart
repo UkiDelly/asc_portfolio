@@ -14,7 +14,7 @@ class HomeController with _$HomeController {
     @Default(0) int period,
     @Default(0) int remainingTime,
     @Default(0) int selectedIndex,
-    @Default(true) bool loginCheck,
+    @Default(false) bool loginCheck,
     @Default([]) List<UsersSeatModel> seatDatas,
     @Default('') String userName,
     @Default('') String qrCode,

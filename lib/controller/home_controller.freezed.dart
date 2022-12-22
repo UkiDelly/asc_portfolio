@@ -290,7 +290,7 @@ class _$_HomeController extends _HomeController {
       this.period = 0,
       this.remainingTime = 0,
       this.selectedIndex = 0,
-      this.loginCheck = true,
+      this.loginCheck = false,
       final List<UsersSeatModel> seatDatas = const [],
       this.userName = '',
       this.qrCode = '',

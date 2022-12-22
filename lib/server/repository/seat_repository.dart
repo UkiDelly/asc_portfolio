@@ -26,17 +26,6 @@ class SeatRepository {
     return rooms;
   }
 
-  Future<UserSeatResevationModel> getUserSeatReservationInfo() async {
-    Response response;
-
-    print('좌석');
-    print('TICKET=${Api.cafeName}');
-    response = await dio.get(Api.API_USER_RESERVATION_INFO);
-    print(response.data);
-    // FIXME: 여기서 에러가 발생하는 왜 발생하는지 모르겠다.
-    var userSeatReservationInfo = UserSeatResevationModel.fromJson(response.data);
-    return userSeatReservationInfo;
-  }
 
   Future<String> postSeatReservationStart(int seatNumber) async {
     Response response;

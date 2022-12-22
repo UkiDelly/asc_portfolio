@@ -5,7 +5,6 @@ import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
-import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -39,20 +38,11 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(
-      initialLocation: '/',
+      initialLocation: '/login',
       routes: [
         GoRoute(
           path: '/',
           builder: (context, state) => const MainScreen(),
-          redirect: (context, state) async {
-            final userLogin = await ref.read(userRepoProvider).getCheckLogin();
-
-            if (userLogin) {
-              return '/';
-            } else {
-              return '/login';
-            }
-          },
           routes: [
             GoRoute(
               path: 'seat',

@@ -603,7 +603,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               setState(() {
                 storage.deleteAll();
                 //storage.write(key: 'accessToken', value: null);
-                ref.watch(homeStateProvider.notifier).isLogin = false;
+                ref.read(homeStateProvider.notifier).logOut();
               }),
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen())),
             },

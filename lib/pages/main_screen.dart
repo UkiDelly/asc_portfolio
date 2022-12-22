@@ -60,7 +60,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLogined = ref.watch(homeStateProvider.notifier).isLogin;
+    bool isLogined = ref.watch(homeStateProvider).loginCheck;
     selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
     // print('DateTime=${DateTime.now()}');

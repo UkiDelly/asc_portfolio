@@ -29,7 +29,6 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     init();
   }
 
-  bool isLogin = false;
   int selectedIndex = 0;
 
   set setSelectedIndex(int index) {
@@ -38,42 +37,52 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     state = state.copyWith(selectedIndex: index);
   }
 
+  void logOut() {
+    state = HomeController();
+  }
+
   void init() async {
-    final userQrandName = await userRepository.getUserQrAndNameReq();
-    final userTicketInfo = await ticketRepository.getUserTicketInfo();
-    final userSeatReservationInfo = await seatRepository.getUserSeatReservationInfo();
-    state = state.copyWith(
-      qrCode: userQrandName.qrCode,
-      userName: userQrandName.name,
-      userTicketInfo: userTicketInfo,
-      seatReservationSeatNumber: userSeatReservationInfo.seatNumber,
-      seatReservationStartTime: userSeatReservationInfo.startTime,
-      seatReservationCreateDate: userSeatReservationInfo.createDate,
-      seatReservationPeriod: userSeatReservationInfo.period,
-      seatReservationTimeInUse: userSeatReservationInfo.timeInUse,
-      format: DateFormat('HH시 mm분').format(
-        DateTime.parse(state.seatReservationCreateDate).subtract(
-          Duration(
-            days: DateTime.now().day,
-            hours: DateTime.now().hour,
-            minutes: DateTime.now().minute,
-          ),
-        ),
-      ),
-    );
+    final userLogin = await userRepository.getCheckLogin();
 
-    if (userTicketInfo.productLabel.contains('PART-TIME')) {
-      state = state.copyWith(period: userTicketInfo.remainingTime);
-    } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
-      state = state.copyWith(period: userTicketInfo.period);
+    if (userLogin) {
+      final userQrandName = await userRepository.getUserQrAndNameReq();
+      final userTicketInfo = await ticketRepository.getUserTicketInfo();
+
+      state = state.copyWith(
+        loginCheck: userLogin,
+        qrCode: userQrandName.qrCode,
+        userName: userQrandName.name,
+        userTicketInfo: userTicketInfo,
+        // seatReservationSeatNumber: userSeatReservationInfo.seatNumber,
+        // seatReservationStartTime: userSeatReservationInfo.startTime,
+        // seatReservationCreateDate: userSeatReservationInfo.createDate,
+        // seatReservationPeriod: userSeatReservationInfo.period,
+        // seatReservationTimeInUse: userSeatReservationInfo.timeInUse,
+        // format: DateFormat('HH시 mm분').format(
+        //   DateTime.parse(state.seatReservationCreateDate).subtract(
+        //     Duration(
+        //       days: DateTime.now().day,
+        //       hours: DateTime.now().hour,
+        //       minutes: DateTime.now().minute,
+        //     ),
+        //   ),
+        // ),
+      );
+      if (userTicketInfo.productLabel.contains('PART-TIME')) {
+        state = state.copyWith(period: userTicketInfo.remainingTime);
+      } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
+        state = state.copyWith(period: userTicketInfo.period);
+      }
+
+      print('_loginCheckAndFetch실행');
+      print('seatReservationCreateDate=${state.seatReservationCreateDate}');
+      print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
+      print('seatReservationStartTime=${state.seatReservationStartTime}');
+      print('seatReservationPeriod=${state.seatReservationPeriod}');
+      print('userQrAndName=${state.qrCode}');
+    } else {
+      print('로그인 안됨');
     }
-
-    print('_loginCheckAndFetch실행');
-    print('seatReservationCreateDate=${state.seatReservationCreateDate}');
-    print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
-    print('seatReservationStartTime=${state.seatReservationStartTime}');
-    print('seatReservationPeriod=${state.seatReservationPeriod}');
-    print('userQrAndName=${state.qrCode}');
   }
 
   void roomFetchGet() async {

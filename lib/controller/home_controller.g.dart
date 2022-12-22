@@ -15,7 +15,7 @@ _$_HomeController _$$_HomeControllerFromJson(Map<String, dynamic> json) =>
       period: json['period'] as int? ?? 0,
       remainingTime: json['remainingTime'] as int? ?? 0,
       selectedIndex: json['selectedIndex'] as int? ?? 0,
-      loginCheck: json['loginCheck'] as bool? ?? true,
+      loginCheck: json['loginCheck'] as bool? ?? false,
       seatDatas: (json['seatDatas'] as List<dynamic>?)
               ?.map((e) => UsersSeatModel.fromJson(e as Map<String, dynamic>))
               .toList() ??

@@ -22,7 +22,9 @@ class DioInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    options.headers['Authorization'] = await storage.read(key: 'accessToken');
+    String auth = 'Bearer';
+    String? token = await storage.read(key: 'accessToken');
+    options.headers['Authorization'] = '$auth $token';
     super.onRequest(options, handler);
   }
 }

@@ -17,7 +17,7 @@ class SeatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeController = ref.watch(homeStateProvider);
-    final isLogined = ref.watch(homeStateProvider.notifier).isLogin;
+    final isLogined = ref.watch(homeStateProvider).loginCheck;
     final selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
     return Scaffold(
@@ -85,7 +85,7 @@ class SeatScreen extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => InAppPaymentSecond(
+                      builder: (context) => const InAppPaymentSecond(
                         product: Product.FIFTY_HOUR_PART_TIME_TICKET,
                       ),
                     ),

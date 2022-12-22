@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../pages/login/login_page.dart';
 import '../pages/main_screen.dart';
 import '../pages/seat/change_seat_page.dart';
 
@@ -21,7 +21,6 @@ class NavDrawer extends ConsumerStatefulWidget {
 }
 
 class _NavDrawerState extends ConsumerState<NavDrawer> {
-  static const storage = FlutterSecureStorage();
   double _progress = 0;
   bool isNotCompleteLoading = true;
 
@@ -80,7 +79,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             ),
           ),
 
-          ref.watch(homeStateProvider.notifier).isLogin // SeatScreenState.isLogined
+          ref.watch(homeStateProvider).loginCheck // SeatScreenState.isLogined
               ? ListTile(
                   leading: const Icon(Icons.unpublished, color: AppColor.appPurple),
                   title: const Text(
@@ -95,7 +94,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                   },
                 )
               : const Text(''),
-          ref.watch(homeStateProvider.notifier).isLogin
+          ref.watch(homeStateProvider).loginCheck
               ? ListTile(
                   leading: const Icon(
                     Icons.airline_seat_individual_suite_sharp,
@@ -114,33 +113,16 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                 )
               : const Text(''),
           ListTile(
-            leading: ref.watch(homeStateProvider.notifier).isLogin
-                ? const Icon(Icons.logout, color: AppColor.appPurple)
-                : const Icon(Icons.login, color: AppColor.appPurple),
-            title: ref.watch(homeStateProvider.notifier).isLogin
-                ? const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400))
-                : const Text('로그인', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+            leading: const Icon(Icons.logout, color: AppColor.appPurple),
+            title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
-              if (ref.watch(homeStateProvider.notifier).isLogin == true) {
-                setState(() {
-                  storage.deleteAll();
-                  //storage.write(key: 'accessToken', value: null);
-                  ref.watch(homeStateProvider.notifier).isLogin = false;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MainScreen()),
-                );
-                await showDialog(
-                  context: context,
-                  builder: (BuildContext context) => _buildPopupDialogLogOutCheck(context),
-                );
-              } else if (ref.watch(homeStateProvider.notifier).isLogin == false) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }
+              
+
+              await ref.read(secureStorageProvider).deleteAll().then(
+                    (value) => context.go(
+                      '/login',
+                    ),
+                  );
             },
           ),
           // ListTile(
