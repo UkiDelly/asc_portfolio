@@ -165,6 +165,7 @@ class SeatScreen extends ConsumerWidget {
                 return InkWell(
                   onTap: () {
                     if (isLogined == true &&
+                        // UNRESERVED && VALID일때
                         homeController.seatDatas[index].seatState.length == 10 &&
                         homeController.userTicketInfo?.isValidTicket == 'VALID') {
                       ref.read(homeStateProvider.notifier).setSelectedIndex = index + 1;

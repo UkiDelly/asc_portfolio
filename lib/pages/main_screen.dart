@@ -63,14 +63,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
     bool isLogined = ref.watch(homeStateProvider).loginCheck;
     selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
-    // print('DateTime=${DateTime.now()}');
-    //.replaceAll(' ', '').replaceAll('-', '').replaceAll(':', '').replaceAll('.', '')
-    // String validTime = DateFormat('yyyy-MM-dd h시 mm분까지')
-    //     .format(DateTime.now().add(Duration(hours: 9, minutes: homeController.period)));
-    // for (int i = 0; i < homeController.seatDatas.length; i++) {
-    //   seatList.add(homeController.seatDatas[i].toJson());
-    // }
-
     return Scaffold(
       key: _scaffoldKey,
       drawer: const NavDrawer(),

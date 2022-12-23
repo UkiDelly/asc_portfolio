@@ -58,12 +58,12 @@ class UserRepository {
   }
 
   Future<bool> getCheckLogin() async {
-    Response response = await dio.get(Api.API_LOGIN_CHECK);
-    print('loginCheckResponseData=' + response.data);
-    if (response.statusCode == 200) {
+    try {
+      Response response = await dio.get(Api.API_LOGIN_CHECK);
       return true;
+    } on DioError {
+      return false;
     }
-    return false;
   }
 
   Future<void> postReqLogin({required String id, required String password}) async {

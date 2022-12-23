@@ -5,6 +5,7 @@ import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_page.dart';
 import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
+import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,15 @@ class MyApp extends ConsumerWidget {
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
+          redirect: (context, state) {
+            final userLogin = ref.watch(homeStateProvider).loginCheck;
+
+            if (userLogin) {
+              return '/';
+            } else {
+              return '/login';
+            }
+          },
         ),
         GoRoute(
           path: '/sign_up',
