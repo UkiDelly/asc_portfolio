@@ -116,11 +116,8 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             leading: const Icon(Icons.logout, color: AppColor.appPurple),
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
-              await ref.read(secureStorageProvider).deleteAll().then(
-                    (value) => context.go(
-                      '/login',
-                    ),
-                  );
+              await ref.read(secureStorageProvider).deleteAll();
+              context.go('/login');
             },
           ),
           // ListTile(

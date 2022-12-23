@@ -124,7 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       isLoading = true;
                     });
 
-                    ref
+                    await ref
                         .read(userRepoProvider)
                         .postReqLogin(id: idController.text, password: passwordController.text);
 
