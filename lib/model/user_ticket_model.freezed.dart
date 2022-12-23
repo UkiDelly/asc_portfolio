@@ -22,7 +22,8 @@ UserTicketModel _$UserTicketModelFromJson(Map<String, dynamic> json) {
 mixin _$UserTicketModel {
   String get isValidTicket => throw _privateConstructorUsedError;
   String get fixedTermTicket => throw _privateConstructorUsedError;
-  String get productLabel => throw _privateConstructorUsedError;
+  @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+  Product get productLabel => throw _privateConstructorUsedError;
   int get partTimeTicket => throw _privateConstructorUsedError;
   int get remainingTime => throw _privateConstructorUsedError;
   int get period => throw _privateConstructorUsedError;
@@ -42,7 +43,8 @@ abstract class $UserTicketModelCopyWith<$Res> {
   $Res call(
       {String isValidTicket,
       String fixedTermTicket,
-      String productLabel,
+      @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+          Product productLabel,
       int partTimeTicket,
       int remainingTime,
       int period});
@@ -80,7 +82,7 @@ class _$UserTicketModelCopyWithImpl<$Res, $Val extends UserTicketModel>
       productLabel: null == productLabel
           ? _value.productLabel
           : productLabel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Product,
       partTimeTicket: null == partTimeTicket
           ? _value.partTimeTicket
           : partTimeTicket // ignore: cast_nullable_to_non_nullable
@@ -108,7 +110,8 @@ abstract class _$$_UserTicketModelCopyWith<$Res>
   $Res call(
       {String isValidTicket,
       String fixedTermTicket,
-      String productLabel,
+      @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+          Product productLabel,
       int partTimeTicket,
       int remainingTime,
       int period});
@@ -144,7 +147,7 @@ class __$$_UserTicketModelCopyWithImpl<$Res>
       productLabel: null == productLabel
           ? _value.productLabel
           : productLabel // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Product,
       partTimeTicket: null == partTimeTicket
           ? _value.partTimeTicket
           : partTimeTicket // ignore: cast_nullable_to_non_nullable
@@ -167,7 +170,8 @@ class _$_UserTicketModel extends _UserTicketModel {
   const _$_UserTicketModel(
       {required this.isValidTicket,
       this.fixedTermTicket = '',
-      required this.productLabel,
+      @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+          this.productLabel = Product.UNDEFINED,
       this.partTimeTicket = 0,
       this.remainingTime = 0,
       this.period = 0})
@@ -182,7 +186,8 @@ class _$_UserTicketModel extends _UserTicketModel {
   @JsonKey()
   final String fixedTermTicket;
   @override
-  final String productLabel;
+  @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+  final Product productLabel;
   @override
   @JsonKey()
   final int partTimeTicket;
@@ -239,7 +244,8 @@ abstract class _UserTicketModel extends UserTicketModel {
   const factory _UserTicketModel(
       {required final String isValidTicket,
       final String fixedTermTicket,
-      required final String productLabel,
+      @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+          final Product productLabel,
       final int partTimeTicket,
       final int remainingTime,
       final int period}) = _$_UserTicketModel;
@@ -253,7 +259,8 @@ abstract class _UserTicketModel extends UserTicketModel {
   @override
   String get fixedTermTicket;
   @override
-  String get productLabel;
+  @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
+  Product get productLabel;
   @override
   int get partTimeTicket;
   @override

@@ -3,7 +3,6 @@ import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/server/repository/ticket_repository.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 final homeStateProvider = StateNotifierProvider<HomeStateNotifier, HomeController>((ref) {
   final userRepository = ref.watch(userRepoProvider);
@@ -29,10 +28,12 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     init();
   }
 
-  int selectedIndex = 0;
+  int _selectedIndex = 0;
+
+  get selectedIndex => _selectedIndex;
 
   set setSelectedIndex(int index) {
-    selectedIndex = index;
+    _selectedIndex = index;
 
     state = state.copyWith(selectedIndex: index);
   }
@@ -48,31 +49,58 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
       final userQrandName = await userRepository.getUserQrAndNameReq();
       final userTicketInfo = await ticketRepository.getUserTicketInfo();
 
-      state = state.copyWith(
-        loginCheck: userLogin,
-        qrCode: userQrandName.qrCode,
-        userName: userQrandName.name,
-        userTicketInfo: userTicketInfo,
-        // seatReservationSeatNumber: userSeatReservationInfo.seatNumber,
-        // seatReservationStartTime: userSeatReservationInfo.startTime,
-        // seatReservationCreateDate: userSeatReservationInfo.createDate,
-        // seatReservationPeriod: userSeatReservationInfo.period,
-        // seatReservationTimeInUse: userSeatReservationInfo.timeInUse,
-        // format: DateFormat('HH시 mm분').format(
-        //   DateTime.parse(state.seatReservationCreateDate).subtract(
-        //     Duration(
-        //       days: DateTime.now().day,
-        //       hours: DateTime.now().hour,
-        //       minutes: DateTime.now().minute,
-        //     ),
-        //   ),
-        // ),
-      );
-      if (userTicketInfo.productLabel.contains('PART-TIME')) {
-        state = state.copyWith(period: userTicketInfo.remainingTime);
-      } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
-        state = state.copyWith(period: userTicketInfo.period);
+      // state = state.copyWith(
+      //   loginCheck: userLogin,
+      //   qrCode: userQrandName.qrCode,
+      //   userName: userQrandName.name,
+      //   userTicketInfo: userTicketInfo,
+      //   // seatReservationSeatNumber: userSeatReservationInfo.seatNumber,
+      //   // seatReservationStartTime: userSeatReservationInfo.startTime,
+      //   // seatReservationCreateDate: userSeatReservationInfo.createDate,
+      //   // seatReservationPeriod: userSeatReservationInfo.period,
+      //   // seatReservationTimeInUse: userSeatReservationInfo.timeInUse,
+      //   // format: DateFormat('HH시 mm분').format(
+      //   //   DateTime.parse(state.seatReservationCreateDate).subtract(
+      //   //     Duration(
+      //   //       days: DateTime.now().day,
+      //   //       hours: DateTime.now().hour,
+      //   //       minutes: DateTime.now().minute,
+      //   //     ),
+      //   //   ),
+      //   // ),
+      // );
+
+      // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
+      if (userTicketInfo.productLabel.label == 'PART-TIME') {
+        state = state.copyWith(
+          period: userTicketInfo.remainingTime,
+          loginCheck: userLogin,
+          qrCode: userQrandName.qrCode,
+          userName: userQrandName.name,
+          userTicketInfo: userTicketInfo,
+        );
+      } else if (userTicketInfo.productLabel.label == 'TIME-TERM') {
+        state = state.copyWith(
+          period: userTicketInfo.period,
+          loginCheck: userLogin,
+          qrCode: userQrandName.qrCode,
+          userName: userQrandName.name,
+          userTicketInfo: userTicketInfo,
+        );
+      } else {
+        state = state.copyWith(
+          loginCheck: userLogin,
+          qrCode: userQrandName.qrCode,
+          userName: userQrandName.name,
+          userTicketInfo: userTicketInfo,
+        );
       }
+
+      // if (userTicketInfo.productLabel == Product.values) {
+      //   state = state.copyWith(period: userTicketInfo.remainingTime);
+      // } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
+      //   state = state.copyWith(period: userTicketInfo.period);
+      // }
 
       print('_loginCheckAndFetch실행');
       print('seatReservationCreateDate=${state.seatReservationCreateDate}');

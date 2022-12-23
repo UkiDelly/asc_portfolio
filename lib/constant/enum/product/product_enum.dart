@@ -16,9 +16,9 @@ enum Product {
   final double price;
   final String label;
 
-  factory Product.getByCode(String name) {
+  factory Product.getByCode(String term) {
     return Product.values.firstWhere(
-      (value) => value.name == name,
+      (value) => value.label == term,
       orElse: () => Product.UNDEFINED,
     );
   }
