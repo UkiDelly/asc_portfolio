@@ -1,4 +1,4 @@
-import '../../../model/user_ticket_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 enum Product {
   todayFixedTermTicket('당일권', 10000, Term.fixedTerm),
@@ -24,4 +24,18 @@ enum Product {
       orElse: () => Product.undefined,
     );
   }
+}
+
+enum Term {
+  @JsonValue('FIXED-TERM')
+  fixedTerm,
+  @JsonValue('PART-TIME')
+  partTime,
+  none;
+}
+
+// Term type의 enum을 String으로 변환하는 확장을 정의
+extension TermExtension on Term {
+  // make enum to String method
+  String enumToString() => toString().split('.').last.toUpperCase();
 }

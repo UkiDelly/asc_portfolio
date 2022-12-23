@@ -8,12 +8,18 @@ part of 'token_model.dart';
 
 _$_TokenModel _$$_TokenModelFromJson(Map<String, dynamic> json) =>
     _$_TokenModel(
-      roleType: json['roleType'] as String,
+      roleType: $enumDecode(_$RoleTypeEnumMap, json['roleType']),
       accessToken: json['accessToken'] as String,
     );
 
 Map<String, dynamic> _$$_TokenModelToJson(_$_TokenModel instance) =>
     <String, dynamic>{
-      'roleType': instance.roleType,
+      'roleType': _$RoleTypeEnumMap[instance.roleType]!,
       'accessToken': instance.accessToken,
     };
+
+const _$RoleTypeEnumMap = {
+  RoleType.user: 'USER',
+  RoleType.admin: 'ADMIN',
+  RoleType.none: 'none',
+};

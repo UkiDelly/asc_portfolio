@@ -20,7 +20,7 @@ TokenModel _$TokenModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TokenModel {
-  String get roleType => throw _privateConstructorUsedError;
+  RoleType get roleType => throw _privateConstructorUsedError;
   String get accessToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $TokenModelCopyWith<$Res> {
           TokenModel value, $Res Function(TokenModel) then) =
       _$TokenModelCopyWithImpl<$Res, TokenModel>;
   @useResult
-  $Res call({String roleType, String accessToken});
+  $Res call({RoleType roleType, String accessToken});
 }
 
 /// @nodoc
@@ -58,7 +58,7 @@ class _$TokenModelCopyWithImpl<$Res, $Val extends TokenModel>
       roleType: null == roleType
           ? _value.roleType
           : roleType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RoleType,
       accessToken: null == accessToken
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
@@ -75,7 +75,7 @@ abstract class _$$_TokenModelCopyWith<$Res>
       __$$_TokenModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String roleType, String accessToken});
+  $Res call({RoleType roleType, String accessToken});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$_TokenModelCopyWithImpl<$Res>
       roleType: null == roleType
           ? _value.roleType
           : roleType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as RoleType,
       accessToken: null == accessToken
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
@@ -115,7 +115,7 @@ class _$_TokenModel extends _TokenModel {
       _$$_TokenModelFromJson(json);
 
   @override
-  final String roleType;
+  final RoleType roleType;
   @override
   final String accessToken;
 
@@ -155,7 +155,7 @@ class _$_TokenModel extends _TokenModel {
 
 abstract class _TokenModel extends TokenModel {
   factory _TokenModel(
-      {required final String roleType,
+      {required final RoleType roleType,
       required final String accessToken}) = _$_TokenModel;
   _TokenModel._() : super._();
 
@@ -163,7 +163,7 @@ abstract class _TokenModel extends TokenModel {
       _$_TokenModel.fromJson;
 
   @override
-  String get roleType;
+  RoleType get roleType;
   @override
   String get accessToken;
   @override

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:asc_portfolio/constant/enum/user/user_enum.dart';
 import 'package:asc_portfolio/model/admin/admin_check_user_info.dart';
 import 'package:asc_portfolio/model/token_model.dart';
 import 'package:asc_portfolio/model/user_qr_and_name_model.dart';
@@ -80,7 +81,7 @@ class UserRepository {
 
       final tokenInfo = TokenModel.fromJson(response.data);
       storage.write(key: 'accessToken', value: tokenInfo.accessToken);
-      storage.write(key: 'roleType', value: tokenInfo.roleType);
+      storage.write(key: 'roleType', value: tokenInfo.roleType.enumToString());
     } catch (e) {
       print(e);
     }

@@ -4,7 +4,7 @@ import 'package:asc_portfolio/server/repository/ticket_repository.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../model/user_ticket_model.dart';
+import '../../constant/enum/product/product_enum.dart';
 
 final homeStateProvider = StateNotifierProvider<HomeStateNotifier, HomeController>((ref) {
   final userRepository = ref.watch(userRepoProvider);
@@ -73,7 +73,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
       // );
 
       // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
-      if (userTicketInfo.productLabel == Term.partTime) {
+      if (userTicketInfo.productLabel.contains(Term.partTime.enumToString())) {
         state = state.copyWith(
           period: userTicketInfo.remainingTime,
           loginCheck: userLogin,
@@ -81,7 +81,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
           userName: userQrandName.name,
           userTicketInfo: userTicketInfo,
         );
-      } else if (userTicketInfo.productLabel == Term.fixedTerm) {
+      } else if (userTicketInfo.productLabel.contains(Term.fixedTerm.enumToString())) {
         state = state.copyWith(
           period: userTicketInfo.period,
           loginCheck: userLogin,

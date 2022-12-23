@@ -163,14 +163,14 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
 
   //결제용 데이터 init
   bootpayReqeustDataInit() {
-    Item item1 = Item();
-    item1.name = product.name;
-    item1.qty = 1; // 해당 상품의 주문 수량
-    item1.id =
-        product.label.toString() + DateTime.now().millisecondsSinceEpoch.toString(); // 해당 상품의 고유 키
-    item1.price = product.price;
+    Item item = Item();
+    item.name = product.name;
+    item.qty = 1; // 해당 상품의 주문 수량
+    item.id = product.label.enumToString() +
+        DateTime.now().millisecondsSinceEpoch.toString(); // 해당 상품의 고유 키
+    item.price = product.price;
 
-    List<Item> itemList = [item1];
+    List<Item> itemList = [item];
 
     payload.webApplicationId = inAppPaymentController.webApplicationId; // web application id
     payload.androidApplicationId =
@@ -255,7 +255,7 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
           'orderProduct': product.toString().substring(8),
           'orderPrice': product.price,
           'productLabel':
-              product.label.toString() + DateTime.now().millisecondsSinceEpoch.toString(),
+              product.label.enumToString() + DateTime.now().millisecondsSinceEpoch.toString(),
           'receiptOrderId': paymentDataDto.receiptOrderId,
         };
         // print(paymentString);
