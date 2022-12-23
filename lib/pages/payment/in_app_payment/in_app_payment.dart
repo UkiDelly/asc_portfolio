@@ -166,7 +166,8 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
     Item item1 = Item();
     item1.name = product.name;
     item1.qty = 1; // 해당 상품의 주문 수량
-    item1.id = product.label + DateTime.now().millisecondsSinceEpoch.toString(); // 해당 상품의 고유 키
+    item1.id =
+        product.label.toString() + DateTime.now().millisecondsSinceEpoch.toString(); // 해당 상품의 고유 키
     item1.price = product.price;
 
     List<Item> itemList = [item1];
@@ -253,7 +254,8 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
         Map<String, dynamic> orderData = {
           'orderProduct': product.toString().substring(8),
           'orderPrice': product.price,
-          'productLabel': product.label + DateTime.now().millisecondsSinceEpoch.toString(),
+          'productLabel':
+              product.label.toString() + DateTime.now().millisecondsSinceEpoch.toString(),
           'receiptOrderId': paymentDataDto.receiptOrderId,
         };
         // print(paymentString);
