@@ -86,7 +86,7 @@ class SeatScreen extends ConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const InAppPaymentSecond(
-                        product: Product.FIFTY_HOUR_PART_TIME_TICKET,
+                        product: Product.fiftyHourPartTimeTicket,
                       ),
                     ),
                   );

@@ -1,4 +1,3 @@
-import 'package:asc_portfolio/constant/enum/product/product_enum.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_ticket_model.freezed.dart';
@@ -11,13 +10,23 @@ class UserTicketModel with _$UserTicketModel {
   const factory UserTicketModel({
     required String isValidTicket,
     @Default('') String fixedTermTicket,
-    @JsonKey(name: 'productLabel', fromJson: Product.getByCode)
-    @Default(Product.UNDEFINED)
-        Product productLabel,
+    required Term productLabel,
     @Default(0) int partTimeTicket,
     @Default(0) int remainingTime,
     @Default(0) int period,
   }) = _UserTicketModel;
 
   factory UserTicketModel.fromJson(Map<String, dynamic> json) => _$UserTicketModelFromJson(json);
+}
+
+enum Term {
+  @JsonValue('FIXED-TERM')
+  fixedTerm,
+  @JsonValue('PART-TIME')
+  partTime,
+  none;
+}
+
+extension TermExtension on Term {
+  String enumToString() => _$TermEnumMap[this]!;
 }

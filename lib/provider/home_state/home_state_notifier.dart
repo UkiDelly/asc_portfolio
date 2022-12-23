@@ -4,6 +4,8 @@ import 'package:asc_portfolio/server/repository/ticket_repository.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../model/user_ticket_model.dart';
+
 final homeStateProvider = StateNotifierProvider<HomeStateNotifier, HomeController>((ref) {
   final userRepository = ref.watch(userRepoProvider);
   final ticketRepository = ref.watch(ticketRepoProvider);
@@ -71,7 +73,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
       // );
 
       // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
-      if (userTicketInfo.productLabel.label == 'PART-TIME') {
+      if (userTicketInfo.productLabel == Term.partTime) {
         state = state.copyWith(
           period: userTicketInfo.remainingTime,
           loginCheck: userLogin,
@@ -79,7 +81,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
           userName: userQrandName.name,
           userTicketInfo: userTicketInfo,
         );
-      } else if (userTicketInfo.productLabel.label == 'TIME-TERM') {
+      } else if (userTicketInfo.productLabel == Term.fixedTerm) {
         state = state.copyWith(
           period: userTicketInfo.period,
           loginCheck: userLogin,
