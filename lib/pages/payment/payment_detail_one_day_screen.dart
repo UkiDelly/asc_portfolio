@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/enum/product/product_enum.dart';
@@ -46,7 +45,7 @@ class PaymentDetailOneDayPage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => const InAppPaymentSecond(
                             product: Product.todayFixedTermTicket,
-                          )));
+                          ),),);
             },
           ),
         ],

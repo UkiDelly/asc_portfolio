@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../pages/main_screen.dart';
-import '../pages/seat/change_seat_page.dart';
+import '../pages/seat/change_seat_screen.dart';
 
 class NavDrawer extends ConsumerStatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);

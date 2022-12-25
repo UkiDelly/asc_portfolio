@@ -1,10 +1,10 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/pages/login/login_page.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../style/app_color.dart';
+import '../login/login_screen.dart';
 
 class SignupPage extends ConsumerStatefulWidget {
   @override

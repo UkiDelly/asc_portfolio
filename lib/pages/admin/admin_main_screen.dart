@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/controller/admin_controller.dart';
-import 'package:asc_portfolio/pages/admin/admin_searching_page.dart';
+import 'package:asc_portfolio/pages/admin/admin_searching_screen.dart';
 import 'package:asc_portfolio/provider/admin_state/admin_state_notifier.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
@@ -25,6 +25,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   late AdminController _adminController;
   late AdminStateNotifier _adminConttollerNotifier;
   late FlutterSecureStorage storage;
+  PageController pageController = PageController(initialPage: 0);
 
   late int todaySalePrice = 0;
   int selectedSeatNumber = 0;
@@ -32,6 +33,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   String dailySales = DateTime.now().add(const Duration(days: -1)).toString().substring(0, 23);
   String weeklySales = DateTime.now().add(const Duration(days: -7)).toString().substring(0, 23);
   String monthSales = DateTime.now().add(const Duration(days: -30)).toString().substring(0, 23);
+
   //2022-12-04 06:01:14.266
   //2022-11-03 01:01:32.526
 
@@ -88,6 +90,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   @override
   void dispose() {
     _loginIdController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -104,7 +107,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
     }
     final totalSales = price;
 
-    List widgetOption = [
+    List<Widget> widgetOption = [
       ListView(
         children: [
           Column(
@@ -600,11 +603,13 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
           IconButton(
             color: Colors.white,
             onPressed: () => {
-              setState(() {
-                storage.deleteAll();
-                //storage.write(key: 'accessToken', value: null);
-                ref.read(homeStateProvider.notifier).logOut();
-              }),
+              setState(
+                () {
+                  storage.deleteAll();
+                  //storage.write(key: 'accessToken', value: null);
+                  ref.read(homeStateProvider.notifier).logOut();
+                },
+              ),
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen())),
             },
             icon: const Icon(Icons.logout),
@@ -618,13 +623,22 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        currentIndex: _adminController.selectedIndex, //현재 선택된 Index
+        currentIndex: _adminController.selectedIndex,
+        //현재 선택된 Index
         onTap: (int index) {
           // setState(() {
           //   _adminController = _adminController.copyWith(selectedIndex = index);
           // });
 
-          _adminConttollerNotifier.setSelectedIndex(index);
+          // _adminConttollerNotifier.setSelectedIndex(index);
+          print(index);
+          setState(() {
+            pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.linearToEaseOut,
+            );
+          });
         },
         items: const [
           BottomNavigationBarItem(
@@ -641,8 +655,9 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
           ),
         ],
       ),
-      body: Center(
-        child: widgetOption.elementAt(_adminController.selectedIndex),
+      body: PageView(
+        controller: pageController,
+        children: widgetOption,
       ),
     );
   }

@@ -95,7 +95,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
           IconButton(
             color: Colors.white,
             onPressed: () => {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCafePage())),
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SelectCafeScreen())),
             },
             icon: const Icon(Icons.storefront_outlined, size: 35),
           ),

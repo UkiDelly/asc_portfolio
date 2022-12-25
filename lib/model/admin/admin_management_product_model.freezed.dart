@@ -211,37 +211,46 @@ class __$$_AdminManagementProductModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AdminManagementProductModel extends _AdminManagementProductModel {
   const _$_AdminManagementProductModel(
-      {required this.createDate,
-      required this.modifiedDate,
-      required this.productId,
-      required this.productState,
-      required this.productNameType,
-      required this.description,
-      required this.productPrice,
-      required this.productLabel,
-      required this.productNameTypeString})
+      {this.createDate = '',
+      this.modifiedDate = '',
+      this.productId = 0,
+      this.productState = '',
+      this.productNameType = '',
+      this.description = '',
+      this.productPrice = 0,
+      this.productLabel = '',
+      this.productNameTypeString = ''})
       : super._();
 
   factory _$_AdminManagementProductModel.fromJson(Map<String, dynamic> json) =>
       _$$_AdminManagementProductModelFromJson(json);
 
   @override
+  @JsonKey()
   final String createDate;
   @override
+  @JsonKey()
   final String modifiedDate;
   @override
+  @JsonKey()
   final int productId;
   @override
+  @JsonKey()
   final String productState;
   @override
+  @JsonKey()
   final String productNameType;
   @override
+  @JsonKey()
   final String description;
   @override
+  @JsonKey()
   final int productPrice;
   @override
+  @JsonKey()
   final String productLabel;
   @override
+  @JsonKey()
   final String productNameTypeString;
 
   @override
@@ -306,16 +315,15 @@ class _$_AdminManagementProductModel extends _AdminManagementProductModel {
 abstract class _AdminManagementProductModel
     extends AdminManagementProductModel {
   const factory _AdminManagementProductModel(
-          {required final String createDate,
-          required final String modifiedDate,
-          required final int productId,
-          required final String productState,
-          required final String productNameType,
-          required final String description,
-          required final int productPrice,
-          required final String productLabel,
-          required final String productNameTypeString}) =
-      _$_AdminManagementProductModel;
+      {final String createDate,
+      final String modifiedDate,
+      final int productId,
+      final String productState,
+      final String productNameType,
+      final String description,
+      final int productPrice,
+      final String productLabel,
+      final String productNameTypeString}) = _$_AdminManagementProductModel;
   const _AdminManagementProductModel._() : super._();
 
   factory _AdminManagementProductModel.fromJson(Map<String, dynamic> json) =

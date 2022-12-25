@@ -21,6 +21,8 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   final UserRepository userRepository;
   final TicketRepository ticketRepository;
   final SeatRepository seatRepository;
+  int _selectedIndex = 0;
+
   HomeStateNotifier({
     required this.userRepository,
     required this.ticketRepository,
@@ -30,8 +32,6 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     init();
   }
 
-  int _selectedIndex = 0;
-
   get selectedIndex => _selectedIndex;
 
   set setSelectedIndex(int index) {
@@ -40,8 +40,15 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     state = state.copyWith(selectedIndex: index);
   }
 
-  void logOut() {
-    state = HomeController();
+  bool getRoomState(int index) {
+    final roomState = state.seatDatas[index].toJson();
+    if (roomState.values.toString() == '(RESERVED)') {
+      print('seat:${roomState.values}');
+      return true;
+    } else {
+      print('seat:${roomState.values}');
+      return false;
+    }
   }
 
   void init() async {
@@ -115,19 +122,12 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     }
   }
 
+  void logOut() {
+    state = HomeController();
+  }
+
   void roomFetchGet() async {
     final rooms = await seatRepository.getAllRoomStateReq();
     state = state.copyWith(seatDatas: rooms);
-  }
-
-  bool getRoomState(int index) {
-    final roomState = state.seatDatas[index].toJson();
-    if (roomState.values.toString() == '(RESERVED)') {
-      print('seat:${roomState.values}');
-      return true;
-    } else {
-      print('seat:${roomState.values}');
-      return false;
-    }
   }
 }

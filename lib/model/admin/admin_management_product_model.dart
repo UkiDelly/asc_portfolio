@@ -8,15 +8,15 @@ class AdminManagementProductModel with _$AdminManagementProductModel {
   const AdminManagementProductModel._();
 
   const factory AdminManagementProductModel({
-    required String createDate,
-    required String modifiedDate,
-    required int productId,
-    required String productState,
-    required String productNameType,
-    required String description,
-    required int productPrice,
-    required String productLabel,
-    required String productNameTypeString,
+    @Default('') String createDate,
+    @Default('') String modifiedDate,
+    @Default(0) int productId,
+    @Default('') String productState,
+    @Default('') String productNameType,
+    @Default('') String description,
+    @Default(0) int productPrice,
+    @Default('') String productLabel,
+    @Default('') String productNameTypeString,
   }) = _AdminManagementProductModel;
 
   factory AdminManagementProductModel.fromJson(Map<String, dynamic> json) =>

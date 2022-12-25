@@ -1,6 +1,6 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:asc_portfolio/server/api/api.dart';
+import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,12 +8,12 @@ import '../../constant/enum/cafe/cafe_name.dart';
 import '../../style/app_color.dart';
 import '../main_screen.dart';
 
-class SelectCafePage extends ConsumerStatefulWidget {
+class SelectCafeScreen extends ConsumerStatefulWidget {
   @override
-  _SelectCafePageState createState() => _SelectCafePageState();
+  ConsumerState createState() => _SelectCafeScreenState();
 }
 
-class _SelectCafePageState extends ConsumerState<SelectCafePage> {
+class _SelectCafeScreenState extends ConsumerState<SelectCafeScreen> {
   void _fetchChangeCafe(String cafeName) async {
     await ref.read(paymentRepoProvider).postChangeCafe(cafeName);
   }

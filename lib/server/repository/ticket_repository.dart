@@ -22,7 +22,7 @@ class TicketRepository {
 
     response = await dio.get(Api.API_USER_TICKET + Api.cafeName);
     print(response.data);
-    var userTicketInfo = UserTicketModel.fromJson(response.data);
+    final userTicketInfo = UserTicketModel.fromJson(response.data);
     return userTicketInfo;
   }
 

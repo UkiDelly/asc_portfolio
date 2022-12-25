@@ -1,8 +1,7 @@
 import 'package:asc_portfolio/pages/main_screen.dart';
-import 'package:asc_portfolio/pages/payment/payment_detail_one_day_page.dart';
-import 'package:asc_portfolio/pages/payment/payment_detail_period_page.dart';
-import 'package:asc_portfolio/pages/payment/payment_detail_time_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:asc_portfolio/pages/payment/payment_detail_one_day_screen.dart';
+import 'package:asc_portfolio/pages/payment/payment_detail_period_screen.dart';
+import 'package:asc_portfolio/pages/payment/payment_detail_time_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../style/app_color.dart';

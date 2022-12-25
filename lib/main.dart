@@ -1,10 +1,10 @@
-import 'package:asc_portfolio/pages/admin/admin_main_page.dart';
+import 'package:asc_portfolio/pages/admin/admin_main_screen.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_page.dart';
 import 'package:asc_portfolio/pages/home/seat_screen.dart';
-import 'package:asc_portfolio/pages/login/login_page.dart';
+import 'package:asc_portfolio/pages/login/login_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
-import 'package:asc_portfolio/pages/payment/payment_page.dart';
-import 'package:asc_portfolio/pages/signup/sign_up_page.dart';
+import 'package:asc_portfolio/pages/payment/payment_screen.dart';
+import 'package:asc_portfolio/pages/signup/sign_up_screen.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -74,7 +74,7 @@ class MyApp extends ConsumerWidget {
         ),
         GoRoute(
           path: '/cafe_page',
-          builder: (context, state) => SelectCafePage(),
+          builder: (context, state) => SelectCafeScreen(),
         ),
         GoRoute(
           path: '/payment',

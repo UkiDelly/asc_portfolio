@@ -7,9 +7,9 @@ import '../../constant/enum/product/product_enum.dart';
 import '../../provider/home_state/home_state_notifier.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
-import '../admin/admin_main_page.dart';
+import '../admin/admin_main_screen.dart';
 import '../payment/in_app_payment/in_app_payment.dart';
-import '../seat/specific_seat_page.dart';
+import '../seat/specific_seat_screen.dart';
 
 class SeatScreen extends ConsumerWidget {
   const SeatScreen({super.key});

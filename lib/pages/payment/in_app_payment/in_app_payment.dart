@@ -15,7 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../constant/enum/product/product_enum.dart';
 import '../../../controller/payment_controller.dart';
 import '../../../style/app_color.dart';
-import '../payment_page.dart';
+import '../payment_screen.dart';
 
 class InAppPaymentSecond extends ConsumerStatefulWidget {
   final Product product;

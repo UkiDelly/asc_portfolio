@@ -16,13 +16,13 @@ _$_AdminController _$$_AdminControllerFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String? ?? '',
       productList: (json['productList'] as List<dynamic>?)
               ?.map((e) => AdminManagementProductModel.fromJson(
-                  e as Map<String, dynamic>))
+                  e as Map<String, dynamic>,),)
               .toList() ??
           const [],
       oneDaySales: json['oneDaySales'] as int? ?? 0,
       oneDayProductList: (json['oneDayProductList'] as List<dynamic>?)
               ?.map((e) => AdminManagementProductModel.fromJson(
-                  e as Map<String, dynamic>))
+                  e as Map<String, dynamic>,),)
               .toList() ??
           const [],
       loginId: json['loginId'] as String? ?? '',

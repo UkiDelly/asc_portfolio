@@ -7,14 +7,14 @@ part of 'user_qr_and_name_model.dart';
 // **************************************************************************
 
 _$_UserQrAndNameModel _$$_UserQrAndNameModelFromJson(
-        Map<String, dynamic> json) =>
+        Map<String, dynamic> json,) =>
     _$_UserQrAndNameModel(
       qrCode: json['qrCode'] as String,
       name: json['name'] as String,
     );
 
 Map<String, dynamic> _$$_UserQrAndNameModelToJson(
-        _$_UserQrAndNameModel instance) =>
+        _$_UserQrAndNameModel instance,) =>
     <String, dynamic>{
       'qrCode': instance.qrCode,
       'name': instance.name,

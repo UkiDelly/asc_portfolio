@@ -11,7 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../style/app_color.dart';
-import 'admin_main_page.dart';
+import 'admin_main_screen.dart';
 
 class AdminSearchingPage extends ConsumerStatefulWidget {
   String loginId;

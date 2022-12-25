@@ -7,21 +7,21 @@ part of 'admin_management_product_model.dart';
 // **************************************************************************
 
 _$_AdminManagementProductModel _$$_AdminManagementProductModelFromJson(
-        Map<String, dynamic> json) =>
+        Map<String, dynamic> json,) =>
     _$_AdminManagementProductModel(
-      createDate: json['createDate'] as String,
-      modifiedDate: json['modifiedDate'] as String,
-      productId: json['productId'] as int,
-      productState: json['productState'] as String,
-      productNameType: json['productNameType'] as String,
-      description: json['description'] as String,
-      productPrice: json['productPrice'] as int,
-      productLabel: json['productLabel'] as String,
-      productNameTypeString: json['productNameTypeString'] as String,
+      createDate: json['createDate'] as String? ?? '',
+      modifiedDate: json['modifiedDate'] as String? ?? '',
+      productId: json['productId'] as int? ?? 0,
+      productState: json['productState'] as String? ?? '',
+      productNameType: json['productNameType'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      productPrice: json['productPrice'] as int? ?? 0,
+      productLabel: json['productLabel'] as String? ?? '',
+      productNameTypeString: json['productNameTypeString'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$_AdminManagementProductModelToJson(
-        _$_AdminManagementProductModel instance) =>
+        _$_AdminManagementProductModel instance,) =>
     <String, dynamic>{
       'createDate': instance.createDate,
       'modifiedDate': instance.modifiedDate,
