@@ -1,4 +1,0 @@
-enum UserState {
-  user,
-  admin
-}
