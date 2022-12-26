@@ -1,4 +1,5 @@
 import 'package:asc_portfolio/controller/home_controller.dart';
+import 'package:asc_portfolio/model/user_seat_model.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/server/repository/ticket_repository.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
@@ -52,32 +53,11 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   }
 
   void init() async {
-    final userLogin = await userRepository.getCheckLogin();
+    final bool userLogin = await userRepository.getCheckLogin();
 
     if (userLogin) {
       final userQrandName = await userRepository.getUserQrAndNameReq();
       final userTicketInfo = await ticketRepository.getUserTicketInfo();
-
-      // state = state.copyWith(
-      //   loginCheck: userLogin,
-      //   qrCode: userQrandName.qrCode,
-      //   userName: userQrandName.name,
-      //   userTicketInfo: userTicketInfo,
-      //   // seatReservationSeatNumber: userSeatReservationInfo.seatNumber,
-      //   // seatReservationStartTime: userSeatReservationInfo.startTime,
-      //   // seatReservationCreateDate: userSeatReservationInfo.createDate,
-      //   // seatReservationPeriod: userSeatReservationInfo.period,
-      //   // seatReservationTimeInUse: userSeatReservationInfo.timeInUse,
-      //   // format: DateFormat('HH시 mm분').format(
-      //   //   DateTime.parse(state.seatReservationCreateDate).subtract(
-      //   //     Duration(
-      //   //       days: DateTime.now().day,
-      //   //       hours: DateTime.now().hour,
-      //   //       minutes: DateTime.now().minute,
-      //   //     ),
-      //   //   ),
-      //   // ),
-      // );
 
       // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
       if (userTicketInfo.productLabel.contains(Term.partTime.enumToString())) {
@@ -127,7 +107,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   }
 
   void roomFetchGet() async {
-    final rooms = await seatRepository.getAllRoomStateReq();
+    final List<UsersSeatModel> rooms = await seatRepository.getAllRoomStateReq();
     state = state.copyWith(seatDatas: rooms);
   }
 }
