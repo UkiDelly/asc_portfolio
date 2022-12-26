@@ -19,6 +19,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
   }
 
   double progress = 0;
+  int totalSales = 0;
+  List seatList = [];
 
   String selectedDate =
       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
@@ -28,7 +30,7 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
     state = state.copyWith(productList: productList);
   }
 
-  Future<int> fechOnlyOneDay(String dailySales) async {
+  Future<void> fechOnlyOneDay(String dailySales) async {
     final oneDayProductList = await productProvider.getProductInfoForAdmin(dailySales);
     state = state.copyWith(oneDayProductList: oneDayProductList);
     int price = 0;
@@ -37,7 +39,7 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
       price += item.productPrice;
     }
 
-    return price;
+    totalSales = price;
   }
 
   void roomFetchGet() async {
@@ -105,5 +107,19 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
 
   void setSelectedIndex(int index) {
     state = state.copyWith(selectedIndex: index);
+  }
+
+  void setSeatList(AdminController adminController) {
+    for (int i = 0; i < adminController.seatDatas.length; i++) {
+      seatList.add(adminController.seatDatas[i].toJson());
+    }
+  }
+
+  void setTotalSales(AdminController adminController) {
+    int price = 0;
+    for (int i = 0; i < adminController.productList.length; i++) {
+      price += adminController.productList[i].productPrice;
+    }
+    totalSales = price;
   }
 }

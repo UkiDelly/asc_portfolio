@@ -22,31 +22,26 @@ class AdminMainPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMainPageState extends ConsumerState<AdminMainPage> {
-  late AdminController _adminController;
-  late AdminStateNotifier _adminConttollerNotifier;
-  late FlutterSecureStorage storage;
-  PageController pageController = PageController(initialPage: 0);
+  final PageController pageController = PageController(initialPage: 0);
+  final _loginIdController = TextEditingController();
 
-  late int todaySalePrice = 0;
   int selectedSeatNumber = 0;
 
-  String dailySales = DateTime.now().add(const Duration(days: -1)).toString().substring(0, 23);
-  String weeklySales = DateTime.now().add(const Duration(days: -7)).toString().substring(0, 23);
-  String monthSales = DateTime.now().add(const Duration(days: -30)).toString().substring(0, 23);
+  String dailySales = DateTime.now().subtract(const Duration(days: 1)).toString();
+  String weeklySales = DateTime.now().subtract(const Duration(days: 7)).toString();
+  String monthSales = DateTime.now().subtract(const Duration(days: 30)).toString();
 
   //2022-12-04 06:01:14.266
   //2022-11-03 01:01:32.526
 
   bool isNotCompleteLoading = true;
 
-  final _loginIdController = TextEditingController();
-
-  Future<void> startTimer() async {
+  Future<void> startTimer(AdminStateNotifier adminStateNotifier) async {
     Timer.periodic(
       const Duration(milliseconds: 50),
       (Timer timer) => setState(
         () {
-          if (_adminConttollerNotifier.progress == 0.05) {
+          if (adminStateNotifier.progress == 0.05) {
             setState(() {
               isNotCompleteLoading = false;
             });
@@ -60,31 +55,11 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               });
             });
           } else {
-            _adminConttollerNotifier.progress += 0.025;
+            adminStateNotifier.progress += 0.025;
           }
         },
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    _adminController = ref.watch(adminStateProvider);
-    _adminConttollerNotifier = ref.watch(adminStateProvider.notifier);
-    storage = ref.watch(secureStorageProvider);
-    _adminConttollerNotifier
-      ..fetchApi(dailySales)
-      ..fechOnlyOneDay(dailySales).then(
-        (value) => setState(
-          () => todaySalePrice = value,
-        ),
-      );
-    super.didChangeDependencies();
   }
 
   @override
@@ -96,16 +71,11 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    List seatList = [];
-    for (int i = 0; i < _adminController.seatDatas.length; i++) {
-      seatList.add(_adminController.seatDatas[i].toJson());
-    }
-
-    int price = 0;
-    for (int i = 0; i < _adminController.productList.length; i++) {
-      price += _adminController.productList[i].productPrice;
-    }
-    final totalSales = price;
+    final AdminController adminController = ref.watch(adminStateProvider);
+    final AdminStateNotifier adminControllerNotifier = ref.watch(adminStateProvider.notifier)
+      ..fetchApi(dailySales)
+      ..fechOnlyOneDay(dailySales);
+    final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
     List<Widget> widgetOption = [
       ListView(
@@ -147,7 +117,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                         ],
                       ),
                       Text(
-                        '$todaySalePrice 원',
+                        '${adminControllerNotifier.totalSales} 원',
                         style: const TextStyle(
                           fontSize: 25,
                           color: Colors.white,
@@ -172,18 +142,18 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                           TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
                     ), // <-- Text
                     backgroundColor:
-                        _adminController.oneHasPressed ? AppColor.appPurple : Colors.grey,
+                        adminController.oneHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
                       // _fetchApi(dailySales);
-                      // _adminConttollerNotifier.fetchApi(dailySales);
-                      // _adminController.oneHasPressed = true;
-                      // _adminController.weekHasPressed = false;
-                      // _adminController.monthHasPressed = false;
-                      // _adminController.selectHasPressed = false;
+                      // adminControllerNotifier.fetchApi(dailySales);
+                      // adminController.oneHasPressed = true;
+                      // adminController.weekHasPressed = false;
+                      // adminController.monthHasPressed = false;
+                      // adminController.selectHasPressed = false;
                       // AdminMainPage._selectedDate =
                       // "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -24)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
 
-                      _adminConttollerNotifier.dailySales(dailySales);
+                      adminControllerNotifier.dailySales(dailySales);
                     },
                   ),
                   const SizedBox(
@@ -197,19 +167,19 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                           TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
                     ), // <-- Text
                     backgroundColor:
-                        _adminController.weekHasPressed ? AppColor.appPurple : Colors.grey,
+                        adminController.weekHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
                       // setState(() {
                       //   _fetchApi(weeklySales);
-                      //   _adminController.weekHasPressed = true;
-                      //   _adminController.oneHasPressed = false;
-                      //   _adminController.monthHasPressed = false;
-                      //   _adminController.selectHasPressed = false;
+                      //   adminController.weekHasPressed = true;
+                      //   adminController.oneHasPressed = false;
+                      //   adminController.monthHasPressed = false;
+                      //   adminController.selectHasPressed = false;
                       //   AdminMainPage._selectedDate =
                       //       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -168)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
                       // });
 
-                      _adminConttollerNotifier.weeklySales(weeklySales);
+                      adminControllerNotifier.weeklySales(weeklySales);
                     },
                   ),
                   const SizedBox(
@@ -223,18 +193,18 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                           TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
                     ), // <-- Text
                     backgroundColor:
-                        _adminController.monthHasPressed ? AppColor.appPurple : Colors.grey,
+                        adminController.monthHasPressed ? AppColor.appPurple : Colors.grey,
                     onPressed: () async {
                       // setState(() {
                       //   _fetchApi(monthSales);
-                      //   _adminController.monthHasPressed = true;
-                      //   _adminController.oneHasPressed = false;
-                      //   _adminController.weekHasPressed = false;
-                      //   _adminController.selectHasPressed = false;
+                      //   adminController.monthHasPressed = true;
+                      //   adminController.oneHasPressed = false;
+                      //   adminController.weekHasPressed = false;
+                      //   adminController.selectHasPressed = false;
                       //   AdminMainPage._selectedDate =
                       //       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -720)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
                       // });
-                      _adminConttollerNotifier.monthSales(monthSales);
+                      adminControllerNotifier.monthSales(monthSales);
                     },
                   ),
                 ],
@@ -245,15 +215,15 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               FloatingActionButton.extended(
                 heroTag: 'select4',
                 backgroundColor:
-                    _adminController.selectHasPressed ? AppColor.appPurple : Colors.grey,
+                    adminController.selectHasPressed ? AppColor.appPurple : Colors.grey,
                 onPressed: () {
                   // setState(() {
-                  //   _adminController.selectHasPressed = true;
-                  //   _adminController.monthHasPressed = false;
-                  //   _adminController.oneHasPressed = false;
-                  //   _adminController.weekHasPressed = false;
+                  //   adminController.selectHasPressed = true;
+                  //   adminController.monthHasPressed = false;
+                  //   adminController.oneHasPressed = false;
+                  //   adminController.weekHasPressed = false;
                   // });
-                  _adminConttollerNotifier.select4();
+                  adminControllerNotifier.select4();
                   showDatePicker(
                     initialDatePickerMode: DatePickerMode.day,
                     context: context,
@@ -263,10 +233,10 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                     initialDate: DateTime.now(),
                   ).then((date) {
                     print('date:$date');
-                    _adminConttollerNotifier.selectedDate =
+                    adminControllerNotifier.selectedDate =
                         "${DateFormat('yyyy-MM-dd').format(date!.add(const Duration(hours: 9)))}~${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
 
-                    _adminConttollerNotifier.fetchApi(date.toString());
+                    adminControllerNotifier.fetchApi(date.toString());
                     print(date.toString());
                   });
 
@@ -302,7 +272,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               FloatingActionButton.extended(
                 heroTag: 'select5',
                 label: Text(
-                  '선택한 날짜 : ${_adminConttollerNotifier.selectedDate}',
+                  '선택한 날짜 : ${adminControllerNotifier.selectedDate}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 16,
@@ -343,7 +313,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                         ],
                       ),
                       Text(
-                        '$price 원',
+                        '${adminControllerNotifier.totalSales} 원',
                         style: const TextStyle(
                           fontSize: 25,
                           color: Colors.white,
@@ -374,7 +344,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 width: 400,
                 height: 500,
                 child: ListView.builder(
-                  itemCount: _adminController.productList.length,
+                  itemCount: adminController.productList.length,
                   itemBuilder: (BuildContext context, int idx) {
                     return Card(
                       elevation: 5,
@@ -387,11 +357,11 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                           size: 40,
                           color: Colors.black,
                         ),
-                        title: Text(_adminController.productList[idx].productNameTypeString),
-                        subtitle: Text('금액: ${_adminController.productList[idx].productPrice},'
-                            ' 일시 : ${_adminController.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
-                            ' 제품번호: ${_adminController.productList[idx].productLabel},'
-                            ' 상태: ${_adminController.productList[idx].productState}'),
+                        title: Text(adminController.productList[idx].productNameTypeString),
+                        subtitle: Text('금액: ${adminController.productList[idx].productPrice},'
+                            ' 일시 : ${adminController.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
+                            ' 제품번호: ${adminController.productList[idx].productLabel},'
+                            ' 상태: ${adminController.productList[idx].productState}'),
                         onTap: () {},
                       ),
                     );
@@ -406,7 +376,9 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 100,),
+            const SizedBox(
+              height: 100,
+            ),
             FloatingActionButton.extended(
               backgroundColor: AppColor.appPurple,
               onPressed: () {},
@@ -503,7 +475,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
               backgroundColor: AppColor.appPurple,
               onPressed: () {
                 //server.getAllRoomStateReq(context);
-                print(seatList);
+                // print(seatList);
               },
             ),
             const SizedBox(height: 20),
@@ -535,18 +507,71 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
               ),
-              itemCount: _adminController.seatDatas.length,
+              itemCount: adminController.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    if (_adminController.seatDatas[index].seatState.length == 8) {
+                    if (adminController.seatDatas[index].seatState.length == 8) {
                       setState(() {
                         selectedSeatNumber = index + 1;
                       });
                       print(selectedSeatNumber);
                       showDialog(
                         context: context,
-                        builder: _buildPopupDialog,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: AppColor.appPurple,
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: const [
+                              Text(
+                                '해당 좌석을 강제 종료 시킵니다.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    '선택한 좌석번호 : $selectedSeatNumber번',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () async {
+                                // _fetchAdminCancelSeat(selectedSeatNumber - 1);
+
+                                adminControllerNotifier
+                                    .fetchAdminCancelSeat(selectedSeatNumber - 1);
+                                startTimer(adminControllerNotifier);
+                              },
+                              child: const Text(
+                                '확인',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     }
                   },
@@ -558,7 +583,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: _adminConttollerNotifier.getRoomState(index)
+                      color: adminControllerNotifier.getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -570,9 +595,9 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                             width: 4,
                           ),
                           Text(
-                            '${_adminController.seatDatas[index].seatNumber + 1}',
+                            '${adminController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: _adminConttollerNotifier.getRoomState(index)
+                              color: adminControllerNotifier.getRoomState(index)
                                   ? Colors.white
                                   : AppColor.appPurple,
                               fontSize: 35,
@@ -624,14 +649,14 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        currentIndex: _adminController.selectedIndex,
+        currentIndex: adminController.selectedIndex,
         //현재 선택된 Index
         onTap: (int index) {
           // setState(() {
-          //   _adminController = _adminController.copyWith(selectedIndex = index);
+          //   adminController = adminController.copyWith(selectedIndex = index);
           // });
 
-          // _adminConttollerNotifier.setSelectedIndex(index);
+          // adminControllerNotifier.setSelectedIndex(index);
           print(index);
           setState(() {
             pageController.animateToPage(
@@ -660,50 +685,6 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         controller: pageController,
         children: widgetOption,
       ),
-    );
-  }
-
-  Widget _buildPopupDialog(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: AppColor.appPurple,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: const [
-          Text(
-            '해당 좌석을 강제 종료 시킵니다.',
-            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
-          ),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                '선택한 좌석번호 : $selectedSeatNumber번',
-                style:
-                    const TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
-              ),
-            ],
-          ),
-        ],
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () async {
-            // _fetchAdminCancelSeat(selectedSeatNumber - 1);
-            _adminConttollerNotifier.fetchAdminCancelSeat(selectedSeatNumber - 1);
-            startTimer();
-          },
-          child: const Text(
-            '확인',
-            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16, color: Colors.white),
-          ),
-        ),
-      ],
     );
   }
 
