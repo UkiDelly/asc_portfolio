@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/constant/enum/user/user_enum.dart';
 import 'package:asc_portfolio/pages/admin/admin_main_screen.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_screen.dart';
 import 'package:asc_portfolio/pages/home/seat_screen.dart';
@@ -11,9 +12,12 @@ import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
+
+import 'provider/secure_storage_provider.dart';
 
 void main() async {
   await initializeDateFormatting('ko_KR');
@@ -40,6 +44,24 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(
       initialLocation: '/login',
+      redirect: (context, state) async {
+        final bool userLogin = ref.watch(homeStateProvider).loginCheck;
+        final FlutterSecureStorage storage = ref.read(secureStorageProvider);
+
+        final RoleType roleType =
+            RoleTypeExtension.getRoleType(await storage.read(key: 'roleType') ?? '');
+
+        if (userLogin) {
+          if (roleType == RoleType.admin) {
+            return '/admin';
+          } else if (roleType == RoleType.user) {
+            return '/';
+          }
+        } else {
+          return '/login';
+        }
+        return null;
+      },
       routes: [
         GoRoute(
           path: '/',
