@@ -74,7 +74,9 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
     final AdminController adminController = ref.watch(adminStateProvider);
     final AdminStateNotifier adminControllerNotifier = ref.watch(adminStateProvider.notifier)
       ..fetchApi(dailySales)
-      ..fechOnlyOneDay(dailySales);
+      ..fechOnlyOneDay(dailySales)
+      ..setSeatList(adminController)
+      ..setTotalSales(adminController);
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
     List<Widget> widgetOption = [
