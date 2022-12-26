@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../main.dart';
 import '../api/api.dart';
 
 final userRepoProvider = Provider<UserRepository>((ref) {
@@ -77,7 +78,7 @@ class UserRepository {
         },
       );
 
-      print(response.data);
+      logger.i("login_data="+response.data.toString());
 
       final tokenInfo = TokenModel.fromJson(response.data);
       storage.write(key: 'accessToken', value: tokenInfo.accessToken);
@@ -89,7 +90,7 @@ class UserRepository {
 
   Future<UserQrAndNameModel> getUserQrAndNameReq() async {
     Response response = await dio.get(Api.API_USER_QR_AND_NAME);
-    print(response.data);
+    logger.i("유저 QR, 이름="+response.data.toString());
     final userQrAndName = UserQrAndNameModel.fromJson(response.data);
     return userQrAndName;
   }
@@ -98,9 +99,8 @@ class UserRepository {
     String userLoginId,
   ) async {
     Response response;
-    print('userLoginId=$userLoginId');
     response = await dio.get(Api.API_ADMIN_FIND_SPECIFIC_USER + userLoginId);
-    print('responseData=$response');
+    logger.i("관리자 유저 체크= "+response.data.toString());
     var adminCheckUserInfo = AdminCheckUserInfo.fromJson(response.data);
     return adminCheckUserInfo;
   }

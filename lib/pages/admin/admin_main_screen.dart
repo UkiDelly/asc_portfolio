@@ -406,6 +406,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            SizedBox(height: 100,),
             FloatingActionButton.extended(
               backgroundColor: AppColor.appPurple,
               onPressed: () {},

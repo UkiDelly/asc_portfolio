@@ -3,6 +3,7 @@ import 'package:asc_portfolio/provider/dio_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main.dart';
 import '../api/api.dart';
 
 final seatRepoProvider = Provider<SeatRepository>((ref) {
@@ -23,21 +24,24 @@ class SeatRepository {
     return rooms;
   }
 
-  Future<String> postSeatReservationStart(int seatNumber) async {
-    Response response = await dio.post(Api.API_START_SEAT_RESERVATION + seatNumber.toString(),);
-    print('reservationResponse=' + response.data);
+  // 좌석시작, 좌석이동 API
+  // startTime => 사용을 원하는 시간
+  // startTime이 0이면 좌석이동요청 API
+  Future<String> postSeatReservationStart(int seatNumber, int startTime) async {
+    Response response = await dio.post(Api.API_START_SEAT_RESERVATION + "?seat=" + seatNumber.toString() + "&time=" + startTime.toString());
+    logger.i("좌석 시작, 좌석 이동="+response.data.toString());
     return response.data;
   }
 
   Future<String> postExitSeat() async {
     Response response = await dio.post(Api.API_EXIT_SEAT);
-    print('exitResponse=' + response.data);
+    logger.i("좌석 종료="+response.data.toString());
     return response.data;
   }
 
   Future<String> postAdminExitSeat(int seatNumber) async {
     Response response = await dio.post(Api.API_ADMIN_EXIT_SEAT + seatNumber.toString(),);
-    print('exitResponse=' + response.data);
+    logger.i("관리자 유저 좌석 강제 종료="+response.data.toString());
     return response.data;
   }
 }

@@ -60,7 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     focusColor: Colors.black,
                     filled: true,
                     fillColor: Colors.white,
-                    hintText: 'Email',
+                    hintText: 'ID',
                     contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main.dart';
 import '../api/api.dart';
 import '../../provider/dio_provider.dart';
 
@@ -15,20 +16,18 @@ class PaymentRepository {
   PaymentRepository(this.dio);
 
   Future<dynamic> postProductReq(Map<String, dynamic> orderData) async {
-    print('postProductReqStart');
-    print(orderData);
     Response response;
 
     response = await dio.post(Api.API_PRODUCT_PAY, data: orderData);
+    logger.i("주문 Data="+response.data.toString());
     return response.data;
   }
 
   Future<dynamic> getPaymentConfirm(String receiptId) async {
     Response response;
 
-    print(receiptId);
     response = await dio.get('${Api.API_ORDER_CHECK}receipt-id=$receiptId');
-    print(response);
+    logger.i("결제 검증 Data="+response.data.toString());
     return response.data;
   }
 
@@ -36,6 +35,6 @@ class PaymentRepository {
     Response response;
 
     response = await dio.post(Api.API_CHANGE_CAFE + cafeName);
-    print('cafeNameChange=' + response.data);
+    logger.i("유저가 고른 카페="+response.data.toString());
   }
 }

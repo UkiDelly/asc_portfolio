@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main.dart';
 import '../../model/admin/admin_check_user_product.dart';
 import '../../model/admin/admin_management_product_model.dart';
 import '../../provider/dio_provider.dart';
@@ -27,7 +28,7 @@ class ProductRepository {
         },
       ),
     );
-    print('getProductInfoForAdmin response.data = ${response.data}');
+    logger.i("getProductInfoForAdmin response.data="+response.data.toString());
     List<AdminManagementProductModel> products =
         (response.data).map<AdminManagementProductModel>((json) {
       return AdminManagementProductModel.fromJson(json);
@@ -39,7 +40,7 @@ class ProductRepository {
     Response response;
 
     response = await dio.get(Api.API_ADMIN_CHECK_SPECIFIC_USER_PRODUCT + userLoginId);
-    print('responseData=$response');
+    logger.i("getAdminCheckUserProduct Data="+response.data.toString());
     List<AdminCheckUserProduct> adminCheckUserProduct =
         (response.data).map<AdminCheckUserProduct>((json) {
       return AdminCheckUserProduct.fromJson(json);
@@ -51,7 +52,7 @@ class ProductRepository {
     Response response;
 
     response = await dio.post('${Api.API_CANCEL_PRODUCT}receipt-id=$productLabel');
-    print('cancelDatas=$response');
+    logger.i("cancelDatas="+response.data.toString());
     return response.data;
   }
 }

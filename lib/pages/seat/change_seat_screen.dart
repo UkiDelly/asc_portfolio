@@ -7,6 +7,7 @@ import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -52,11 +53,6 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
 
   void _roomFetchGet() async {
     ref.read(seatStateProvider.notifier).getAllRoomStateReq();
-  }
-
-  void _postStartReservation(int seatNumber) async {
-    String responseData = await ref.watch(seatRepoProvider).postSeatReservationStart(seatNumber);
-    print('SeatScreenResponseData=$responseData');
   }
 
   @override
@@ -147,7 +143,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
               backgroundColor: AppColor.appPurple,
               onPressed: () {
                 //server.getAllRoomStateReq(context);
-                print(seatList);
+                // print(seatList);
               },
             ),
             const SizedBox(height: 20),
@@ -191,7 +187,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
                         context: context,
                         builder: _buildPopupDialog,
                       );
-                      print(selectedSeatNumber);
+                      logger.i("선택한 좌석 번호="+selectedSeatNumber.toString());
                     }
                   },
                   child: Container(
@@ -268,7 +264,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            ref.watch(seatRepoProvider).postSeatReservationStart(selectedSeatNumber - 1);
+            ref.watch(seatRepoProvider).postSeatReservationStart(selectedSeatNumber - 1, 0);
             startTimer();
           },
           child: const Text(

@@ -4,6 +4,7 @@ import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../main.dart';
 import '../../style/app_color.dart';
 import '../main_screen.dart';
 
@@ -74,7 +75,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 1;
-              print(selectedHour);
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -93,7 +94,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 2;
-              print(selectedHour);
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -115,6 +116,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () async {
               selectedHour = 4;
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -136,6 +138,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 6;
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -157,6 +160,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 9;
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -178,6 +182,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 12;
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -199,6 +204,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 24;
+              logger.i("선택한시간="+selectedHour.toString());
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -352,8 +358,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
 
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
     void _postStartReservation(int seatNumber) async {
-      String responseData = await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber);
-      print('SeatScreenResponseData=$responseData');
+      String responseData = await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber, selectedHour);
     }
 
     return AlertDialog(

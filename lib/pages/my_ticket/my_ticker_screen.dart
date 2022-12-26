@@ -27,17 +27,12 @@ class MyTicketScreen extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.credit_card_outlined),
             SizedBox(
               width: 10,
             ),
-            Text(
-              '내 이용권 정보',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 16),
-            ),
           ],
         ),
-
+        SizedBox(height: 20,),
         Card(
           elevation: 5,
           color: AppColor.appPurple,
@@ -51,25 +46,26 @@ class MyTicketScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: '지점: ',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                    children: <TextSpan>[
+                Row(
+                  children: [
+                    SizedBox(width: 55,),
+                    Icon(Icons.location_on, color: Colors.white, size: 20,),
+                    SizedBox(width: 15,),
+                    Text.rich(
                       TextSpan(
-                        text: Api.cafeName,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: Api.cafeName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -85,22 +81,11 @@ class MyTicketScreen extends ConsumerWidget {
         //   backgroundColor: AppColor.appPurple,
         //   onPressed: () {},
         // ),
-        const SizedBox(height: 10),
-        FloatingActionButton.extended(
-          heroTag: 'Pass2',
-          label: Text(
-            Api.cafeName,
-            style: const TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 16),
-          ), // <-- Text
-          backgroundColor: AppColor.appPurple,
-          onPressed: () {},
-        ),
         Image.asset(
           AppAssets.logoPass,
-          width: 400,
-          height: 400,
+          width: 350,
+          height: 350,
         ),
-        const SizedBox(height: 10),
         FloatingActionButton.extended(
           heroTag: 'Pass',
           icon: const Icon(Icons.timelapse_rounded),
@@ -117,6 +102,7 @@ class MyTicketScreen extends ConsumerWidget {
           backgroundColor: AppColor.appPurple,
           onPressed: () {},
         ),
+        SizedBox(height: 80,),
       ],
     );
   }

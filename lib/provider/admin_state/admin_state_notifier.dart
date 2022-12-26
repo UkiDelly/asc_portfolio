@@ -52,10 +52,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
   bool getRoomState(int index) {
     final getState = state.seatDatas[index].toJson();
     if (getState.values.toString() == '(RESERVED)') {
-      print('seat:${getState.values}');
       return true;
     } else {
-      print('seat:${getState.values}');
       return false;
     }
   }

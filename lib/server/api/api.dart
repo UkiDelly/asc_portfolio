@@ -30,7 +30,8 @@ class Api {
       '$DOMAIN/ticket/admin/lookup?userLoginId=';
 
   //seatReservationInfo
-  static final API_USER_RESERVATION_INFO = '$DOMAIN/seatReservationInfo/';
+  // 미사용
+  //static final API_USER_RESERVATION_INFO = '$DOMAIN/seatReservationInfo/';
 
   //pay
   static final API_PRODUCT_PAY = '$DOMAIN/pay/order/';

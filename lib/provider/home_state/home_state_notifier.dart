@@ -6,6 +6,7 @@ import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/enum/product/product_enum.dart';
+import '../../main.dart';
 
 final homeStateProvider = StateNotifierProvider<HomeStateNotifier, HomeController>((ref) {
   final userRepository = ref.watch(userRepoProvider);
@@ -44,10 +45,8 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   bool getRoomState(int index) {
     final roomState = state.seatDatas[index].toJson();
     if (roomState.values.toString() == '(RESERVED)') {
-      print('seat:${roomState.values}');
       return true;
     } else {
-      print('seat:${roomState.values}');
       return false;
     }
   }
@@ -91,14 +90,14 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
       //   state = state.copyWith(period: userTicketInfo.period);
       // }
 
-      print('_loginCheckAndFetch실행');
-      print('seatReservationCreateDate=${state.seatReservationCreateDate}');
-      print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
-      print('seatReservationStartTime=${state.seatReservationStartTime}');
-      print('seatReservationPeriod=${state.seatReservationPeriod}');
-      print('userQrAndName=${state.qrCode}');
+      // print('_loginCheckAndFetch실행');
+      // print('seatReservationCreateDate=${state.seatReservationCreateDate}');
+      // print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
+      // print('seatReservationStartTime=${state.seatReservationStartTime}');
+      // print('seatReservationPeriod=${state.seatReservationPeriod}');
+      // print('userQrAndName=${state.qrCode}');
     } else {
-      print('로그인 안됨');
+      logger.i("로그인 실패");
     }
   }
 

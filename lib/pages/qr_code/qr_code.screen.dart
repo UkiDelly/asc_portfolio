@@ -133,11 +133,16 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(
-          '${homeController.userName}님의 QR코드',
+        title: Row(
+          children: [
+            SizedBox(width: 25,),
+            Text(
+              '${homeController.userName}님의 QR코드',
+            ),
+          ],
         ),
         titleTextStyle: const TextStyle(
-          fontSize: 30,
+          fontSize: 25,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -163,7 +168,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 const Text(
                   '주의 ! QR코드를 타인에게 노출하지마세요.',
                   style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent, fontSize: 20),
+                      TextStyle(fontWeight: FontWeight.w300, color: Colors.redAccent, fontSize: 20),
                 ),
                 const SizedBox(
                   height: 20,
@@ -198,7 +203,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                         ],
                       )
                     : Text(
-                        '좌석이 없습니다.',
+                        '좌석이 없습니다',
                         style: Theme.of(context)
                             .primaryTextTheme
                             .headlineSmall!

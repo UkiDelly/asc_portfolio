@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/assets.dart';
-import '../../constant/enum/product/product_enum.dart';
 import '../../provider/home_state/home_state_notifier.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
-import '../admin/admin_main_screen.dart';
-import '../payment/in_app_payment/in_app_payment.dart';
 import '../seat/specific_seat_screen.dart';
 
 class SeatScreen extends ConsumerWidget {
@@ -25,74 +22,81 @@ class SeatScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              color: AppColor.appPurple,
-              child: SizedBox(
-                width: double.infinity,
-                child: Image.asset(
-                  AppAssets.splashLogo,
-                  width: 200,
-                  height: 200,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: FloatingActionButton.extended(
-                heroTag: 'Text2',
-                label: Text(
-                  Api.cafeName,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w200,
-                  ),
-                ), // <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: () {},
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: FloatingActionButton.extended(
-                heroTag: 'Text4',
-                label: const Text(
-                  '관리자페이지 테스트',
-                  style: TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
-                ), // <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AdminMainPage()),
-                  );
-                },
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: FloatingActionButton.extended(
-                heroTag: 'Text5',
-                label: const Text(
-                  '결제 테스트',
-                  style: TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
-                ), // <-- Text
-                backgroundColor: AppColor.appPurple,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const InAppPaymentSecond(
-                        product: Product.fiftyHourPartTimeTicket,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            SizedBox(height: 20,),
+            Api.cafeName == "서울지점" ?
+            Image.asset(
+              AppAssets.cafeImage1
+            ) : Text(''),
+            // Card(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(30),
+            //   ),
+            //   color: AppColor.appPurple,
+            //   child: SizedBox(
+            //     width: double.infinity,
+            //     child: Image.asset(
+            //       AppAssets.splashLogo,
+            //       width: 200,
+            //       height: 200,
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   padding: const EdgeInsets.all(10),
+            //   child: FloatingActionButton.extended(
+            //     isExtended: true,
+            //     heroTag: 'Text2',
+            //     label: Text(
+            //       Api.cafeName,
+            //       style: const TextStyle(
+            //         fontSize: 27,
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.w200,
+            //       ),
+            //     ), // <-- Text
+            //     backgroundColor: AppColor.appPurple,
+            //     onPressed: () {},
+            //   ),
+            // ),
+            // Container(
+            //   padding: const EdgeInsets.all(20),
+            //   child: FloatingActionButton.extended(
+            //     heroTag: 'Text4',
+            //     label: const Text(
+            //       '관리자페이지 테스트',
+            //       style: TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
+            //     ), // <-- Text
+            //     backgroundColor: AppColor.appPurple,
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => const AdminMainPage()),
+            //       );
+            //     },
+            //   ),
+            // ),
+            // Container(
+            //   padding: const EdgeInsets.all(20),
+            //   child: FloatingActionButton.extended(
+            //     heroTag: 'Text5',
+            //     label: const Text(
+            //       '결제 테스트',
+            //       style: TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.w300),
+            //     ), // <-- Text
+            //     backgroundColor: AppColor.appPurple,
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => const InAppPaymentSecond(
+            //             product: Product.fiftyHourPartTimeTicket,
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            SizedBox(height: 10,),
             Container(
               padding: const EdgeInsets.all(15),
               child: FloatingActionButton.extended(
@@ -122,16 +126,6 @@ class SeatScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 70),
-            FloatingActionButton.extended(
-              heroTag: 'Area1',
-              label: const Text('좌석번호'), // <-- Text
-              backgroundColor: AppColor.appPurple,
-              onPressed: () {
-                //server.getAllRoomStateReq(context);
-                // print(seatList);
-              },
-            ),
-            const SizedBox(height: 20),
             Card(
               color: Colors.grey,
               child: Row(
