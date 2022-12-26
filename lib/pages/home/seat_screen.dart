@@ -22,11 +22,11 @@ class SeatScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            SizedBox(height: 20,),
-            Api.cafeName == "서울지점" ?
+            const SizedBox(height: 20,),
+            Api.cafeName == '서울지점' ?
             Image.asset(
-              AppAssets.cafeImage1
-            ) : Text(''),
+              AppAssets.cafeImage1,
+            ) : const Text(''),
             // Card(
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(30),
@@ -96,7 +96,7 @@ class SeatScreen extends ConsumerWidget {
             //     },
             //   ),
             // ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Container(
               padding: const EdgeInsets.all(15),
               child: FloatingActionButton.extended(

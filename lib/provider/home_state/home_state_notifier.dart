@@ -97,7 +97,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
       // print('seatReservationPeriod=${state.seatReservationPeriod}');
       // print('userQrAndName=${state.qrCode}');
     } else {
-      logger.i("로그인 실패");
+      logger.i('로그인 실패');
     }
   }
 

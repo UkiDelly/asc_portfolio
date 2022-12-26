@@ -19,7 +19,7 @@ class PaymentRepository {
     Response response;
 
     response = await dio.post(Api.API_PRODUCT_PAY, data: orderData);
-    logger.i("주문 Data="+response.data.toString());
+    logger.i('주문 Data=${response.data}');
     return response.data;
   }
 
@@ -27,7 +27,7 @@ class PaymentRepository {
     Response response;
 
     response = await dio.get('${Api.API_ORDER_CHECK}receipt-id=$receiptId');
-    logger.i("결제 검증 Data="+response.data.toString());
+    logger.i('결제 검증 Data=${response.data}');
     return response.data;
   }
 
@@ -35,6 +35,6 @@ class PaymentRepository {
     Response response;
 
     response = await dio.post(Api.API_CHANGE_CAFE + cafeName);
-    logger.i("유저가 고른 카페="+response.data.toString());
+    logger.i('유저가 고른 카페=${response.data}');
   }
 }

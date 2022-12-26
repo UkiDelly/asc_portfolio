@@ -78,11 +78,11 @@ class UserRepository {
         },
       );
 
-      logger.i("login_data="+response.data.toString());
+      logger.i('login_data=${response.data}');
 
       final tokenInfo = TokenModel.fromJson(response.data);
-      storage.write(key: 'accessToken', value: tokenInfo.accessToken);
-      storage.write(key: 'roleType', value: tokenInfo.roleType.enumToString());
+      await storage.write(key: 'accessToken', value: tokenInfo.accessToken);
+      await storage.write(key: 'roleType', value: tokenInfo.roleType.enumToString());
     } catch (e) {
       print(e);
     }
@@ -90,7 +90,7 @@ class UserRepository {
 
   Future<UserQrAndNameModel> getUserQrAndNameReq() async {
     Response response = await dio.get(Api.API_USER_QR_AND_NAME);
-    logger.i("유저 QR, 이름="+response.data.toString());
+    logger.i('유저 QR, 이름=${response.data}');
     final userQrAndName = UserQrAndNameModel.fromJson(response.data);
     return userQrAndName;
   }
@@ -100,7 +100,7 @@ class UserRepository {
   ) async {
     Response response;
     response = await dio.get(Api.API_ADMIN_FIND_SPECIFIC_USER + userLoginId);
-    logger.i("관리자 유저 체크= "+response.data.toString());
+    logger.i('관리자 유저 체크= ${response.data}');
     var adminCheckUserInfo = AdminCheckUserInfo.fromJson(response.data);
     return adminCheckUserInfo;
   }

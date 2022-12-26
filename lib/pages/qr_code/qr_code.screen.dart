@@ -135,7 +135,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
         elevation: 0,
         title: Row(
           children: [
-            SizedBox(width: 25,),
+            const SizedBox(width: 25,),
             Text(
               '${homeController.userName}님의 QR코드',
             ),

@@ -32,7 +32,7 @@ class MyTicketScreen extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         Card(
           elevation: 5,
           color: AppColor.appPurple,
@@ -48,9 +48,9 @@ class MyTicketScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(width: 55,),
-                    Icon(Icons.location_on, color: Colors.white, size: 20,),
-                    SizedBox(width: 15,),
+                    const SizedBox(width: 55,),
+                    const Icon(Icons.location_on, color: Colors.white, size: 20,),
+                    const SizedBox(width: 15,),
                     Text.rich(
                       TextSpan(
                         children: <TextSpan>[
@@ -102,7 +102,7 @@ class MyTicketScreen extends ConsumerWidget {
           backgroundColor: AppColor.appPurple,
           onPressed: () {},
         ),
-        SizedBox(height: 80,),
+        const SizedBox(height: 80,),
       ],
     );
   }

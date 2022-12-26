@@ -22,7 +22,7 @@ class TicketRepository {
     Response response;
 
     response = await dio.get(Api.API_USER_TICKET + Api.cafeName);
-    logger.i("유저 티켓 정보="+response.data.toString());
+    logger.i('유저 티켓 정보=${response.data}');
     final userTicketInfo = UserTicketModel.fromJson(response.data);
     return userTicketInfo;
   }
@@ -33,7 +33,7 @@ class TicketRepository {
     Response response;
 
     response = await dio.get(Api.API_ADMIN_CHECK_SPECIFIC_USER_VALID_TICKET + userLoginId);
-    logger.i("valid ticket of specific user for admin="+response.data.toString());
+    logger.i('valid ticket of specific user for admin=${response.data}');
     var adminCheckUserValidTicket = AdminCheckUserValidTicket.fromJson(response.data);
     return adminCheckUserValidTicket;
   }
