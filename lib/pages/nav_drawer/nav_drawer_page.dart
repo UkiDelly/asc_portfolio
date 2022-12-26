@@ -67,7 +67,6 @@ class _NavDrawerState extends State<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -76,11 +75,11 @@ class _NavDrawerState extends State<NavDrawer> {
             child: Text(
               '',
             ),
-            decoration: BoxDecoration(
-                color: AppColor.appPurple,
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/logo_set_mini.png'))),
+          decoration: BoxDecoration(
+              color: AppColor.appPurple,
+              image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage('assets/images/logo_set_mini.png'))),
           ),
           HomePageState.isLogined ? ListTile(
             leading: Icon(Icons.unpublished, color: AppColor.appPurple),
@@ -133,11 +132,11 @@ class _NavDrawerState extends State<NavDrawer> {
               _launchURL()
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.border_color, color: AppColor.appPurple),
-          //   title: Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-          //   onTap: () => {Navigator.of(context).pop()},
-          // ),
+          ListTile(
+            leading: Icon(Icons.border_color, color: AppColor.appPurple),
+            title: Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+            onTap: () => {Navigator.of(context).pop()},
+          ),
           ListTile(
             leading: Icon(Icons.device_unknown_rounded, color: AppColor.appPurple),
             title: Text('Contact', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),

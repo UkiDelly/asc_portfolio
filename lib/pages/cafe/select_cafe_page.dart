@@ -2,12 +2,10 @@ import 'package:asc_portfolio/server/api/api.dart';
 import 'package:asc_portfolio/server/dio_server.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../server/api/api.dart';
 
 import '../../style/app_color.dart';
 import '../home_page.dart';
 import '../../common_enum/cafe/cafe_name.dart';
-
 
 class SelectCafePage extends StatefulWidget {
 
@@ -50,7 +48,7 @@ class _SelectCafePageState extends State<SelectCafePage> {
                 tileColor: Colors.white,
                 title: Container(
                     padding: EdgeInsets.all(10),
-                    child: Text('     합리적인 공간, 알라딘 스터디 카페입니다.', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.black45,fontSize: 20))),
+                    child: Text('합리적인 공간, 알라딘 스터디 카페입니다.', style: TextStyle(fontWeight: FontWeight.w300,color: Colors.black45,fontSize: 20))),
                 onTap: () {
                 },
               ),
