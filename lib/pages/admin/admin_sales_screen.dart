@@ -193,14 +193,15 @@ class AdminSalesScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      Text(
-                        '${adminControllerNotifier.totalSales} 원',
-                        style: const TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
+                      if (salesState is! SaleLoading)
+                        Text(
+                          '${(salesState as SalesState).totalSales} 원',
+                          style: const TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -225,34 +226,35 @@ class AdminSalesScreen extends ConsumerWidget {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: 400,
-                height: 500,
-                child: ListView.builder(
-                  itemCount: adminController.productList.length,
-                  itemBuilder: (BuildContext context, int idx) {
-                    return Card(
-                      elevation: 5,
-                      shadowColor: AppColor.appPurple,
-                      surfaceTintColor: AppColor.appPurple,
-                      margin: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        leading: const Icon(
-                          Icons.paypal,
-                          size: 40,
-                          color: Colors.black,
+              if (salesState is! SaleLoading)
+                SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: ListView.builder(
+                    itemCount: (salesState as SalesState).productList.length,
+                    itemBuilder: (BuildContext context, int idx) {
+                      return Card(
+                        elevation: 5,
+                        shadowColor: AppColor.appPurple,
+                        surfaceTintColor: AppColor.appPurple,
+                        margin: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          leading: const Icon(
+                            Icons.paypal,
+                            size: 40,
+                            color: Colors.black,
+                          ),
+                          title: Text(salesState.productList[idx].productNameTypeString),
+                          subtitle: Text('금액: ${salesState.productList[idx].productPrice},'
+                              ' 일시 : ${salesState.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
+                              ' 제품번호: ${salesState.productList[idx].productLabel},'
+                              ' 상태: ${salesState.productList[idx].productState}'),
+                          onTap: () {},
                         ),
-                        title: Text(adminController.productList[idx].productNameTypeString),
-                        subtitle: Text('금액: ${adminController.productList[idx].productPrice},'
-                            ' 일시 : ${adminController.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
-                            ' 제품번호: ${adminController.productList[idx].productLabel},'
-                            ' 상태: ${adminController.productList[idx].productState}'),
-                        onTap: () {},
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
             ],
           )
         ],

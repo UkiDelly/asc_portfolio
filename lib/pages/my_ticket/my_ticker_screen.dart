@@ -1,6 +1,3 @@
-import 'package:asc_portfolio/controller/home_controller.dart';
-import 'package:asc_portfolio/model/user_ticket_model.dart';
-import 'package:asc_portfolio/server/repository/ticket_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,15 +9,10 @@ import '../../style/app_color.dart';
 class MyTicketScreen extends ConsumerWidget {
   const MyTicketScreen({super.key});
 
-  void getUserTicketInfo(HomeController homeController, Ref ticketRef ) async {
-    final UserTicketModel userTicketInfo = await ticketRef.watch(ticketRepoProvider).getUserTicketInfo();
-    homeController = homeController.copyWith(userTicketInfo: userTicketInfo);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeController = ref.watch(homeStateProvider);
-  
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -32,7 +24,9 @@ class MyTicketScreen extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 20,),
+        const SizedBox(
+          height: 20,
+        ),
         Card(
           elevation: 5,
           color: AppColor.appPurple,
@@ -48,9 +42,17 @@ class MyTicketScreen extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    const SizedBox(width: 55,),
-                    const Icon(Icons.location_on, color: Colors.white, size: 20,),
-                    const SizedBox(width: 15,),
+                    const SizedBox(
+                      width: 55,
+                    ),
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
                     Text.rich(
                       TextSpan(
                         children: <TextSpan>[
@@ -102,7 +104,9 @@ class MyTicketScreen extends ConsumerWidget {
           backgroundColor: AppColor.appPurple,
           onPressed: () {},
         ),
-        const SizedBox(height: 80,),
+        const SizedBox(
+          height: 80,
+        ),
       ],
     );
   }
