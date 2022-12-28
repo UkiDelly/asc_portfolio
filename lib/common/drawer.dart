@@ -23,6 +23,13 @@ class NavDrawer extends ConsumerStatefulWidget {
 class _NavDrawerState extends ConsumerState<NavDrawer> {
   double _progress = 0;
   bool isNotCompleteLoading = true;
+  late bool isLogin;
+
+  @override
+  void initState() {
+    super.initState();
+    isLogin = ref.read(homeStateProvider).loginCheck;
+  }
 
   _launchURL() async {
     final url = Uri.parse(
@@ -79,7 +86,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             ),
           ),
 
-          ref.watch(homeStateProvider).loginCheck // SeatScreenState.isLogined
+          isLogin // SeatScreenState.isLogined
               ? ListTile(
                   leading: const Icon(Icons.unpublished, color: AppColor.appPurple),
                   title: const Text(
@@ -94,7 +101,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                   },
                 )
               : const Text(''),
-          ref.watch(homeStateProvider).loginCheck
+          isLogin
               ? ListTile(
                   leading: const Icon(
                     Icons.airline_seat_individual_suite_sharp,

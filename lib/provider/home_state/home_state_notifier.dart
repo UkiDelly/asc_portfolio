@@ -6,7 +6,6 @@ import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/enum/product/product_enum.dart';
-import '../../main.dart';
 
 final homeStateProvider = StateNotifierProvider<HomeStateNotifier, HomeController>((ref) {
   final userRepository = ref.watch(userRepoProvider);
@@ -52,53 +51,47 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
   }
 
   void init() async {
-    final bool userLogin = await userRepository.getCheckLogin();
+    final userQrandName = await userRepository.getUserQrAndNameReq();
+    final userTicketInfo = await ticketRepository.getUserTicketInfo();
 
-    if (userLogin) {
-      final userQrandName = await userRepository.getUserQrAndNameReq();
-      final userTicketInfo = await ticketRepository.getUserTicketInfo();
-
-      // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
-      if (userTicketInfo.productLabel.contains(Term.partTime.enumToString())) {
-        state = state.copyWith(
-          period: userTicketInfo.remainingTime,
-          loginCheck: userLogin,
-          qrCode: userQrandName.qrCode,
-          userName: userQrandName.name,
-          userTicketInfo: userTicketInfo,
-        );
-      } else if (userTicketInfo.productLabel.contains(Term.fixedTerm.enumToString())) {
-        state = state.copyWith(
-          period: userTicketInfo.period,
-          loginCheck: userLogin,
-          qrCode: userQrandName.qrCode,
-          userName: userQrandName.name,
-          userTicketInfo: userTicketInfo,
-        );
-      } else {
-        state = state.copyWith(
-          loginCheck: userLogin,
-          qrCode: userQrandName.qrCode,
-          userName: userQrandName.name,
-          userTicketInfo: userTicketInfo,
-        );
-      }
-
-      // if (userTicketInfo.productLabel == Product.values) {
-      //   state = state.copyWith(period: userTicketInfo.remainingTime);
-      // } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
-      //   state = state.copyWith(period: userTicketInfo.period);
-      // }
-
-      // print('_loginCheckAndFetch실행');
-      // print('seatReservationCreateDate=${state.seatReservationCreateDate}');
-      // print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
-      // print('seatReservationStartTime=${state.seatReservationStartTime}');
-      // print('seatReservationPeriod=${state.seatReservationPeriod}');
-      // print('userQrAndName=${state.qrCode}');
+    // if the userTicketInfo.productLabel is 'FIXED-TERM' copy the period to state.period
+    if (userTicketInfo.productLabel.contains(Term.partTime.enumToString())) {
+      state = state.copyWith(
+        period: userTicketInfo.remainingTime,
+        loginCheck: true,
+        qrCode: userQrandName.qrCode,
+        userName: userQrandName.name,
+        userTicketInfo: userTicketInfo,
+      );
+    } else if (userTicketInfo.productLabel.contains(Term.fixedTerm.enumToString())) {
+      state = state.copyWith(
+        period: userTicketInfo.period,
+        loginCheck: true,
+        qrCode: userQrandName.qrCode,
+        userName: userQrandName.name,
+        userTicketInfo: userTicketInfo,
+      );
     } else {
-      logger.i('로그인 실패');
+      state = state.copyWith(
+        loginCheck: true,
+        qrCode: userQrandName.qrCode,
+        userName: userQrandName.name,
+        userTicketInfo: userTicketInfo,
+      );
     }
+
+    // if (userTicketInfo.productLabel == Product.values) {
+    //   state = state.copyWith(period: userTicketInfo.remainingTime);
+    // } else if (userTicketInfo.productLabel.contains('FIXED-TERM')) {
+    //   state = state.copyWith(period: userTicketInfo.period);
+    // }
+
+    // print('_loginCheckAndFetch실행');
+    // print('seatReservationCreateDate=${state.seatReservationCreateDate}');
+    // print('seatReservationSeatNumber=${state.seatReservationSeatNumber}');
+    // print('seatReservationStartTime=${state.seatReservationStartTime}');
+    // print('seatReservationPeriod=${state.seatReservationPeriod}');
+    // print('userQrAndName=${state.qrCode}');
   }
 
   void logOut() {

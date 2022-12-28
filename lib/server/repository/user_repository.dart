@@ -13,6 +13,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../main.dart';
 import '../api/api.dart';
 
+final checkUserLoginProvider = FutureProvider<bool>((ref) async {
+  final Dio dio = ref.watch(dioProvider);
+  try {
+    Response response = await dio.get(Api.API_LOGIN_CHECK);
+    return true;
+  } on DioError {
+    return false;
+  }
+});
+
 final userRepoProvider = Provider<UserRepository>((ref) {
   final repository = UserRepository(
     dio: ref.watch(dioProvider),
@@ -57,15 +67,6 @@ class UserRepository {
       Api.API_SIGN_UP,
       data: data,
     );
-  }
-
-  Future<bool> getCheckLogin() async {
-    try {
-      Response response = await dio.get(Api.API_LOGIN_CHECK);
-      return true;
-    } on DioError {
-      return false;
-    }
   }
 
   Future<void> postReqLogin({required String id, required String password}) async {
