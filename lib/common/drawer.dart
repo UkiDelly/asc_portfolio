@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
+import 'package:asc_portfolio/main.dart';
 import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
@@ -74,6 +75,9 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     final isLogin = ref.watch(loginStateProvider).loginCheck;
+
+    logger.i(isLogin);
+
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,6 +128,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
               await ref.read(secureStorageProvider).deleteAll();
+              ref.read(loginStateProvider.notifier).clear();
               context.go('/login');
             },
           ),

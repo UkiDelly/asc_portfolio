@@ -46,7 +46,8 @@ class MyApp extends ConsumerWidget {
     final router = GoRouter(
       initialLocation: '/login',
       redirect: (context, state) async {
-        final userLogin = await ref.watch(checkUserLoginProvider.future);
+        ref.read(checkUserLoginProvider);
+        final bool userLogin = ref.watch(loginStateProvider).loginCheck;
         final FlutterSecureStorage storage = ref.read(secureStorageProvider);
 
         final RoleType roleType =
@@ -78,6 +79,7 @@ class MyApp extends ConsumerWidget {
           path: '/login',
           builder: (context, state) => const LoginScreen(),
           redirect: (context, state) {
+            ref.refresh(checkUserLoginProvider);
             final userLogin = ref.watch(homeStateProvider).loginCheck;
 
             if (userLogin) {

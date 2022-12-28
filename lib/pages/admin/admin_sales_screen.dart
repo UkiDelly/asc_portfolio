@@ -47,15 +47,18 @@ class AdminSalesScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        if (salesState is SalesState)
-                          Text(
-                            '${salesState.todaySales} 원',
-                            style: const TextStyle(
-                              fontSize: 30,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        salesState is SalesState
+                            ? Text(
+                                '${salesState.todaySales} 원',
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : salesState is SaleLoading
+                                ? const CircularProgressIndicator()
+                                : const SizedBox.shrink(),
                       ],
                     ),
                   ),

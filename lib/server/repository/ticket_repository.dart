@@ -23,6 +23,9 @@ class TicketRepository {
 
     response = await dio.get(Api.API_USER_TICKET + Api.cafeName);
     logger.i('유저 티켓 정보=${response.data}');
+    if (response.data == null || response.data.isEmpty) {
+      return const UserTicketModel(isValidTicket: 'false');
+    }
     final userTicketInfo = UserTicketModel.fromJson(response.data);
     return userTicketInfo;
   }

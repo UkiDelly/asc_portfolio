@@ -132,7 +132,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     final storage = ref.watch(secureStorageProvider);
                     final tokenExist = await storage.containsKey(key: 'accessToken');
                     final roleType = await storage.read(key: 'roleType');
-                    final login = ref.read(checkUserLoginProvider);
+                    ref.refresh(checkUserLoginProvider);
                     if (tokenExist && roleType == 'USER') {
                       setState(() {
                         isLoading = false;
