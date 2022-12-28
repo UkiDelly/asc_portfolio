@@ -7,7 +7,7 @@ part of 'chage_seat_controller.dart';
 // **************************************************************************
 
 _$_ChangeSeatController _$$_ChangeSeatControllerFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_ChangeSeatController(
       seatDatas: (json['seatDatas'] as List<dynamic>?)
               ?.map((e) => UsersSeatModel.fromJson(e as Map<String, dynamic>))
@@ -16,7 +16,7 @@ _$_ChangeSeatController _$$_ChangeSeatControllerFromJson(
     );
 
 Map<String, dynamic> _$$_ChangeSeatControllerToJson(
-        _$_ChangeSeatController instance,) =>
+        _$_ChangeSeatController instance) =>
     <String, dynamic>{
       'seatDatas': instance.seatDatas,
     };

@@ -13,15 +13,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../main.dart';
 import '../api/api.dart';
 
-final checkUserLoginProvider = FutureProvider<bool>((ref) async {
-  final Dio dio = ref.watch(dioProvider);
-  try {
-    Response response = await dio.get(Api.API_LOGIN_CHECK);
-    return true;
-  } on DioError {
-    return false;
-  }
-});
+
 
 final userRepoProvider = Provider<UserRepository>((ref) {
   final repository = UserRepository(

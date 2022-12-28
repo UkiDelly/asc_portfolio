@@ -7,7 +7,7 @@ part of 'user_seat_reservation_info_model.dart';
 // **************************************************************************
 
 _$_UserSeatResevationModel _$$_UserSeatResevationModelFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_UserSeatResevationModel(
       seatNumber: json['seatNumber'] as int,
       startTime: json['startTime'] as int,
@@ -17,7 +17,7 @@ _$_UserSeatResevationModel _$$_UserSeatResevationModelFromJson(
     );
 
 Map<String, dynamic> _$$_UserSeatResevationModelToJson(
-        _$_UserSeatResevationModel instance,) =>
+        _$_UserSeatResevationModel instance) =>
     <String, dynamic>{
       'seatNumber': instance.seatNumber,
       'startTime': instance.startTime,

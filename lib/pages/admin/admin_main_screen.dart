@@ -26,7 +26,6 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   @override
   Widget build(BuildContext context) {
     final AdminController adminController = ref.watch(adminStateProvider);
-
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
     return Scaffold(

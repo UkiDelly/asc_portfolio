@@ -11,7 +11,7 @@ _$_HomeController _$$_HomeControllerFromJson(Map<String, dynamic> json) =>
       userTicketInfo: json['userTicketInfo'] == null
           ? null
           : UserTicketModel.fromJson(
-              json['userTicketInfo'] as Map<String, dynamic>,),
+              json['userTicketInfo'] as Map<String, dynamic>),
       period: json['period'] as int? ?? 0,
       remainingTime: json['remainingTime'] as int? ?? 0,
       selectedIndex: json['selectedIndex'] as int? ?? 0,

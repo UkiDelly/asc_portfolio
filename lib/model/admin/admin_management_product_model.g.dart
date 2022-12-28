@@ -7,7 +7,7 @@ part of 'admin_management_product_model.dart';
 // **************************************************************************
 
 _$_AdminManagementProductModel _$$_AdminManagementProductModelFromJson(
-        Map<String, dynamic> json,) =>
+        Map<String, dynamic> json) =>
     _$_AdminManagementProductModel(
       createDate: json['createDate'] as String? ?? '',
       modifiedDate: json['modifiedDate'] as String? ?? '',
@@ -21,7 +21,7 @@ _$_AdminManagementProductModel _$$_AdminManagementProductModelFromJson(
     );
 
 Map<String, dynamic> _$$_AdminManagementProductModelToJson(
-        _$_AdminManagementProductModel instance,) =>
+        _$_AdminManagementProductModel instance) =>
     <String, dynamic>{
       'createDate': instance.createDate,
       'modifiedDate': instance.modifiedDate,

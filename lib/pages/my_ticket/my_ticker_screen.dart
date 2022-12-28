@@ -1,8 +1,9 @@
+import 'package:asc_portfolio/model/user_ticket_model.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/assets.dart';
-import '../../provider/home_state/home_state_notifier.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -11,7 +12,9 @@ class MyTicketScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeController = ref.watch(homeStateProvider);
+    // final homeController = ref.watch(homeStateProvider);
+    ref.read(checkUserLoginProvider);
+    final UserTicketModel? ticket = ref.watch(loginStateProvider).ticket;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -91,11 +94,11 @@ class MyTicketScreen extends ConsumerWidget {
         FloatingActionButton.extended(
           heroTag: 'Pass',
           icon: const Icon(Icons.timelapse_rounded),
-          label: homeController.period == 0
+          label: ticket == null
               ? const Text('이용권이 없습니다')
-              : const Text(
-                  '티켓남은기간:  ',
-                  style: TextStyle(
+              : Text(
+                  '티켓남은기간: ${ticket.period}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Colors.white,
                     fontSize: 16,

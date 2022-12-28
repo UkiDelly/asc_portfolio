@@ -17,8 +17,8 @@ import 'pages/main_screen.dart';
 import 'pages/payment/payment_screen.dart';
 import 'pages/signup/sign_up_screen.dart';
 import 'provider/home_state/home_state_notifier.dart';
+import 'provider/home_state/login_state.dart';
 import 'provider/secure_storage_provider.dart';
-import 'server/repository/user_repository.dart';
 
 void main() async {
   await initializeDateFormatting('ko_KR');

@@ -5,8 +5,8 @@ import 'package:asc_portfolio/pages/cafe/select_cafe_screen.dart';
 import 'package:asc_portfolio/pages/home/seat_screen.dart';
 import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
-import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +28,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
   String rolyType = '';
   int selectedSeatNumber = 0;
   late FlutterSecureStorage storage;
-  bool isLogin = false;
 
   PageController pageController = PageController(initialPage: 0);
 
@@ -38,7 +37,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
   void initState() {
     super.initState();
     storage = ref.read(secureStorageProvider);
-    isLogin = ref.read(checkUserLoginProvider).value!;
   }
 
   @override
@@ -50,6 +48,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
+    final LoginState loginState = ref.watch(loginStateProvider);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -91,10 +90,10 @@ class MainScreenState extends ConsumerState<MainScreen> {
             padding: const EdgeInsets.fromLTRB(8, 8, 25, 8),
             color: Colors.white,
             onPressed: () {
-              if (!isLogin) context.go('/login');
+              if (!loginState.loginCheck) context.go('/login');
               context.go('/payment');
             },
-            icon: isLogin
+            icon: loginState.loginCheck
                 ? const Icon(
                     Icons.add_card,
                     size: 35,

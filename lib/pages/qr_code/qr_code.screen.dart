@@ -1,7 +1,6 @@
 import 'package:asc_portfolio/controller/home_controller.dart';
 import 'package:asc_portfolio/main.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
-import 'package:asc_portfolio/provider/qr_code/qr_code_state.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../model/user_qr_and_name_model.dart';
+import '../../provider/home_state/login_state.dart';
 import '../../provider/local_notification_provider.dart';
 
 class QRCodeScreen extends ConsumerStatefulWidget {
@@ -119,6 +118,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   void initState() {
     notificationDetails = NotificationDetails(android: androidNotification, iOS: iosNotification);
     notificationsPlugin = ref.read(notificationProvider);
+    ref.read(checkUserLoginProvider);
     super.initState();
   }
 
@@ -131,8 +131,8 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     logger.i(startTime);
-    final UserQrAndNameModel userData = ref.watch(getQrCodeProvider).value!;
     final HomeController homeController = ref.watch(homeStateProvider);
+    final LoginState loginState = ref.watch(loginStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -143,7 +143,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
               width: 25,
             ),
             Text(
-              '${userData.name}님의 QR코드',
+              '${loginState.qrCode!.name}님의 QR코드',
             ),
           ],
         ),
@@ -166,7 +166,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                   width: 300,
                   height: 300,
                   child: QrImage(
-                    data: userData.qrCode,
+                    data: loginState.qrCode!.qrCode,
                     version: QrVersions.auto,
                     backgroundColor: Colors.white,
                   ),

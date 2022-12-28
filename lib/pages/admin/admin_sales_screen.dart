@@ -49,7 +49,7 @@ class AdminSalesScreen extends ConsumerWidget {
                         ),
                         if (salesState is SalesState)
                           Text(
-                            '${salesState.totalSales} 원',
+                            '${salesState.todaySales} 원',
                             style: const TextStyle(
                               fontSize: 30,
                               color: Colors.white,

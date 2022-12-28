@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -23,12 +23,11 @@ class NavDrawer extends ConsumerStatefulWidget {
 class _NavDrawerState extends ConsumerState<NavDrawer> {
   double _progress = 0;
   bool isNotCompleteLoading = true;
-  late bool isLogin;
 
   @override
   void initState() {
     super.initState();
-    isLogin = ref.read(homeStateProvider).loginCheck;
+    ref.read(checkUserLoginProvider);
   }
 
   _launchURL() async {
@@ -74,6 +73,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final isLogin = ref.watch(loginStateProvider).loginCheck;
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

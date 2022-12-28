@@ -14,12 +14,30 @@ class SalesState extends BaseSalesState {
   final String selectedDate;
   final List<AdminManagementProductModel> productList;
   final SalesRange salesRange;
+  final double todaySales;
   SalesState({
     required this.totalSales,
     required this.selectedDate,
     required this.productList,
     required this.salesRange,
+    this.todaySales = 0,
   });
+
+  SalesState copyWith({
+    int? totalSales,
+    String? selectedDate,
+    List<AdminManagementProductModel>? productList,
+    SalesRange? salesRange,
+    double? todaySales,
+  }) {
+    return SalesState(
+      totalSales: totalSales ?? this.totalSales,
+      selectedDate: selectedDate ?? this.selectedDate,
+      productList: productList ?? this.productList,
+      salesRange: salesRange ?? this.salesRange,
+      todaySales: todaySales ?? this.todaySales,
+    );
+  }
 }
 
 final salesProvider = StateNotifierProvider<SalesNotifier, BaseSalesState>((ref) {
@@ -31,6 +49,7 @@ class SalesNotifier extends StateNotifier<BaseSalesState> {
   final ProductRepository productRepository;
   SalesNotifier(this.productRepository) : super(SaleLoading()) {
     getSales(SalesRange.oneDay);
+    getTodaySales();
   }
 
   void getSales(SalesRange range) async {
@@ -52,6 +71,19 @@ class SalesNotifier extends StateNotifier<BaseSalesState> {
     );
 
     print((state as SalesState).salesRange);
+  }
+
+  void getTodaySales() async {
+    String date = DateTime.now().toString().substring(0, 23);
+    final productList = await productRepository.getProductInfoForAdmin(date);
+
+    int totalSales = 0;
+    for (var item in productList) {
+      totalSales += item.productPrice;
+    }
+    state = (state as SalesState).copyWith(
+      todaySales: totalSales.toDouble(),
+    );
   }
 
   void getSalesOfDate(DateTime date) {}

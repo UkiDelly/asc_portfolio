@@ -1,4 +1,5 @@
 import 'package:asc_portfolio/constant/assets.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -131,6 +132,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     final storage = ref.watch(secureStorageProvider);
                     final tokenExist = await storage.containsKey(key: 'accessToken');
                     final roleType = await storage.read(key: 'roleType');
+                    final login = ref.read(checkUserLoginProvider);
                     if (tokenExist && roleType == 'USER') {
                       setState(() {
                         isLoading = false;
