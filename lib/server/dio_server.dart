@@ -22,8 +22,8 @@ class Server{
   };
 
   static Map<String, String> loginData = {
-  "loginId": "tUser_B_login",
-  "password": "tUser_B_password",
+  "loginId": "tUser_A_login",
+  "password": "tUser_A_password",
   };
 
   static final storage = FlutterSecureStorage();
@@ -155,7 +155,6 @@ class Server{
   }
 
   // product
-
   Future<List<AdminManagementProductDto>> getProductInfoForAdmin(BuildContext context, String dateString) async {
     Response response;
     var dio = await authDio(context);

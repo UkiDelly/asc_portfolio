@@ -10,6 +10,7 @@ import 'dart:async';
 import '../home_page.dart';
 import '../seat/change_seat_page.dart';
 import '../login/login_page.dart';
+import '../suggest_board/suggest_board_page.dart';
 
 class NavDrawer extends StatefulWidget {
 
@@ -135,7 +136,9 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             leading: Icon(Icons.border_color, color: AppColor.appPurple),
             title: Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SuggestBoardPage())),
+            },
           ),
           ListTile(
             leading: Icon(Icons.device_unknown_rounded, color: AppColor.appPurple),
