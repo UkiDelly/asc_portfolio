@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/constant/sales/sale_enum.dart';
 import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/server/repository/product_repository.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
@@ -16,6 +17,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
   AdminStateNotifier({required this.seatRepoProvider, required this.productProvider})
       : super(const AdminController()) {
     roomFetchGet();
+    fetchApi(SalesRange.oneDay);
+    fechOnlyOneDay(SalesRange.oneDay);
   }
 
   double progress = 0;
@@ -25,12 +28,15 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
   String selectedDate =
       "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
 
-  void fetchApi(String day) async {
-    final productList = await productProvider.getProductInfoForAdmin(day);
+  void fetchApi(SalesRange range) async {
+    String date = DateTime.now().subtract(Duration(days: range.enumToInt)).toString();
+
+    final productList = await productProvider.getProductInfoForAdmin(date);
     state = state.copyWith(productList: productList);
   }
 
-  Future<void> fechOnlyOneDay(String dailySales) async {
+  Future<void> fechOnlyOneDay(SalesRange range) async {
+    String dailySales = DateTime.now().subtract(Duration(days: range.enumToInt)).toUtc().toString();
     final oneDayProductList = await productProvider.getProductInfoForAdmin(dailySales);
     state = state.copyWith(oneDayProductList: oneDayProductList);
     int price = 0;
@@ -60,8 +66,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
     }
   }
 
-  void dailySales(String day) {
-    fetchApi(day);
+  void dailySales(SalesRange range) {
+    fetchApi(range);
     state = state.copyWith(
       oneHasPressed: true,
       weekHasPressed: false,
@@ -72,8 +78,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
         "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -24)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
   }
 
-  void weeklySales(String day) {
-    fetchApi(day);
+  void weeklySales(SalesRange range) {
+    fetchApi(range);
     state = state.copyWith(
       oneHasPressed: false,
       weekHasPressed: true,
@@ -84,8 +90,8 @@ class AdminStateNotifier extends StateNotifier<AdminController> {
         "${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: -168)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(hours: 9)))}";
   }
 
-  void monthSales(String day) {
-    fetchApi(day);
+  void monthSales(SalesRange range) {
+    fetchApi(range);
     state = state.copyWith(
       oneHasPressed: false,
       weekHasPressed: false,
