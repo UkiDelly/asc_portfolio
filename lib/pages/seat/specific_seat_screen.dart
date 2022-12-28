@@ -75,7 +75,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 1;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -94,7 +94,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 2;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -116,7 +116,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () async {
               selectedHour = 4;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -138,7 +138,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 6;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -160,7 +160,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 9;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -182,7 +182,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 12;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),
@@ -204,7 +204,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               selectedHour = 24;
-              logger.i("선택한시간="+selectedHour.toString());
+              logger.i('선택한시간=$selectedHour');
               showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildPopupDialog(context),

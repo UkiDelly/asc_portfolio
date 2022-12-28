@@ -1,6 +1,7 @@
 import 'package:asc_portfolio/constant/enum/user/user_enum.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
+import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +18,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/login',
     redirect: (context, state) async {
-      final bool userLogin = ref.watch(homeStateProvider).loginCheck;
+      final bool userLogin = await ref.watch(userRepoProvider).getCheckLogin();
       final FlutterSecureStorage storage = ref.read(secureStorageProvider);
 
       final RoleType roleType =
@@ -28,9 +29,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           return '/admin';
         } else if (roleType == RoleType.user) {
           return '/';
+        } else if (roleType == RoleType.none) {
+          return null;
         }
       }
-      return '/login';
+      return null;
     },
     routes: [
       GoRoute(

@@ -187,7 +187,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
                         context: context,
                         builder: _buildPopupDialog,
                       );
-                      logger.i("선택한 좌석 번호="+selectedSeatNumber.toString());
+                      logger.i('선택한 좌석 번호=$selectedSeatNumber');
                     }
                   },
                   child: Container(

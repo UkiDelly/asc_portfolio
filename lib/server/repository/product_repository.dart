@@ -28,7 +28,7 @@ class ProductRepository {
         },
       ),
     );
-    logger.i("getProductInfoForAdmin response.data="+response.data.toString());
+    logger.i('getProductInfoForAdmin response.data=${response.data}');
     List<AdminManagementProductModel> products =
         (response.data).map<AdminManagementProductModel>((json) {
       return AdminManagementProductModel.fromJson(json);
@@ -40,7 +40,7 @@ class ProductRepository {
     Response response;
 
     response = await dio.get(Api.API_ADMIN_CHECK_SPECIFIC_USER_PRODUCT + userLoginId);
-    logger.i("getAdminCheckUserProduct Data="+response.data.toString());
+    logger.i('getAdminCheckUserProduct Data=${response.data}');
     List<AdminCheckUserProduct> adminCheckUserProduct =
         (response.data).map<AdminCheckUserProduct>((json) {
       return AdminCheckUserProduct.fromJson(json);
@@ -52,7 +52,7 @@ class ProductRepository {
     Response response;
 
     response = await dio.post('${Api.API_CANCEL_PRODUCT}receipt-id=$productLabel');
-    logger.i("cancelDatas="+response.data.toString());
+    logger.i('cancelDatas=${response.data}');
     return response.data;
   }
 }
