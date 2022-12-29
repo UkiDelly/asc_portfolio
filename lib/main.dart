@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/pages/faq_screen.dart/faq_screen.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,10 @@ class MyApp extends ConsumerWidget {
           path: '/payment',
           builder: (context, state) => const PaymentPage(),
         ),
+        GoRoute(
+          path: '/faq',
+          builder: (context, state) => FAQScreen(),
+        )
       ],
     );
 

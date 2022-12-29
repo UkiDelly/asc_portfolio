@@ -143,11 +143,11 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                 const Text('1:1 채팅문의', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () => {_launchURL()},
           ),
-          // ListTile(
-          //   leading: Icon(Icons.border_color, color: AppColor.appPurple),
-          //   title: Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-          //   onTap: () => {Navigator.of(context).pop()},
-          // ),
+          ListTile(
+            leading: const Icon(Icons.border_color, color: AppColor.appPurple),
+            title: const Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
+            onTap: () => {Navigator.of(context).pop()},
+          ),
           ListTile(
             leading: const Icon(Icons.device_unknown_rounded, color: AppColor.appPurple),
             title:
