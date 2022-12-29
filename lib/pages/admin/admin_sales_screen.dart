@@ -47,18 +47,14 @@ class AdminSalesScreen extends ConsumerWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        salesState is SalesState
-                            ? Text(
-                                '${salesState.todaySales} 원',
-                                style: const TextStyle(
-                                  fontSize: 30,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : salesState is SaleLoading
-                                ? const CircularProgressIndicator()
-                                : const SizedBox.shrink(),
+                        Text(
+                          '${salesState.todaySales} 원',
+                          style: const TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -196,15 +192,14 @@ class AdminSalesScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      if (salesState is! SaleLoading)
-                        Text(
-                          '${(salesState as SalesState).totalSales} 원',
-                          style: const TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                          ),
+                      Text(
+                        '${(salesState).totalSales} 원',
+                        style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -229,35 +224,34 @@ class AdminSalesScreen extends ConsumerWidget {
               const SizedBox(
                 height: 20,
               ),
-              if (salesState is! SaleLoading)
-                SizedBox(
-                  width: 400,
-                  height: 500,
-                  child: ListView.builder(
-                    itemCount: (salesState as SalesState).productList.length,
-                    itemBuilder: (BuildContext context, int idx) {
-                      return Card(
-                        elevation: 5,
-                        shadowColor: AppColor.appPurple,
-                        surfaceTintColor: AppColor.appPurple,
-                        margin: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.paypal,
-                            size: 40,
-                            color: Colors.black,
-                          ),
-                          title: Text(salesState.productList[idx].productNameTypeString),
-                          subtitle: Text('금액: ${salesState.productList[idx].productPrice},'
-                              ' 일시 : ${salesState.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
-                              ' 제품번호: ${salesState.productList[idx].productLabel},'
-                              ' 상태: ${salesState.productList[idx].productState}'),
-                          onTap: () {},
+              SizedBox(
+                width: 400,
+                height: 500,
+                child: ListView.builder(
+                  itemCount: (salesState).productList.length,
+                  itemBuilder: (BuildContext context, int idx) {
+                    return Card(
+                      elevation: 5,
+                      shadowColor: AppColor.appPurple,
+                      surfaceTintColor: AppColor.appPurple,
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.paypal,
+                          size: 40,
+                          color: Colors.black,
                         ),
-                      );
-                    },
-                  ),
+                        title: Text(salesState.productList[idx].productNameTypeString),
+                        subtitle: Text('금액: ${salesState.productList[idx].productPrice},'
+                            ' 일시 : ${salesState.productList[idx].createDate.replaceAll('T', ' ').substring(0, 19)},'
+                            ' 제품번호: ${salesState.productList[idx].productLabel},'
+                            ' 상태: ${salesState.productList[idx].productState}'),
+                        onTap: () {},
+                      ),
+                    );
+                  },
                 ),
+              ),
             ],
           )
         ],

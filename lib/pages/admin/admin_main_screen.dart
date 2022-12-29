@@ -8,10 +8,10 @@ import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
-import '../main_screen.dart';
 
 class AdminMainPage extends ConsumerStatefulWidget {
   const AdminMainPage({Key? key}) : super(key: key);
@@ -39,15 +39,15 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
         actions: [
           IconButton(
             color: Colors.white,
-            onPressed: () => {
+            onPressed: () {
               setState(
                 () {
                   storage.deleteAll();
                   //storage.write(key: 'accessToken', value: null);
                   ref.read(homeStateProvider.notifier).logOut();
                 },
-              ),
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen())),
+              );
+              context.go('/login');
             },
             icon: const Icon(Icons.logout),
           ),
