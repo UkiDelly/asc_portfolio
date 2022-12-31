@@ -1,5 +1,5 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/pages/faq_screen.dart/help_center_screen.dart';
+import 'package:asc_portfolio/pages/help_center/help_center_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/seat/change_seat_screen.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
