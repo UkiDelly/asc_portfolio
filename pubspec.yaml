@@ -29,6 +29,8 @@ dependencies:
   toast: ^0.3.0
   url_launcher: ^6.1.7
   form_builder_validators: ^8.4.0
+  firebase_core: ^2.4.1
+  firebase_messaging: ^14.2.1
 
 
 
