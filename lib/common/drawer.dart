@@ -12,7 +12,6 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../pages/main_screen.dart';
-import '../pages/seat/change_seat_screen.dart';
 
 class NavDrawer extends ConsumerStatefulWidget {
   const NavDrawer({Key? key}) : super(key: key);
@@ -115,11 +114,12 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
                     '좌석이동',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                   ),
-                  onTap: () => {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChangeSeatScreen()),
-                    )
+                  onTap: () {
+                    context.go('/change_seat');
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const ChangeSeatScreen()),
+                    // )
                   },
                 )
               : const Text(''),
@@ -146,7 +146,10 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
           ListTile(
             leading: const Icon(Icons.border_color, color: AppColor.appPurple),
             title: const Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () {
+              print('press');
+              context.go('/help_center');
+            },
           ),
           ListTile(
             leading: const Icon(Icons.device_unknown_rounded, color: AppColor.appPurple),

@@ -137,7 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       setState(() {
                         isLoading = false;
                       });
-                      context.go('/');
+                      context.go('/user');
                     } else if (tokenExist && roleType == 'ADMIN') {
                       setState(() {
                         isLoading = false;

@@ -25,6 +25,31 @@ class DioInterceptor extends Interceptor {
     String auth = 'Bearer';
     String? token = await storage.read(key: 'accessToken');
     options.headers['Authorization'] = '$auth $token';
+
+    print(' --------------------------------------------------------------------\n');
+    print('|[Dio] Request: (${options.method.toUpperCase()}) ${options.path}\n');
+    print('|         Params: ${options.queryParameters}\n');
+    print('|         Body: ${options.data}\n');
+    print('--------------------------------------------------------------------\n');
     super.onRequest(options, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print(' --------------------------------------------------------------------\n');
+    print('| [Dio] Response: (${response.statusCode}) ${response.requestOptions.path}\n');
+    print('|          Data: ${response.data}\n');
+    print('--------------------------------------------------------------------\n');
+
+    super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    print(' --------------------------------------------------------------------\n');
+    print('|[Dio] Error: (${err.response?.statusCode}) ${err.requestOptions.path}\n');
+    print('|        Message: ${err.message}\n');
+    print('--------------------------------------------------------------------\n');
+    super.onError(err, handler);
   }
 }
