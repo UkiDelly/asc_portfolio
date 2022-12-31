@@ -1,5 +1,4 @@
 import 'package:asc_portfolio/controller/home_controller.dart';
-import 'package:asc_portfolio/main.dart';
 import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
@@ -10,6 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../main.dart';
 import '../../provider/home_state/login_state.dart';
 import '../../provider/local_notification_provider.dart';
 
