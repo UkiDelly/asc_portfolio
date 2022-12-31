@@ -2,17 +2,17 @@ import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/help_center/help_center_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/seat/change_seat_screen.dart';
-import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:logger/logger.dart';
 
 import 'constant/enum/user/user_enum.dart';
+import 'firebase_options.dart';
 import 'pages/admin/admin_main_screen.dart';
 import 'pages/cafe/select_cafe_screen.dart';
 import 'pages/home/seat_screen.dart';
@@ -24,26 +24,24 @@ import 'provider/home_state/login_state.dart';
 import 'provider/secure_storage_provider.dart';
 
 void main() async {
-  await initializeDateFormatting('ko_KR');
   WidgetsFlutterBinding.ensureInitialized();
-  await initNotificationSettings();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
+  String? fcmToken = await FirebaseMessaging.instance.getToken(
+    vapidKey:
+        'BBOfhbB8XaVcQDzGng2qYz2-PeqRGB9rzym_lEzJGQp9JUhBRnMaiqBEntIJH8AjEl3pzIS8_ylW6gcZXByl8L8',
+  );
+  print('fcmToken=$fcmToken');
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: MyApp(),
     ),
   );
 }
 
-final logger = Logger(
-  printer: PrettyPrinter(
-    colors: true,
-  ),
-);
-
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "939337505240",
+    "project_id": "asc-fcm",
+    "storage_bucket": "asc-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939337505240:android:d1d1b4091d3cee13963aad",
+        "android_client_info": {
+          "package_name": "asc.portfolio.asc_portfolio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939337505240-hvvng3kgquamko3c2gb9lrrcn2r9kd68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaDfx_X1--Qlb4E9qG93AqGEX6WOEsHds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939337505240-hvvng3kgquamko3c2gb9lrrcn2r9kd68.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "939337505240-aej8mo9bmec08j7vh7p5up28r5d3l8qg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "asc.portfolio.ascPortfolio"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
