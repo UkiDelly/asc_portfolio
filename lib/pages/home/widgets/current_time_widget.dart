@@ -40,7 +40,8 @@ class _CurrentTimeState extends State<CurrentTime> {
       margin: const EdgeInsets.all(15),
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Text(
+        child: 
+        Text(
           '현재시간 : $currentTime',
           style: const TextStyle(
             fontWeight: FontWeight.w300,
