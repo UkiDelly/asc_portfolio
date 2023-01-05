@@ -1,5 +1,4 @@
-import 'package:asc_portfolio/controller/home_controller.dart';
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +131,8 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     logger.i(startTime);
-    final HomeController homeController = ref.watch(homeStateProvider);
+
+    final seatState = ref.watch(seatStateNotifierProvider);
     final LoginState loginState = ref.watch(loginStateProvider);
 
     return BaseScaffold(
@@ -180,7 +180,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                homeController.seatReservationSeatNumber != 0
+                seatState.seatReservationSeatNumber != 0
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -202,7 +202,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                '${homeController.seatReservationSeatNumber}',
+                                '${seatState.seatReservationSeatNumber}',
                                 style: const TextStyle(fontSize: 30, color: Colors.white),
                               ),
                             ),
@@ -219,7 +219,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                if (homeController.seatReservationSeatNumber == 0)
+                if (seatState.seatReservationSeatNumber == 0)
                   Card(
                     elevation: 5,
                     color: AppColor.appPurple,

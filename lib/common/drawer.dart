@@ -128,7 +128,7 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
               await ref.read(secureStorageProvider).deleteAll();
-              ref.read(loginStateProvider.notifier).clear();
+              ref.read(loginStateProvider.notifier).logout();
               context.go('/login');
             },
           ),

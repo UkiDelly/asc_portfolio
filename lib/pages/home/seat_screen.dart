@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/base_scaffold.dart';
 import '../../constant/assets.dart';
-import '../../provider/home_state/home_state_notifier.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 import '../seat/specific_seat_screen.dart';
@@ -172,8 +171,7 @@ class SeatScreen extends ConsumerWidget {
                         // UNRESERVED && VALID일때
                         seatState.seatDatas[index].seatState.length == 10 &&
                         ticket == 'VALID') {
-                      ref.read(homeStateProvider.notifier).setSelectedIndex = index + 1;
-
+                      ref.read(seatStateNotifierProvider.notifier).setSelectedIndex = index + 1;
                       // Navigator.pop(context);
                       Navigator.push(
                         context,

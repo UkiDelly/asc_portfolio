@@ -1,27 +1,50 @@
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../model/user_seat_model.dart';
 
-part 'seat_state.freezed.dart';
+class SeatState {
+  int selectedIndex;
+  List<UsersSeatModel> seatDatas;
+  int seatReservationSeatNumber;
+  int seatReservationStartTime;
+  String seatReservationCreateDate;
+  String seatReservationPeriod;
+  String format;
+  int seatReservationTimeInUse;
 
-@freezed
-class SeatState with _$SeatState {
-  const SeatState._();
+  SeatState({
+    this.selectedIndex = 0,
+    this.seatDatas = const [],
+    this.seatReservationSeatNumber = 0,
+    this.seatReservationStartTime = 0,
+    this.seatReservationCreateDate = '',
+    this.seatReservationPeriod = '',
+    this.format = '',
+    this.seatReservationTimeInUse = 0,
+  });
 
-  factory SeatState({
-    @Default(0) int selectedIndex,
-    @Default([]) List<UsersSeatModel> seatDatas,
-    @Default(0) int seatReservationSeatNumber,
-    @Default(0) int seatReservationStartTime,
-    @Default('') String seatReservationCreateDate,
-    @Default('') String seatReservationPeriod,
-    @Default('') String format,
-    @Default(0) int seatReservationTimeInUse,
-  }) = _SeatState;
-
-  factory SeatState.fromJson(Map<String, dynamic> json) => _$SeatStateFromJson(json);
+  SeatState copyWith({
+    int? selectedIndex,
+    List<UsersSeatModel>? seatDatas,
+    int? seatReservationSeatNumber,
+    int? seatReservationStartTime,
+    String? seatReservationCreateDate,
+    String? seatReservationPeriod,
+    String? format,
+    int? seatReservationTimeInUse,
+  }) {
+    return SeatState(
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      seatDatas: seatDatas ?? this.seatDatas,
+      seatReservationSeatNumber: seatReservationSeatNumber ?? this.seatReservationSeatNumber,
+      seatReservationStartTime: seatReservationStartTime ?? this.seatReservationStartTime,
+      seatReservationCreateDate: seatReservationCreateDate ?? this.seatReservationCreateDate,
+      seatReservationPeriod: seatReservationPeriod ?? this.seatReservationPeriod,
+      format: format ?? this.format,
+      seatReservationTimeInUse: seatReservationTimeInUse ?? this.seatReservationTimeInUse,
+    );
+  }
 }
 
 final seatStateNotifierProvider = StateNotifierProvider<SeatStateNotifier, SeatState>((ref) {

@@ -64,7 +64,7 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(ticket: ticket);
   }
 
-  void clear() {
+  void logout() {
     state = LoginState();
   }
 }

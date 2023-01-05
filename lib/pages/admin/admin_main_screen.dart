@@ -4,7 +4,7 @@ import 'package:asc_portfolio/pages/admin/admin_sales_screen.dart';
 import 'package:asc_portfolio/pages/admin/admin_search_user_screen.dart';
 import 'package:asc_portfolio/pages/admin/admin_seat_manage_screen.dart';
 import 'package:asc_portfolio/provider/admin_state/admin_state_notifier.dart';
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +60,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 () {
                   storage.deleteAll();
                   //storage.write(key: 'accessToken', value: null);
-                  ref.read(homeStateProvider.notifier).logOut();
+                  ref.read(loginStateProvider.notifier).logout();
                 },
               );
               context.go('/login');

@@ -4,8 +4,8 @@ import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_screen.dart';
 import 'package:asc_portfolio/pages/home/seat_screen.dart';
 import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/home_state/login_state.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
+    selectedSeatNumber = ref.watch(seatStateNotifierProvider.notifier).selectedIndex;
     final LoginState loginState = ref.watch(loginStateProvider);
 
     return Scaffold(

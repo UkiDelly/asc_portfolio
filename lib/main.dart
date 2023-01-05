@@ -28,7 +28,6 @@ import 'pages/home/seat_screen.dart';
 import 'pages/login/login_screen.dart';
 import 'pages/payment/payment_screen.dart';
 import 'pages/signup/sign_up_screen.dart';
-import 'provider/home_state/home_state_notifier.dart';
 import 'provider/home_state/login_state.dart';
 import 'provider/secure_storage_provider.dart';
 
@@ -117,7 +116,7 @@ class MyApp extends ConsumerWidget {
           builder: (context, state) => const LoginScreen(),
           redirect: (context, state) {
             ref.refresh(checkUserLoginProvider);
-            final userLogin = ref.watch(homeStateProvider).loginCheck;
+            final userLogin = ref.watch(loginStateProvider).loginCheck;
 
             if (userLogin) {
               return '/user';
