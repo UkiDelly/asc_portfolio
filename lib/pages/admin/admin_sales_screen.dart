@@ -4,6 +4,7 @@ import 'package:asc_portfolio/provider/admin_sales/admin_sales_state_notifier.da
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../provider/admin_state/admin_state_notifier.dart';
 
@@ -193,7 +194,7 @@ class AdminSalesScreen extends ConsumerWidget {
                         ],
                       ),
                       Text(
-                        '${(salesState).totalSales} 원',
+                        '${NumberFormat.currency(locale: 'ko_KR', symbol: '').format(salesState.totalSales)}원',
                         style: const TextStyle(
                           fontSize: 25,
                           color: Colors.white,

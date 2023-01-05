@@ -13,10 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import '../common/base_scaffold.dart';
 import 'my_ticket/my_ticker_screen.dart';
-
-final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -26,6 +23,7 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class MainScreenState extends ConsumerState<MainScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String rolyType = '';
   int selectedSeatNumber = 0;
   late FlutterSecureStorage storage;
@@ -51,9 +49,9 @@ class MainScreenState extends ConsumerState<MainScreen> {
     selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
     final LoginState loginState = ref.watch(loginStateProvider);
 
-    return BaseScaffold(
+    return Scaffold(
       key: _scaffoldKey,
-      drawer: const NavDrawer(),
+      drawer: const UserDrawer(),
       appBar: AppBar(
         // backgroundColor: AppColor.appPurple,
         title: Image.asset(

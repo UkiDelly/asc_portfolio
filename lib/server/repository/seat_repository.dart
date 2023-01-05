@@ -27,10 +27,15 @@ class SeatRepository {
   // 좌석시작, 좌석이동 API
   // startTime => 사용을 원하는 시간
   // startTime이 0이면 좌석이동요청 API
-  Future<String> postSeatReservationStart(int seatNumber, int startTime) async {
-    Response response = await dio.post('${Api.API_START_SEAT_RESERVATION}?seat=$seatNumber&time=$startTime');
-    logger.i('좌석 시작, 좌석 이동=${response.data}');
-    return response.data;
+  Future<bool> postSeatReservationStart(int seatNumber, int startTime) async {
+    try {
+      Response response =
+          await dio.post('${Api.API_START_SEAT_RESERVATION}?seat=$seatNumber&time=$startTime');
+      logger.i('좌석 시작, 좌석 이동=${response.data}');
+      return true;
+    } on DioError {
+      return false;
+    }
   }
 
   Future<String> postExitSeat() async {
@@ -40,7 +45,9 @@ class SeatRepository {
   }
 
   Future<String> postAdminExitSeat(int seatNumber) async {
-    Response response = await dio.post(Api.API_ADMIN_EXIT_SEAT + seatNumber.toString(),);
+    Response response = await dio.post(
+      Api.API_ADMIN_EXIT_SEAT + seatNumber.toString(),
+    );
     logger.i('관리자 유저 좌석 강제 종료=${response.data}');
     return response.data;
   }

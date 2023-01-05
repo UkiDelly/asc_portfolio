@@ -1,3 +1,4 @@
+import 'package:asc_portfolio/common/drawer.dart';
 import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_sales_screen.dart';
 import 'package:asc_portfolio/pages/admin/admin_search_user_screen.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../common/base_scaffold.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -22,6 +22,7 @@ class AdminMainPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMainPageState extends ConsumerState<AdminMainPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController pageController = PageController(initialPage: 0);
 
   @override
@@ -29,9 +30,23 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
     final AdminController adminController = ref.watch(adminStateProvider);
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
-    return BaseScaffold(
+    return Scaffold(
+      key: scaffoldKey,
+      drawer: const AdminDrawer(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          splashColor: Colors.transparent,
+          style: IconButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          onPressed: (() => scaffoldKey.currentState?.openDrawer()),
+          icon: const Icon(
+            Icons.menu,
+            size: 35,
+          ),
+        ),
         backgroundColor: AppColor.appPurple,
         title: Text('${Api.cafeName} 관리자 페이지'),
         centerTitle: true,

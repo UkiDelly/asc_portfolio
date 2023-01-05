@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -358,11 +359,6 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
   }
 
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
-    void _postStartReservation(int seatNumber) async {
-      String responseData =
-          await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber, selectedHour);
-    }
-
     return AlertDialog(
       backgroundColor: AppColor.appPurple,
       title: Row(
@@ -382,7 +378,11 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _postStartReservation(selectedSeatNumber - 1);
+            await ref
+                .read(seatRepoProvider)
+                .postSeatReservationStart(selectedSeatNumber - 1, selectedHour);
+            ref.read(homeStateProvider.notifier).roomFetchGet();
+
             await startTimer();
 
             // await showDialog(

@@ -1,4 +1,5 @@
 import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
+import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +16,8 @@ class SeatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeController = ref.watch(homeStateProvider);
-    final isLogined = ref.watch(homeStateProvider).loginCheck;
+    final isLogined = ref.watch(loginStateProvider).loginCheck;
+    final ticket = ref.watch(loginStateProvider).ticket?.isValidTicket;
     final selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
     return BaseScaffold(
@@ -164,13 +166,14 @@ class SeatScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
+                    print('pressed');
                     if (isLogined == true &&
                         // UNRESERVED && VALID일때
                         homeController.seatDatas[index].seatState.length == 10 &&
-                        homeController.userTicketInfo?.isValidTicket == 'VALID') {
+                        ticket == 'VALID') {
                       ref.read(homeStateProvider.notifier).setSelectedIndex = index + 1;
 
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -187,9 +190,9 @@ class SeatScreen extends ConsumerWidget {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: ref.watch(homeStateProvider.notifier).getRoomState(index)
-                          ? AppColor.appPurple
-                          : Colors.white,
+                      color: homeController.seatDatas[index].seatState == 'UNRESERVED'
+                          ? Colors.white
+                          : AppColor.appPurple,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
@@ -201,9 +204,9 @@ class SeatScreen extends ConsumerWidget {
                           Text(
                             '${homeController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: ref.watch(homeStateProvider.notifier).getRoomState(index)
-                                  ? Colors.white
-                                  : AppColor.appPurple,
+                              color: homeController.seatDatas[index].seatState == 'UNRESERVED'
+                                  ? AppColor.appPurple
+                                  : Colors.white,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),
