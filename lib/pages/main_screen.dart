@@ -47,8 +47,8 @@ class MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
-    final LoginState loginState = ref.watch(loginStateProvider);
+    selectedSeatNumber = ref.watch(homeStateNotifierProvider.notifier).selectedIndex;
+    final LoginState loginState = ref.watch(loginStateNotifierProvider);
 
     return Scaffold(
       key: _scaffoldKey,

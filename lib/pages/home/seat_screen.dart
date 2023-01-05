@@ -13,20 +13,23 @@ class SeatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeController = ref.watch(homeStateProvider);
-    final isLogined = ref.watch(homeStateProvider).loginCheck;
-    final selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
+    final homeController = ref.watch(homeStateNotifierProvider);
+    final isLogined = ref.watch(homeStateNotifierProvider).loginCheck;
+    final selectedSeatNumber = ref.watch(homeStateNotifierProvider.notifier).selectedIndex;
 
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 20,),
-            Api.cafeName == '서울지점' ?
-            Image.asset(
-              AppAssets.cafeImage1,
-            ) : const Text(''),
+            const SizedBox(
+              height: 20,
+            ),
+            Api.cafeName == '서울지점'
+                ? Image.asset(
+                    AppAssets.cafeImage1,
+                  )
+                : const Text(''),
             // Card(
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(30),
@@ -96,7 +99,9 @@ class SeatScreen extends ConsumerWidget {
             //     },
             //   ),
             // ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               padding: const EdgeInsets.all(15),
               child: FloatingActionButton.extended(
@@ -162,7 +167,7 @@ class SeatScreen extends ConsumerWidget {
                         // UNRESERVED && VALID일때
                         homeController.seatDatas[index].seatState.length == 10 &&
                         homeController.userTicketInfo?.isValidTicket == 'VALID') {
-                      ref.read(homeStateProvider.notifier).setSelectedIndex = index + 1;
+                      ref.read(homeStateNotifierProvider.notifier).setSelectedIndex = index + 1;
 
                       Navigator.pop(context);
                       Navigator.push(
@@ -181,7 +186,7 @@ class SeatScreen extends ConsumerWidget {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: ref.watch(homeStateProvider.notifier).getRoomState(index)
+                      color: ref.watch(homeStateNotifierProvider.notifier).getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -195,9 +200,10 @@ class SeatScreen extends ConsumerWidget {
                           Text(
                             '${homeController.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: ref.watch(homeStateProvider.notifier).getRoomState(index)
-                                  ? Colors.white
-                                  : AppColor.appPurple,
+                              color:
+                                  ref.watch(homeStateNotifierProvider.notifier).getRoomState(index)
+                                      ? Colors.white
+                                      : AppColor.appPurple,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),

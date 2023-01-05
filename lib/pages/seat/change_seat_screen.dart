@@ -52,7 +52,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
   }
 
   void _roomFetchGet() async {
-    ref.read(seatStateProvider.notifier).getAllRoomStateReq();
+    ref.read(seatStateNotifierProvider.notifier).getAllRoomStateReq();
   }
 
   @override
@@ -198,7 +198,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: ref.watch(seatStateProvider.notifier).getRoomState(index)
+                      color: ref.watch(seatStateNotifierProvider.notifier).getRoomState(index)
                           ? AppColor.appPurple
                           : Colors.white,
                     ),
@@ -210,11 +210,12 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
                             width: 4,
                           ),
                           Text(
-                            '${ref.watch(seatStateProvider).seatDatas[index].seatNumber + 1}',
+                            '${ref.watch(seatStateNotifierProvider).seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: ref.watch(seatStateProvider.notifier).getRoomState(index)
-                                  ? Colors.white
-                                  : AppColor.appPurple,
+                              color:
+                                  ref.watch(seatStateNotifierProvider.notifier).getRoomState(index)
+                                      ? Colors.white
+                                      : AppColor.appPurple,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),

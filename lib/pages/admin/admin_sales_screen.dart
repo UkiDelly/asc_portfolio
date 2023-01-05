@@ -12,12 +12,13 @@ class AdminSalesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AdminController adminController = ref.watch(adminStateProvider);
-    final AdminStateNotifier adminControllerNotifier = ref.watch(adminStateProvider.notifier)
-      ..setSeatList(adminController)
-      ..setTotalSales(adminController);
+    final AdminController adminController = ref.watch(adminStateNotifierProvider);
+    final AdminStateNotifier adminControllerNotifier =
+        ref.watch(adminStateNotifierProvider.notifier)
+          ..setSeatList(adminController)
+          ..setTotalSales(adminController);
 
-    final salesState = ref.watch(salesProvider);
+    final salesState = ref.watch(salesNotifierProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -67,10 +68,10 @@ class AdminSalesScreen extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    onPressed:
-                        salesState is SalesState && salesState.salesRange == SalesRange.oneDay
-                            ? null
-                            : () => ref.read(salesProvider.notifier).getSales(SalesRange.oneDay),
+                    onPressed: salesState.salesRange == SalesRange.oneDay
+                        ? null
+                        : () =>
+                            ref.read(salesNotifierProvider.notifier).getSales(SalesRange.oneDay),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
@@ -83,10 +84,10 @@ class AdminSalesScreen extends ConsumerWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        salesState is SalesState && salesState.salesRange == SalesRange.oneWeek
-                            ? null
-                            : () => ref.read(salesProvider.notifier).getSales(SalesRange.oneWeek),
+                    onPressed: salesState.salesRange == SalesRange.oneWeek
+                        ? null
+                        : () =>
+                            ref.read(salesNotifierProvider.notifier).getSales(SalesRange.oneWeek),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
@@ -99,10 +100,10 @@ class AdminSalesScreen extends ConsumerWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed:
-                        salesState is SalesState && salesState.salesRange == SalesRange.oneMonth
-                            ? null
-                            : () => ref.read(salesProvider.notifier).getSales(SalesRange.oneMonth),
+                    onPressed: salesState.salesRange == SalesRange.oneMonth
+                        ? null
+                        : () =>
+                            ref.read(salesNotifierProvider.notifier).getSales(SalesRange.oneMonth),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(15),
                       shape: RoundedRectangleBorder(
@@ -142,7 +143,7 @@ class AdminSalesScreen extends ConsumerWidget {
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2023),
                   ).then((date) {
-                    ref.read(salesProvider.notifier).getSalesOfDate(date!);
+                    ref.read(salesNotifierProvider.notifier).getSalesOfDate(date!);
                   });
                 },
               ),

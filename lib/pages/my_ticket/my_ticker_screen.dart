@@ -14,7 +14,7 @@ class MyTicketScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final homeController = ref.watch(homeStateProvider);
     ref.read(checkUserLoginProvider);
-    final UserTicketModel? ticket = ref.watch(loginStateProvider).ticket;
+    final UserTicketModel? ticket = ref.watch(loginStateNotifierProvider).ticket;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

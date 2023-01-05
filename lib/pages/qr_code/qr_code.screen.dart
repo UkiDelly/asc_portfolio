@@ -131,8 +131,8 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   @override
   Widget build(BuildContext context) {
     logger.i(startTime);
-    final HomeController homeController = ref.watch(homeStateProvider);
-    final LoginState loginState = ref.watch(loginStateProvider);
+    final HomeController homeController = ref.watch(homeStateNotifierProvider);
+    final LoginState loginState = ref.watch(loginStateNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(

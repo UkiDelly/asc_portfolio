@@ -128,7 +128,8 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
               await ref.read(secureStorageProvider).deleteAll();
-              ref.read(loginStateProvider.notifier).clear();
+              ref.invalidate(loginStateNotifierProvider);
+
               context.go('/login');
             },
           ),
