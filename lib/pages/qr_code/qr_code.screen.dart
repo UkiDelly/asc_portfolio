@@ -10,8 +10,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../common/base_scaffold.dart';
 import '../../main.dart';
-import '../../provider/home_state/login_state.dart';
 import '../../provider/local_notification_provider.dart';
+import '../../provider/login_state/login_state.dart';
 
 class QRCodeScreen extends ConsumerStatefulWidget {
   const QRCodeScreen({super.key});

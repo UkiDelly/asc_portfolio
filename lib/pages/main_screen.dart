@@ -4,7 +4,6 @@ import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/pages/cafe/select_cafe_screen.dart';
 import 'package:asc_portfolio/pages/home/seat_screen.dart';
 import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+import '../provider/login_state/login_state.dart';
 import 'my_ticket/my_ticker_screen.dart';
 
 class MainScreen extends ConsumerStatefulWidget {

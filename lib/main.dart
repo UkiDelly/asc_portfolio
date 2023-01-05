@@ -28,7 +28,8 @@ import 'pages/home/seat_screen.dart';
 import 'pages/login/login_screen.dart';
 import 'pages/payment/payment_screen.dart';
 import 'pages/signup/sign_up_screen.dart';
-import 'provider/home_state/login_state.dart';
+
+import 'provider/login_state/login_state.dart';
 import 'provider/secure_storage_provider.dart';
 
 final logger = Logger(

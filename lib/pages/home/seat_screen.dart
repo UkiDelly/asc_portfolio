@@ -1,11 +1,11 @@
 import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/base_scaffold.dart';
 import '../../constant/assets.dart';
+import '../../provider/login_state/login_state.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 import '../seat/specific_seat_screen.dart';
