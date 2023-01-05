@@ -1,5 +1,4 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common/base_scaffold.dart';
+import '../../provider/login_state/login_state.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/main.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -12,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../pages/main_screen.dart';
+import '../provider/login_state/login_state.dart';
 
 class UserDrawer extends ConsumerStatefulWidget {
   const UserDrawer({Key? key}) : super(key: key);
