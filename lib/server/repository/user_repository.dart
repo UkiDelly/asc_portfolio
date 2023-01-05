@@ -13,8 +13,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../main.dart';
 import '../api/api.dart';
 
-
-
 final userRepoProvider = Provider<UserRepository>((ref) {
   final repository = UserRepository(
     dio: ref.watch(dioProvider),
@@ -58,11 +56,10 @@ class UserRepository {
     response = await dio.post(
       Api.API_SIGN_UP,
       data: data,
-      
     );
   }
 
-  Future<void> postReqLogin({required String id, required String password}) async {
+  Future<bool> postReqLogin({required String id, required String password}) async {
     try {
       Response response = await dio.post(
         Api.API_LOGIN,
@@ -72,13 +69,15 @@ class UserRepository {
         },
       );
 
-      logger.i('login_data=${response.data}');
+      // logger.i('login_data=${response.data}');
 
       final tokenInfo = TokenModel.fromJson(response.data);
       await storage.write(key: 'accessToken', value: tokenInfo.accessToken);
       await storage.write(key: 'roleType', value: tokenInfo.roleType.enumToString());
-    } catch (e) {
-      print(e);
+
+      return true;
+    } on DioError {
+      return false;
     }
   }
 

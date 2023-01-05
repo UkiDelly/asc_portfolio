@@ -127,7 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       isLoading = true;
                     });
 
-                    await ref
+                    bool login = await ref
                         .read(userRepoProvider)
                         .postReqLogin(id: idController.text, password: passwordController.text);
 
@@ -135,12 +135,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     final tokenExist = await storage.containsKey(key: 'accessToken');
                     final roleType = await storage.read(key: 'roleType');
                     ref.refresh(checkUserLoginProvider);
-                    if (tokenExist && roleType == 'USER') {
+                    if (login && roleType == 'USER') {
                       setState(() {
                         isLoading = false;
                       });
                       context.go('/user');
-                    } else if (tokenExist && roleType == 'ADMIN') {
+                    } else if (login && roleType == 'ADMIN') {
                       setState(() {
                         isLoading = false;
                       });
