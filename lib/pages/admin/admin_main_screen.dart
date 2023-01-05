@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -28,7 +29,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
     final AdminController adminController = ref.watch(adminStateProvider);
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColor.appPurple,

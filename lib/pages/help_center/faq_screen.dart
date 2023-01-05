@@ -2,6 +2,8 @@ import 'package:asc_portfolio/constant/enum/help-center/category_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
+import '../../common/base_scaffold.dart';
+
 class FAQScreen extends StatefulWidget {
   final ProblemCategory category;
   const FAQScreen({super.key, required this.category});
@@ -17,7 +19,7 @@ class _FAQScreenState extends State<FAQScreen> {
   @override
   Widget build(BuildContext context) {
     print('category=${widget.category.enumToString}');
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         title: const Text('1:1 문의'),
       ),

@@ -2,6 +2,7 @@ import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../constant/assets.dart';
 import '../../provider/home_state/home_state_notifier.dart';
 import '../../server/api/api.dart';
@@ -17,16 +18,19 @@ class SeatScreen extends ConsumerWidget {
     final isLogined = ref.watch(homeStateProvider).loginCheck;
     final selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
 
-    return Scaffold(
+    return BaseScaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 20,),
-            Api.cafeName == '서울지점' ?
-            Image.asset(
-              AppAssets.cafeImage1,
-            ) : const Text(''),
+            const SizedBox(
+              height: 20,
+            ),
+            Api.cafeName == '서울지점'
+                ? Image.asset(
+                    AppAssets.cafeImage1,
+                  )
+                : const Text(''),
             // Card(
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(30),
@@ -96,7 +100,9 @@ class SeatScreen extends ConsumerWidget {
             //     },
             //   ),
             // ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               padding: const EdgeInsets.all(15),
               child: FloatingActionButton.extended(

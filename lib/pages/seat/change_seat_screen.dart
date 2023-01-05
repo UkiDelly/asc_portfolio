@@ -7,6 +7,7 @@ import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../main.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
@@ -68,7 +69,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       seatList.add(_changeSeatController.seatDatas[i].toJson());
     }
 
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
         title: const Text('좌석 이동'),

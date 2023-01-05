@@ -4,6 +4,7 @@ import 'package:asc_portfolio/pages/payment/payment_detail_period_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_time_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../style/app_color.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -11,7 +12,7 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {

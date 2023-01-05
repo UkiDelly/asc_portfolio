@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+import '../common/base_scaffold.dart';
 import 'my_ticket/my_ticker_screen.dart';
 
 final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -50,7 +51,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
     selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
     final LoginState loginState = ref.watch(loginStateProvider);
 
-    return Scaffold(
+    return BaseScaffold(
       key: _scaffoldKey,
       drawer: const NavDrawer(),
       appBar: AppBar(
@@ -125,7 +126,6 @@ class MainScreenState extends ConsumerState<MainScreen> {
         ),
         openBuilder: (context, action) => const QRCodeScreen(),
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
@@ -205,13 +205,10 @@ class MainScreenState extends ConsumerState<MainScreen> {
           ),
         ),
       ),
-
-      body: SafeArea(
-        child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController,
-          children: const [SeatScreen(), MyTicketScreen()],
-        ),
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: const [SeatScreen(), MyTicketScreen()],
       ),
 
       // child: widgetOptions.elementAt(homeController.selectedIndex),

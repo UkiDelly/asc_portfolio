@@ -3,6 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/base_scaffold.dart';
+
 class SuggestBoardDetail extends StatefulWidget {
   const SuggestBoardDetail({Key? key}) : super(key: key);
 
@@ -16,9 +18,9 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
   bool autoValidate = true;
   bool readOnly = false;
   bool showSegmentedControl = true;
-  final _formKey = GlobalKey<FormBuilderState>();
-  bool _ageHasError = false;
-  bool _genderHasError = false;
+  final formKey = GlobalKey<FormBuilderState>();
+  bool ageHasError = false;
+  bool genderHasError = false;
 
   var genderOptions = ['Male', 'Female', 'Other'];
 
@@ -26,7 +28,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(title: const Text('Form Builder Example')),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -34,11 +36,11 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
           child: Column(
             children: <Widget>[
               FormBuilder(
-                key: _formKey,
+                key: formKey,
                 // enabled: false,
                 onChanged: () {
-                  _formKey.currentState!.save();
-                  debugPrint(_formKey.currentState!.value.toString());
+                  formKey.currentState!.save();
+                  debugPrint(formKey.currentState!.value.toString());
                 },
                 autovalidateMode: AutovalidateMode.disabled,
                 initialValue: const {
@@ -62,7 +64,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: () {
-                            _formKey.currentState!.fields['date']?.didChange(null);
+                            formKey.currentState!.fields['date']?.didChange(null);
                           },
                         ),
                       ),
@@ -82,7 +84,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: () {
-                            _formKey.currentState!.fields['date_range']?.didChange(null);
+                            formKey.currentState!.fields['date_range']?.didChange(null);
                           },
                         ),
                       ),
@@ -151,14 +153,13 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                       name: 'age',
                       decoration: InputDecoration(
                         labelText: 'Age',
-                        suffixIcon: _ageHasError
+                        suffixIcon: ageHasError
                             ? const Icon(Icons.error, color: Colors.red)
                             : const Icon(Icons.check, color: Colors.green),
                       ),
                       onChanged: (val) {
                         setState(() {
-                          _ageHasError =
-                              !(_formKey.currentState?.fields['age']?.validate() ?? false);
+                          ageHasError = !(formKey.currentState?.fields['age']?.validate() ?? false);
                         });
                       },
 
@@ -176,7 +177,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                       name: 'gender',
                       decoration: InputDecoration(
                         labelText: 'Gender',
-                        suffix: _genderHasError ? const Icon(Icons.error) : const Icon(Icons.check),
+                        suffix: genderHasError ? const Icon(Icons.error) : const Icon(Icons.check),
                         hintText: 'Select Gender',
                       ),
                       validator: FormBuilderValidators.compose(
@@ -193,8 +194,8 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                           .toList(),
                       onChanged: (val) {
                         setState(() {
-                          _genderHasError =
-                              !(_formKey.currentState?.fields['gender']?.validate() ?? false);
+                          genderHasError =
+                              !(formKey.currentState?.fields['gender']?.validate() ?? false);
                         });
                       },
                       valueTransformer: (val) => val?.toString(),
@@ -346,10 +347,10 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState?.saveAndValidate() ?? false) {
-                          debugPrint(_formKey.currentState?.value.toString());
+                        if (formKey.currentState?.saveAndValidate() ?? false) {
+                          debugPrint(formKey.currentState?.value.toString());
                         } else {
-                          debugPrint(_formKey.currentState?.value.toString());
+                          debugPrint(formKey.currentState?.value.toString());
                           debugPrint('validation failed');
                         }
                       },
@@ -363,7 +364,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () {
-                        _formKey.currentState?.reset();
+                        formKey.currentState?.reset();
                       },
                       // color: Theme.of(context).colorScheme.secondary,
                       child: Text(

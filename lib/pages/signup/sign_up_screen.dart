@@ -3,6 +3,7 @@ import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../style/app_color.dart';
 import '../login/login_screen.dart';
 
@@ -26,7 +27,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       backgroundColor: AppColor.appPurple,
       resizeToAvoidBottomInset: false,
       body: Column(

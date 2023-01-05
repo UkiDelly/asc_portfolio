@@ -9,6 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../common/base_scaffold.dart';
 import '../../main.dart';
 import '../../provider/home_state/login_state.dart';
 import '../../provider/local_notification_provider.dart';
@@ -134,7 +135,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     final HomeController homeController = ref.watch(homeStateProvider);
     final LoginState loginState = ref.watch(loginStateProvider);
 
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         elevation: 0,
         title: Row(
