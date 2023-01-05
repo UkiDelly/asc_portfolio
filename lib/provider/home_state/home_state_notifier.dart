@@ -27,7 +27,7 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     required this.ticketRepository,
     required this.seatRepository,
   }) : super(HomeController()) {
-    roomFetchGet();
+    // roomFetchGet();
     // init();
   }
 
@@ -39,14 +39,14 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     state = state.copyWith(selectedIndex: index);
   }
 
-  bool getRoomState(int index) {
-    final roomState = state.seatDatas[index].toJson();
-    if (roomState.values.toString() == '(RESERVED)') {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // bool getRoomState(int index) {
+  //   final roomState = state.seatDatas[index].toJson();
+  //   if (roomState.values.toString() == '(RESERVED)') {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   // void init() async {
   //   final userQrandName = await userRepository.getUserQrAndNameReq();
@@ -96,8 +96,8 @@ class HomeStateNotifier extends StateNotifier<HomeController> {
     state = HomeController();
   }
 
-  void roomFetchGet() async {
-    final List<UsersSeatModel> rooms = await seatRepository.getAllRoomStateReq();
-    state = state.copyWith(seatDatas: rooms);
-  }
+  // void roomFetchGet() async {
+  //   final List<UsersSeatModel> rooms = await seatRepository.getAllRoomStateReq();
+  //   state = state.copyWith(seatDatas: rooms);
+  // }
 }

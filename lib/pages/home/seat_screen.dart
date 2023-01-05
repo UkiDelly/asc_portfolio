@@ -1,5 +1,6 @@
 import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
 import 'package:asc_portfolio/provider/home_state/login_state.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,10 +16,10 @@ class SeatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeController = ref.watch(homeStateProvider);
     final isLogined = ref.watch(loginStateProvider).loginCheck;
     final ticket = ref.watch(loginStateProvider).ticket?.isValidTicket;
-    final selectedSeatNumber = ref.watch(homeStateProvider.notifier).selectedIndex;
+    final selectedSeatNumber = ref.watch(seatStateNotifierProvider.notifier).selectedIndex;
+    final seatState = ref.watch(seatStateNotifierProvider);
 
     return BaseScaffold(
       body: SingleChildScrollView(
@@ -162,14 +163,14 @@ class SeatScreen extends ConsumerWidget {
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
               ),
-              itemCount: homeController.seatDatas.length,
+              itemCount: seatState.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
                     print('pressed');
                     if (isLogined == true &&
                         // UNRESERVED && VALID일때
-                        homeController.seatDatas[index].seatState.length == 10 &&
+                        seatState.seatDatas[index].seatState.length == 10 &&
                         ticket == 'VALID') {
                       ref.read(homeStateProvider.notifier).setSelectedIndex = index + 1;
 
@@ -190,7 +191,7 @@ class SeatScreen extends ConsumerWidget {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: homeController.seatDatas[index].seatState == 'UNRESERVED'
+                      color: seatState.seatDatas[index].seatState == 'UNRESERVED'
                           ? Colors.white
                           : AppColor.appPurple,
                     ),
@@ -202,9 +203,9 @@ class SeatScreen extends ConsumerWidget {
                             width: 4,
                           ),
                           Text(
-                            '${homeController.seatDatas[index].seatNumber + 1}',
+                            '${seatState.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color: homeController.seatDatas[index].seatState == 'UNRESERVED'
+                              color: seatState.seatDatas[index].seatState == 'UNRESERVED'
                                   ? AppColor.appPurple
                                   : Colors.white,
                               fontSize: 35,

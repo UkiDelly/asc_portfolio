@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -381,7 +381,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
             await ref
                 .read(seatRepoProvider)
                 .postSeatReservationStart(selectedSeatNumber - 1, selectedHour);
-            ref.read(homeStateProvider.notifier).roomFetchGet();
+            ref.read(seatStateNotifierProvider.notifier).roomFetchGet();
 
             await startTimer();
 
