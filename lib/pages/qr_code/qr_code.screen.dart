@@ -1,4 +1,5 @@
 import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
+import 'package:asc_portfolio/provider/timer_state/timer_state.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class QRCodeScreen extends ConsumerStatefulWidget {
 class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   // state들
   // TODO: 서버가 정상적으로 작동하게 되면 startTime을 homeStateNotifier에서 받아와야 함
-  Duration startTime = const Duration(minutes: 10, seconds: 10);
   Duration timeLeft = const Duration();
   CustomTimerController timercontroller = CustomTimerController();
 
@@ -65,7 +65,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   }
 
   // 이용권 시간이 다 되었을때
-  void sendTimeOutNotification() async {
+  void sendTimeOutNotification(Duration startTime) async {
     // set timezone
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
@@ -86,7 +86,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     );
   }
 
-  void send10MinleftNotification() async {
+  void send10MinleftNotification(Duration startTime) async {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
@@ -130,6 +130,13 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Duration startTime = ref.watch(timerStateNotifierProvider).startTime;
+    // time 컨트롤러가 변경될때 남을 시간을 업데이트
+    timercontroller.addListener(() {
+      if (timercontroller.state == CustomTimerState.counting) {
+        ref.read(timerStateNotifierProvider.notifier).updateTimeLeft(timeLeft);
+      }
+    });
     logger.i(startTime);
 
     final seatState = ref.watch(seatStateNotifierProvider);
@@ -282,8 +289,10 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                   onPressed: () {
                     // timer.start();
                     timercontroller.start();
-                    if (startTime > const Duration(minutes: 10)) send10MinleftNotification();
-                    sendTimeOutNotification();
+                    if (startTime > const Duration(minutes: 10)) {
+                      send10MinleftNotification(startTime);
+                    }
+                    sendTimeOutNotification(startTime);
                   },
                   child: const Text('Start timer'),
                 ),
