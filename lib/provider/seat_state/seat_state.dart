@@ -58,6 +58,7 @@ class SeatStateNotifier extends _$SeatStateNotifier {
   @override
   SeatState build() {
     seatRepository = ref.read(seatRepoProvider);
+    roomFetchGet();
     return SeatState();
   }
 

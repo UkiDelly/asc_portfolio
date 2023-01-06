@@ -176,7 +176,7 @@ class SeatScreen extends ConsumerWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SpecificSeatPage(selectedSeatNumber),
+                          builder: (context) => SpecificSeatScreen(selectedSeatNumber),
                         ),
                       );
                     }

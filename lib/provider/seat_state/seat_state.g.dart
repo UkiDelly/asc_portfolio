@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String _$SeatStateNotifierHash() => r'248d2174bb3fb989d4ce52242a2222b545840e8d';
+String _$SeatStateNotifierHash() => r'b355df85d4da223a4ca4045e1fda946a877fad8a';
 
 /// See also [SeatStateNotifier].
 final seatStateNotifierProvider =
