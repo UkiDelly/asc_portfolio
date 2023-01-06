@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../common/base_scaffold.dart';
 import '../../../constant/enum/product/product_enum.dart';
 import '../../../controller/payment_controller.dart';
 import '../../../style/app_color.dart';
@@ -50,7 +51,7 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
         title: const Text(

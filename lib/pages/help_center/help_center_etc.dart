@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/base_scaffold.dart';
+
 class HelpEtcScreen extends StatelessWidget {
   const HelpEtcScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         title: const Text('기타'),
         actions: [
@@ -16,6 +18,7 @@ class HelpEtcScreen extends StatelessWidget {
           ),
         ],
       ),
+      body: const SizedBox(),
     );
   }
 }

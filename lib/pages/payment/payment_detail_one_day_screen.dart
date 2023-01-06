@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../constant/enum/product/product_enum.dart';
 import '../../style/app_color.dart';
 import 'in_app_payment/in_app_payment.dart';
@@ -9,7 +10,7 @@ class PaymentDetailOneDayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
         title: const Text(
@@ -41,11 +42,13 @@ class PaymentDetailOneDayPage extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right, color: Colors.black),
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InAppPaymentSecond(
-                            product: Product.todayFixedTermTicket,
-                          ),),);
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const InAppPaymentSecond(
+                    product: Product.todayFixedTermTicket,
+                  ),
+                ),
+              );
             },
           ),
         ],

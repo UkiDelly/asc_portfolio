@@ -1,9 +1,11 @@
 import 'package:asc_portfolio/pages/home/widgets/current_time_widget.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../constant/assets.dart';
-import '../../provider/home_state/home_state_notifier.dart';
+import '../../provider/login_state/login_state.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 import '../seat/specific_seat_screen.dart';
@@ -13,11 +15,12 @@ class SeatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final homeController = ref.watch(homeStateNotifierProvider);
-    final isLogined = ref.watch(homeStateNotifierProvider).loginCheck;
-    final selectedSeatNumber = ref.watch(homeStateNotifierProvider.notifier).selectedIndex;
+    final isLogined = ref.watch(loginStateProvider).loginCheck;
+    final ticket = ref.watch(loginStateProvider).ticket?.isValidTicket;
+    final selectedSeatNumber = ref.watch(seatStateNotifierProvider.notifier).selectedIndex;
+    final seatState = ref.watch(seatStateNotifierProvider);
 
-    return Scaffold(
+    return BaseScaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(
@@ -159,17 +162,17 @@ class SeatScreen extends ConsumerWidget {
                 crossAxisSpacing: 6.0,
                 mainAxisSpacing: 10.0,
               ),
-              itemCount: homeController.seatDatas.length,
+              itemCount: seatState.seatDatas.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
+                    print('pressed');
                     if (isLogined == true &&
                         // UNRESERVED && VALID일때
-                        homeController.seatDatas[index].seatState.length == 10 &&
-                        homeController.userTicketInfo?.isValidTicket == 'VALID') {
-                      ref.read(homeStateNotifierProvider.notifier).setSelectedIndex = index + 1;
-
-                      Navigator.pop(context);
+                        seatState.seatDatas[index].seatState.length == 10 &&
+                        ticket == 'VALID') {
+                      ref.read(seatStateNotifierProvider.notifier).setSelectedIndex = index + 1;
+                      // Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -186,9 +189,9 @@ class SeatScreen extends ConsumerWidget {
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(15),
-                      color: ref.watch(homeStateNotifierProvider.notifier).getRoomState(index)
-                          ? AppColor.appPurple
-                          : Colors.white,
+                      color: seatState.seatDatas[index].seatState == 'UNRESERVED'
+                          ? Colors.white
+                          : AppColor.appPurple,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
@@ -198,12 +201,11 @@ class SeatScreen extends ConsumerWidget {
                             width: 4,
                           ),
                           Text(
-                            '${homeController.seatDatas[index].seatNumber + 1}',
+                            '${seatState.seatDatas[index].seatNumber + 1}',
                             style: TextStyle(
-                              color:
-                                  ref.watch(homeStateNotifierProvider.notifier).getRoomState(index)
-                                      ? Colors.white
-                                      : AppColor.appPurple,
+                              color: seatState.seatDatas[index].seatState == 'UNRESERVED'
+                                  ? AppColor.appPurple
+                                  : Colors.white,
                               fontSize: 35,
                               fontWeight: FontWeight.w300,
                             ),

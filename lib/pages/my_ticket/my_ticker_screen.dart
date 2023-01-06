@@ -1,9 +1,9 @@
 import 'package:asc_portfolio/model/user_ticket_model.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constant/assets.dart';
+import '../../provider/login_state/login_state.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -14,7 +14,7 @@ class MyTicketScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final homeController = ref.watch(homeStateProvider);
     ref.read(checkUserLoginProvider);
-    final UserTicketModel? ticket = ref.watch(loginStateNotifierProvider).ticket;
+    final UserTicketModel? ticket = ref.watch(loginStateProvider).ticket;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

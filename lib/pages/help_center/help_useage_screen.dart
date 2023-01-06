@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../common/base_scaffold.dart';
+
 class HelpUseageScreen extends StatelessWidget {
   const HelpUseageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         title: const Text('이용관련'),
         actions: [
@@ -16,6 +18,7 @@ class HelpUseageScreen extends StatelessWidget {
           ),
         ],
       ),
+      body: const SizedBox(),
     );
   }
 }

@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
-import 'package:asc_portfolio/provider/admin_state/seat_state_notifier.dart';
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../main.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
@@ -51,13 +52,9 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
     );
   }
 
-  void _roomFetchGet() async {
-    ref.read(seatStateNotifierProvider.notifier).getAllRoomStateReq();
-  }
-
   @override
   void initState() {
-    _roomFetchGet();
+    ref.read(seatStateNotifierProvider.notifier).roomFetchGet();
     super.initState();
   }
 
@@ -68,7 +65,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       seatList.add(_changeSeatController.seatDatas[i].toJson());
     }
 
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
         title: const Text('좌석 이동'),
@@ -265,7 +262,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            ref.watch(seatRepoProvider).postSeatReservationStart(selectedSeatNumber - 1, 0);
+            ref.watch(seatStateNotifierProvider.notifier).postSeatReservationStart(selectedSeatNumber - 1, 0);
             startTimer();
           },
           child: const Text(

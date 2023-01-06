@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../style/app_color.dart';
 import 'admin_main_screen.dart';
 
@@ -132,7 +133,7 @@ class _AdminSearchingPageState extends ConsumerState<AdminSearchingPage> {
   @override
   Widget build(BuildContext context) {
     startTimer();
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

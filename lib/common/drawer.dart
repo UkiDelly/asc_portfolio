@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/main.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
-import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,15 +10,16 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../pages/main_screen.dart';
+import '../provider/login_state/login_state.dart';
 
-class NavDrawer extends ConsumerStatefulWidget {
-  const NavDrawer({Key? key}) : super(key: key);
+class UserDrawer extends ConsumerStatefulWidget {
+  const UserDrawer({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<NavDrawer> createState() => _NavDrawerState();
+  ConsumerState<UserDrawer> createState() => _UserDrawerState();
 }
 
-class _NavDrawerState extends ConsumerState<NavDrawer> {
+class _UserDrawerState extends ConsumerState<UserDrawer> {
   double _progress = 0;
   bool isNotCompleteLoading = true;
 
@@ -65,10 +64,6 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
         },
       ),
     );
-  }
-
-  void _fetchExitSeat() async {
-    await ref.read(seatRepoProvider).postExitSeat();
   }
 
   @override
@@ -128,7 +123,7 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
               await ref.read(secureStorageProvider).deleteAll();
-              ref.invalidate(loginStateNotifierProvider);
+              ref.invalidate(loginStateProvider);
 
               context.go('/login');
             },
@@ -267,7 +262,8 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _fetchExitSeat();
+            //TODO: 좌석 이용 종료 함수 실행
+            // ref.read(seatStateNotifierProvider.notifier).;
             startTimer();
           },
           child: const Text(
@@ -341,6 +337,55 @@ class _NavDrawerState extends ConsumerState<NavDrawer> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class AdminDrawer extends StatelessWidget {
+  const AdminDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 40),
+            color: AppColor.appPurple,
+            child: Image.asset(
+              AppAssets.logoMini,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.contact_support),
+            title: const Text('FAQ 관리'),
+            //TODO: FAQ 관리 페이지로 이동
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: const Text('1:1 문의 관리'),
+            //TODO: 1:1 문의 관리 페이지로 이동
+            onTap: () {},
+          ),
+          const Spacer(),
+          SizedBox(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Text(
+                  'Copyright ©2022 All Rights Reserved',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+                ),
+                Text(
+                  'Powered by padonan, chan-hong',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

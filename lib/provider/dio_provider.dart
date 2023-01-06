@@ -3,12 +3,23 @@ import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
   final storage = ref.watch(secureStorageProvider);
 
   dio.interceptors.add(DioInterceptor(storage: storage));
+  dio.interceptors.add(
+    PrettyDioLogger(
+      // requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      // responseHeader: true,
+      compact: true,
+      maxWidth: 90,
+    ),
+  );
 
   return dio;
 });
@@ -26,30 +37,11 @@ class DioInterceptor extends Interceptor {
     String? token = await storage.read(key: 'accessToken');
     options.headers['Authorization'] = '$auth $token';
 
-    print(' --------------------------------------------------------------------\n');
-    print('|[Dio] Request: (${options.method.toUpperCase()}) ${options.path}\n');
-    print('|         Params: ${options.queryParameters}\n');
-    print('|         Body: ${options.data}\n');
-    print('--------------------------------------------------------------------\n');
+    // print(' --------------------------------------------------------------------\n');
+    // print('|[Dio] Request: (${options.method.toUpperCase()}) ${options.path}\n');
+    // print('|         Params: ${options.queryParameters}\n');
+    // print('|         Body: ${options.data}\n');
+    // print('--------------------------------------------------------------------\n');
     super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print(' --------------------------------------------------------------------\n');
-    print('| [Dio] Response: (${response.statusCode}) ${response.requestOptions.path}\n');
-    print('|          Data: ${response.data}\n');
-    print('--------------------------------------------------------------------\n');
-
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    print(' --------------------------------------------------------------------\n');
-    print('|[Dio] Error: (${err.response?.statusCode}) ${err.requestOptions.path}\n');
-    print('|        Message: ${err.message}\n');
-    print('--------------------------------------------------------------------\n');
-    super.onError(err, handler);
   }
 }

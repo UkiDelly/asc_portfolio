@@ -4,6 +4,7 @@ import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../constant/enum/cafe/cafe_name.dart';
 import '../../style/app_color.dart';
 import '../main_screen.dart';
@@ -20,7 +21,7 @@ class _SelectCafeScreenState extends ConsumerState<SelectCafeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColor.appPurple,

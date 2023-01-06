@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
 import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../common/base_scaffold.dart';
 import '../../main.dart';
 import '../../style/app_color.dart';
 import '../main_screen.dart';
@@ -51,7 +53,7 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
         backgroundColor: AppColor.appPurple,
         title: const Text(
@@ -357,10 +359,6 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
   }
 
   Widget _buildPopupDialogSecondCheck(BuildContext context) {
-    void _postStartReservation(int seatNumber) async {
-      String responseData = await ref.read(seatRepoProvider).postSeatReservationStart(seatNumber, selectedHour);
-    }
-
     return AlertDialog(
       backgroundColor: AppColor.appPurple,
       title: Row(
@@ -380,7 +378,11 @@ class _SpecificSeatPageState extends ConsumerState<SpecificSeatPage> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _postStartReservation(selectedSeatNumber - 1);
+            await ref
+                .read(seatRepoProvider)
+                .postSeatReservationStart(selectedSeatNumber - 1, selectedHour);
+            ref.read(seatStateNotifierProvider.notifier).roomFetchGet();
+
             await startTimer();
 
             // await showDialog(

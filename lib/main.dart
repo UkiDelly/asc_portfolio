@@ -28,7 +28,7 @@ import 'pages/home/seat_screen.dart';
 import 'pages/login/login_screen.dart';
 import 'pages/payment/payment_screen.dart';
 import 'pages/signup/sign_up_screen.dart';
-import 'provider/home_state/login_state.dart';
+import 'provider/login_state/login_state.dart';
 import 'provider/secure_storage_provider.dart';
 
 final logger = Logger(
@@ -81,7 +81,7 @@ class MyApp extends ConsumerWidget {
           ),
           redirect: (context, state) async {
             ref.read(checkUserLoginProvider);
-            final bool userLogin = ref.watch(loginStateNotifierProvider).loginCheck;
+            final bool userLogin = ref.watch(loginStateProvider).loginCheck;
 
             if (userLogin) {
               final FlutterSecureStorage storage = ref.read(secureStorageProvider);
@@ -116,7 +116,7 @@ class MyApp extends ConsumerWidget {
           builder: (context, state) => const LoginScreen(),
           redirect: (context, state) {
             ref.refresh(checkUserLoginProvider);
-            final userLogin = ref.watch(loginStateNotifierProvider).loginCheck;
+            final userLogin = ref.watch(loginStateProvider).loginCheck;
 
             if (userLogin) {
               return '/user';

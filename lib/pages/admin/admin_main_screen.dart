@@ -1,15 +1,16 @@
+import 'package:asc_portfolio/common/drawer.dart';
 import 'package:asc_portfolio/controller/admin_controller.dart';
 import 'package:asc_portfolio/pages/admin/admin_sales_screen.dart';
 import 'package:asc_portfolio/pages/admin/admin_search_user_screen.dart';
 import 'package:asc_portfolio/pages/admin/admin_seat_manage_screen.dart';
 import 'package:asc_portfolio/provider/admin_state/admin_state_notifier.dart';
-import 'package:asc_portfolio/provider/home_state/home_state_notifier.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../provider/login_state/login_state.dart';
 import '../../server/api/api.dart';
 import '../../style/app_color.dart';
 
@@ -21,6 +22,7 @@ class AdminMainPage extends ConsumerStatefulWidget {
 }
 
 class _AdminMainPageState extends ConsumerState<AdminMainPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final PageController pageController = PageController(initialPage: 0);
 
   @override
@@ -29,8 +31,22 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
     return Scaffold(
+      key: scaffoldKey,
+      drawer: const AdminDrawer(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          splashColor: Colors.transparent,
+          style: IconButton.styleFrom(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          onPressed: (() => scaffoldKey.currentState?.openDrawer()),
+          icon: const Icon(
+            Icons.menu,
+            size: 35,
+          ),
+        ),
         backgroundColor: AppColor.appPurple,
         title: Text('${Api.cafeName} 관리자 페이지'),
         centerTitle: true,
@@ -44,7 +60,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 () {
                   storage.deleteAll();
                   //storage.write(key: 'accessToken', value: null);
-                  ref.invalidate(homeStateNotifierProvider);
+                  ref.invalidate(loginStateProvider);
                 },
               );
               context.go('/login');

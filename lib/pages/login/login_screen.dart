@@ -1,5 +1,4 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/provider/home_state/login_state.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
 import 'package:asc_portfolio/server/repository/user_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -7,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../common/base_scaffold.dart';
+import '../../provider/login_state/login_state.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -31,7 +33,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       backgroundColor: AppColor.appPurple,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -125,7 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       isLoading = true;
                     });
 
-                    await ref
+                    bool login = await ref
                         .read(userRepoProvider)
                         .postReqLogin(id: idController.text, password: passwordController.text);
 
@@ -133,12 +135,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     final tokenExist = await storage.containsKey(key: 'accessToken');
                     final roleType = await storage.read(key: 'roleType');
                     ref.refresh(checkUserLoginProvider);
-                    if (tokenExist && roleType == 'USER') {
+                    if (login && roleType == 'USER') {
                       setState(() {
                         isLoading = false;
                       });
                       context.go('/user');
-                    } else if (tokenExist && roleType == 'ADMIN') {
+                    } else if (login && roleType == 'ADMIN') {
                       setState(() {
                         isLoading = false;
                       });
