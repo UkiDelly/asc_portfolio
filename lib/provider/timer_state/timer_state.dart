@@ -22,7 +22,9 @@ class TimerStateNotifier extends _$TimerStateNotifier {
     return const TimerState(startTime: Duration(seconds: 10));
   }
 
+  Future<void> getTimerFromApi() async {}
+
   void updateTimeLeft(Duration timeLeft) {
-    state = state.copyWith(timeLeft: timeLeft);
+    state = state.copyWith(timeLeft: timeLeft, startTime: timeLeft);
   }
 }

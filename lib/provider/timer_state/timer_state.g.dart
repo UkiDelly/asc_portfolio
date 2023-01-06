@@ -48,7 +48,7 @@ class _SystemHash {
 }
 
 String _$TimerStateNotifierHash() =>
-    r'9f883cd7fffa17ef37c83c65fc9103bb52ea6749';
+    r'454d185d9e23af269761f11d4f20e3b0d948347f';
 
 /// See also [TimerStateNotifier].
 final timerStateNotifierProvider =
