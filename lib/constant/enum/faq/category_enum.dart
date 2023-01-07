@@ -14,6 +14,19 @@ extension ProblemCategoryExtension on ProblemCategory {
     }
   }
 
+  String get enumToKorean {
+    switch (this) {
+      case ProblemCategory.payment:
+        return '결제';
+      case ProblemCategory.useage:
+        return '사용';
+      case ProblemCategory.etc:
+        return '기타';
+      case ProblemCategory.account:
+        return '계정';
+    }
+  }
+
   // convert string to enum
   static ProblemCategory stringToEnum(String value) {
     switch (value) {

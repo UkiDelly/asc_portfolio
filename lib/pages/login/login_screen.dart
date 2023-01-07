@@ -53,6 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   controller: idController,
                   cursorColor: Colors.black,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15.0),
@@ -80,6 +81,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextFormField(
                   controller: passwordController,
+                  textInputAction: TextInputAction.done,
                   cursorColor: Colors.black,
                   obscureText: _obscureText ? false : true,
                   keyboardType: TextInputType.text,

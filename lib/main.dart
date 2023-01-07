@@ -2,6 +2,7 @@ import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/constant/enum/faq/category_enum.dart';
 import 'package:asc_portfolio/pages/admin/faq/admin_faq_screen.dart';
 import 'package:asc_portfolio/pages/faq/faq_screen.dart';
+import 'package:asc_portfolio/pages/faq/qna_screen.dart';
 import 'package:asc_portfolio/pages/faq_detail/faq_detail_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/seat/change_seat_screen.dart';
@@ -59,12 +60,15 @@ void main() async {
   );
 }
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = GoRouter(
+      navigatorKey: navigatorKey,
       debugLogDiagnostics: true,
       initialLocation: '/',
       routes: [
@@ -156,14 +160,24 @@ class MyApp extends ConsumerWidget {
                   category: category,
                 );
               },
-            )
+            ),
           ],
+        ),
+        GoRoute(
+          path: '/qna/:category',
+          builder: (context, state) {
+            ProblemCategory category =
+                ProblemCategoryExtension.stringToEnum(state.params['category'] ?? '');
+            return QnAScreen(category: category);
+          },
         ),
         GoRoute(path: '/admin-faq', builder: (context, state) => const AdminFAQManageScreen())
       ],
     );
     return MaterialApp.router(
-      routerConfig: router,
+      routerDelegate: router.routerDelegate,
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       themeMode: ThemeMode.light,

@@ -24,6 +24,7 @@ class _QnAScreenState extends State<QnAScreen> {
       body: FormBuilder(
         child: Column(
           children: [
+            const Spacer(),
             FormBuilderTextField(
               name: '제목',
               decoration: const InputDecoration(labelText: '제목'),
@@ -35,7 +36,8 @@ class _QnAScreenState extends State<QnAScreen> {
               decoration: const InputDecoration(labelText: '내용'),
               controller: contentController,
             ),
-            ElevatedButton(onPressed: () {}, child: const Text('접수하기'))
+            ElevatedButton(onPressed: () {}, child: const Text('접수하기')),
+            const Spacer()
           ],
         ),
       ),

@@ -106,13 +106,6 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     );
   }
 
-  // 유저가 이용중지를 누르면 모든 알림을 취소
-  void cancelNotification() {
-    // cancel notification
-    notificationsPlugin.cancel(0);
-    notificationsPlugin.cancel(1);
-  }
-
   @override
   void initState() {
     notificationDetails = NotificationDetails(android: androidNotification, iOS: iosNotification);
@@ -319,7 +312,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                   onPressed: () {
                     // timer.reset();
                     timerController.pause();
-                    cancelNotification();
+                    notificationsPlugin.cancelAll();
                     logger.w(timeLeft);
                   },
                   child: const Text('pause Timer'),

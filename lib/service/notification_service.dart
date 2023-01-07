@@ -1,4 +1,7 @@
 // notification 설정
+import 'package:asc_portfolio/main.dart';
+import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> initNotificationSettings() async {
@@ -26,5 +29,12 @@ Future<void> initNotificationSettings() async {
   //TODO: 노티를 클릭하면 실행할 함수 넣기
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
+    onDidReceiveBackgroundNotificationResponse: (details) {
+      navigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const QRCodeScreen(),
+        ),
+      );
+    },
   );
 }
