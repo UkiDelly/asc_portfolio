@@ -262,7 +262,7 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            ref.watch(seatRepoProvider).postSeatReservationStart(selectedSeatNumber - 1, 0);
+            ref.watch(seatStateNotifierProvider.notifier).postSeatReservationStart(selectedSeatNumber - 1, 0);
             startTimer();
           },
           child: const Text(

@@ -1,9 +1,11 @@
 import 'package:asc_portfolio/constant/sales/sale_enum.dart';
-import 'package:asc_portfolio/server/repository/product_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../model/admin/admin_management_product_model.dart';
+import '../../server/repository/product_repository.dart';
+
+part 'admin_sales_state_notifier.g.dart';
 
 class SalesState {
   final int totalSales;
@@ -36,16 +38,15 @@ class SalesState {
   }
 }
 
-final salesProvider = StateNotifierProvider<SalesNotifier, SalesState>((ref) {
-  final ProductRepository productRepository = ref.watch(productProvider);
-  return SalesNotifier(productRepository);
-});
+@Riverpod(keepAlive: true)
+class SalesNotifier extends _$SalesNotifier {
+  late ProductRepository productRepository;
 
-class SalesNotifier extends StateNotifier<SalesState> {
-  final ProductRepository productRepository;
-  SalesNotifier(this.productRepository) : super(SalesState()) {
+  @override
+  SalesState build() {
+    productRepository = ref.watch(productProvider);
     getSales(SalesRange.oneDay);
-    getTodaySales();
+    return SalesState();
   }
 
   void getSales(SalesRange range) async {
@@ -58,15 +59,14 @@ class SalesNotifier extends StateNotifier<SalesState> {
       totalSales += item.productPrice;
     }
     String selectedDate =
-        "${DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(const Duration(days: 1)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now())}";
-    state = (state).copyWith(
+        "${DateFormat('yyyy-MM-dd').format(DateTime.now().subtract(Duration(days: range.enumToInt)))} ~ ${DateFormat('yyyy-MM-dd').format(DateTime.now())}";
+
+    state = state.copyWith(
       productList: productList,
       totalSales: totalSales,
       selectedDate: selectedDate,
       salesRange: range,
     );
-
-    print((state).salesRange);
   }
 
   void getTodaySales() async {
@@ -77,22 +77,10 @@ class SalesNotifier extends StateNotifier<SalesState> {
     for (var item in productList) {
       totalSales += item.productPrice;
     }
-    if (state is SalesState) {
-      state = (state).copyWith(
-        todaySales: totalSales.toDouble(),
-      );
-    } else {
-      state = SalesState(
-        productList: [],
-        totalSales: 0,
-        selectedDate: '',
-        salesRange: SalesRange.oneDay,
-        todaySales: totalSales.toDouble(),
-      );
-    }
-    // state = (state as SalesState).copyWith(
-    //   todaySales: totalSales.toDouble(),
-    // );
+
+    state = state.copyWith(
+      todaySales: totalSales.toDouble(),
+    );
   }
 
   void getSalesOfDate(DateTime date) {}

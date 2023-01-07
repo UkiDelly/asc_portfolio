@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:asc_portfolio/constant/assets.dart';
 import 'package:asc_portfolio/main.dart';
 import 'package:asc_portfolio/provider/secure_storage_provider.dart';
-import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,10 +66,6 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
     );
   }
 
-  void _fetchExitSeat() async {
-    await ref.read(seatRepoProvider).postExitSeat();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isLogin = ref.watch(loginStateProvider).loginCheck;
@@ -128,7 +123,8 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
             title: const Text('로그아웃', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () async {
               await ref.read(secureStorageProvider).deleteAll();
-              ref.read(loginStateProvider.notifier).logout();
+              ref.invalidate(loginStateProvider);
+
               context.go('/login');
             },
           ),
@@ -266,7 +262,8 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            _fetchExitSeat();
+            //TODO: 좌석 이용 종료 함수 실행
+            // ref.read(seatStateNotifierProvider.notifier).;
             startTimer();
           },
           child: const Text(

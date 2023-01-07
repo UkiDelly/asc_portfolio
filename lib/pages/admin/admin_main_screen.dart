@@ -27,7 +27,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AdminController adminController = ref.watch(adminStateProvider);
+    final AdminController adminController = ref.watch(adminStateNotifierProvider);
     final FlutterSecureStorage storage = ref.watch(secureStorageProvider);
 
     return Scaffold(
@@ -60,7 +60,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                 () {
                   storage.deleteAll();
                   //storage.write(key: 'accessToken', value: null);
-                  ref.read(loginStateProvider.notifier).logout();
+                  ref.invalidate(loginStateProvider);
                 },
               );
               context.go('/login');

@@ -40,8 +40,9 @@ class _AdminSeatManageScreenState extends ConsumerState<AdminSeatManageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AdminController adminController = ref.watch(adminStateProvider);
-    final AdminStateNotifier adminControllerNotifier = ref.watch(adminStateProvider.notifier);
+    final AdminController adminController = ref.watch(adminStateNotifierProvider);
+    final AdminStateNotifier adminControllerNotifier =
+        ref.watch(adminStateNotifierProvider.notifier);
 
     return Padding(
       padding: const EdgeInsets.all(10.0),

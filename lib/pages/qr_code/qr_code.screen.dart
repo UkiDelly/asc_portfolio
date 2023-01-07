@@ -1,4 +1,5 @@
 import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
+import 'package:asc_portfolio/provider/timer_state/timer_state.dart';
 import 'package:asc_portfolio/style/app_color.dart';
 import 'package:custom_timer/custom_timer.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,8 @@ class QRCodeScreen extends ConsumerStatefulWidget {
 
 class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   // state들
-  // TODO: 서버가 정상적으로 작동하게 되면 startTime을 homeStateNotifier에서 받아와야 함
-  Duration startTime = const Duration(minutes: 10, seconds: 10);
   Duration timeLeft = const Duration();
-  CustomTimerController timercontroller = CustomTimerController();
+  CustomTimerController timerController = CustomTimerController();
 
   // Notification 관련 변수들
   final iosNotification = const DarwinNotificationDetails();
@@ -65,7 +64,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
   }
 
   // 이용권 시간이 다 되었을때
-  void sendTimeOutNotification() async {
+  void sendTimeOutNotification(Duration startTime) async {
     // set timezone
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
@@ -86,7 +85,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     );
   }
 
-  void send10MinleftNotification() async {
+  void send10MinleftNotification(Duration startTime) async {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
@@ -124,16 +123,28 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
 
   @override
   void dispose() {
-    timercontroller.dispose();
+    timerController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Duration startTime = ref.watch(timerStateNotifierProvider).startTime;
+    // time가 변경될때 남을 시간을 업데이트
+    timerController.addListener(() {
+      if (timerController.state == CustomTimerState.counting ||
+          timerController.state == CustomTimerState.paused) {
+        ref.read(timerStateNotifierProvider.notifier).updateTimeLeft(timeLeft);
+      } else if (timerController.state == CustomTimerState.finished) {
+        // 이용권 시간이 다 되었을때 서버로 요청을 보냄
+      }
+    });
     logger.i(startTime);
 
     final seatState = ref.watch(seatStateNotifierProvider);
     final LoginState loginState = ref.watch(loginStateProvider);
+
+    logger.i(startTime);
 
     return BaseScaffold(
       appBar: AppBar(
@@ -241,7 +252,7 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                             CustomTimer(
                               begin: startTime,
                               end: const Duration(),
-                              controller: timercontroller,
+                              controller: timerController,
                               stateBuilder: (timer, state) {
                                 if (state == CustomTimerState.finished) {
                                   return const Padding(
@@ -281,20 +292,22 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
                 ElevatedButton(
                   onPressed: () {
                     // timer.start();
-                    timercontroller.start();
-                    if (startTime > const Duration(minutes: 10)) send10MinleftNotification();
-                    sendTimeOutNotification();
+                    timerController.start();
+                    if (startTime > const Duration(minutes: 10)) {
+                      send10MinleftNotification(startTime);
+                    }
+                    sendTimeOutNotification(startTime);
                   },
                   child: const Text('Start timer'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     // timer.reset();
-                    timercontroller.reset();
-
+                    timerController.pause();
+                    cancelNotification();
                     logger.w(timeLeft);
                   },
-                  child: const Text('reset Timer'),
+                  child: const Text('pause Timer'),
                 ),
                 const SizedBox(
                   height: 100,
