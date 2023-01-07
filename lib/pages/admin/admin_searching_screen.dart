@@ -15,8 +15,8 @@ import '../../style/app_color.dart';
 import 'admin_main_screen.dart';
 
 class AdminSearchingPage extends ConsumerStatefulWidget {
-  String loginId;
-  AdminSearchingPage(this.loginId);
+  final String loginId;
+  const AdminSearchingPage(this.loginId, {super.key});
 
   @override
   ConsumerState<AdminSearchingPage> createState() => _AdminSearchingPageState();
@@ -134,22 +134,23 @@ class _AdminSearchingPageState extends ConsumerState<AdminSearchingPage> {
   Widget build(BuildContext context) {
     startTimer();
     return BaseScaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AdminMainPage()),
-            );
-          },
-        ),
-        backgroundColor: AppColor.appPurple,
-        title: const Text('유저 조회 및 환불처리'),
-        centerTitle: true,
-        shadowColor: Colors.white,
-        elevation: 1,
-      ),
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => const AdminMainPage()),
+      //       );
+      //     },
+      //   ),
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text('유저 조회 및 환불처리'),
+      //   centerTitle: true,
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+      // appBarTitle: const Text('유저 조회 및 환불처리'),
       body: isNotCompleteLoading
           ? Center(
               child: SizedBox(

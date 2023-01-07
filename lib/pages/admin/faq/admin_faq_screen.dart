@@ -6,6 +6,12 @@ class AdminFAQManageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(appBar: AppBar(), body: Container());
+    return BaseScaffold(
+      // appBar: AppBar(
+      //   title: const Text('FAQ 관리'),
+      // ),
+      appBarTitle: const Text('FAQ 관리'),
+      body: Container(),
+    );
   }
 }

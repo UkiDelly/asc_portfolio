@@ -110,7 +110,7 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                   ),
                   onTap: () {
-                    context.go('/change_seat');
+                    context.push('/change_seat');
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => const ChangeSeatScreen()),
@@ -144,7 +144,7 @@ class _UserDrawerState extends ConsumerState<UserDrawer> {
             title: const Text('건의게시판', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400)),
             onTap: () {
               print('press');
-              context.go('/help_center');
+              context.push('/faq');
             },
           ),
           ListTile(
@@ -359,8 +359,7 @@ class AdminDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.contact_support),
             title: const Text('FAQ 관리'),
-            //TODO: FAQ 관리 페이지로 이동
-            onTap: () {},
+            onTap: () => context.push('/faq'),
           ),
           ListTile(
             leading: const Icon(Icons.edit),

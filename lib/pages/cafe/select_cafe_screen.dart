@@ -3,10 +3,10 @@ import 'package:asc_portfolio/server/api/api.dart';
 import 'package:asc_portfolio/server/repository/payment_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../common/base_scaffold.dart';
 import '../../constant/enum/cafe/cafe_name.dart';
-import '../../style/app_color.dart';
 import '../main_screen.dart';
 
 class SelectCafeScreen extends ConsumerStatefulWidget {
@@ -22,26 +22,33 @@ class _SelectCafeScreenState extends ConsumerState<SelectCafeScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColor.appPurple,
-        title: Image.asset(
-          AppAssets.logo,
-          fit: BoxFit.fill,
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: AppColor.appPurple,
+      //   title: Image.asset(
+      //     AppAssets.logo,
+      //     fit: BoxFit.fill,
+      //   ),
+      //   centerTitle: true,
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      //   actions: [
+      //     IconButton(
+      //       color: Colors.white,
+      //       onPressed: () => {
+      //         Navigator.pop(context),
+      //       },
+      //       icon: const Icon(Icons.home),
+      //     ),
+      //   ],
+      // ),
+      appBarActions: [
+        IconButton(
+          color: Colors.white,
+          onPressed: () => context.pop(),
+          icon: const Icon(Icons.home),
         ),
-        centerTitle: true,
-        shadowColor: Colors.white,
-        elevation: 1,
-        actions: [
-          IconButton(
-            color: Colors.white,
-            onPressed: () => {
-              Navigator.pop(context),
-            },
-            icon: const Icon(Icons.home),
-          ),
-        ],
-      ),
+      ],
       body: ListView(
         children: [
           SizedBox(

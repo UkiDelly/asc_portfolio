@@ -10,7 +10,7 @@ import '../../style/app_color.dart';
 class SpecificSeatScreen extends ConsumerStatefulWidget {
   int selectedSeatNumber;
   int selectedHour = 0;
-  SpecificSeatScreen(this.selectedSeatNumber);
+  SpecificSeatScreen(this.selectedSeatNumber, {super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SpecificSeatScreenState();
@@ -65,15 +65,20 @@ class _SpecificSeatScreenState extends ConsumerState<SpecificSeatScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.appPurple,
-        title: const Text(
-          '시간 선택',
-          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
-        ),
-        shadowColor: Colors.white,
-        elevation: 1,
+      // appBar: AppBar(
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text(
+      //     '시간 선택',
+      //     style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+      //   ),
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+      appBarTitle: const Text(
+        '시간 선택',
+        style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
       ),
+
       body: ListView.builder(
         itemCount: optionList.length,
         itemBuilder: (context, index) => OptionTile(

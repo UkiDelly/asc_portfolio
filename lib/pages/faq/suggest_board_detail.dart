@@ -29,7 +29,7 @@ class _SuggestBoardDetailState extends State<SuggestBoardDetail> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(title: const Text('Form Builder Example')),
+      appBarTitle: const Text('Form Builder Example'),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: SingleChildScrollView(

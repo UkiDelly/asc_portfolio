@@ -147,23 +147,38 @@ class _QRCodeScreenState extends ConsumerState<QRCodeScreen> {
     logger.i(startTime);
 
     return BaseScaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Row(
-          children: [
-            const SizedBox(
-              width: 25,
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   title: Row(
+      //     children: [
+      //       const SizedBox(
+      //         width: 25,
+      //       ),
+      //       Text(
+      //         '${loginState.qrCode!.name}님의 QR코드',
+      //       ),
+      //     ],
+      //   ),
+      //   titleTextStyle: const TextStyle(
+      //     fontSize: 25,
+      //     fontWeight: FontWeight.bold,
+      //     color: Colors.white,
+      //   ),
+      // ),
+      appBarTitle: Row(
+        children: [
+          const SizedBox(
+            width: 25,
+          ),
+          Text(
+            '${loginState.qrCode!.name}님의 QR코드',
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-            Text(
-              '${loginState.qrCode!.name}님의 QR코드',
-            ),
-          ],
-        ),
-        titleTextStyle: const TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+          ),
+        ],
       ),
       backgroundColor: AppColor.appPurple,
       body: SafeArea(

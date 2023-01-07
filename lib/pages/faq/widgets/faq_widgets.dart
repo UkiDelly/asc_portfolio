@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../data/faq_data.dart';
+import '../../../provider/secure_storage_provider.dart';
 import '../../../style/app_color.dart';
 
 class BackGround extends StatelessWidget {
@@ -45,8 +49,9 @@ class BackGround extends StatelessWidget {
 }
 
 class ForeGround extends StatelessWidget {
-  final List labelList, iconList;
-  const ForeGround({super.key, required this.labelList, required this.iconList});
+  const ForeGround({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,23 +66,36 @@ class ForeGround extends StatelessWidget {
         childAspectRatio: .9,
         children: List.generate(
           labelList.length,
-          (index) => Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            child: InkWell(
-              splashFactory: NoSplash.splashFactory,
-              highlightColor: Colors.transparent,
-              onTap: () => context.go('/help_center/${labelList[index].path}'),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    iconList[index],
-                    Text(labelList[index].label),
-                  ],
+          (index) => Consumer(
+            builder: (context, ref, child) {
+              final FlutterSecureStorage storage = ref.read(secureStorageProvider);
+              return Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: InkWell(
+                  splashFactory: NoSplash.splashFactory,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    final String? roleType = await storage.read(key: 'roleType');
+
+                    if (roleType == 'admin' || roleType == 'ADMIN') {
+                      context.go('/admin-faq');
+                      return;
+                    }
+                    context.go('/faq/${labelList[index].path}');
+                  },
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        iconList[index],
+                        Text(labelList[index].label),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),

@@ -1,11 +1,10 @@
-import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_one_day_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_period_screen.dart';
 import 'package:asc_portfolio/pages/payment/payment_detail_time_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../common/base_scaffold.dart';
-import '../../style/app_color.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({Key? key}) : super(key: key);
@@ -13,21 +12,30 @@ class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        backgroundColor: AppColor.appPurple,
-        title: const Text(
-          '이용권 선택',
-          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
-        ),
-        shadowColor: Colors.white,
-        elevation: 1,
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       Navigator.push(context, MaterialPageRoute(builder: (context) => const MainScreen()));
+      //     },
+      //     icon: const Icon(Icons.arrow_back),
+      //   ),
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text(
+      //     '이용권 선택',
+      //     style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+      //   ),
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+      appBarLeadingWidget: IconButton(
+        onPressed: () => context.go('/user'),
+        icon: const Icon(Icons.arrow_back),
       ),
+      appBarTitle: const Text(
+        '이용권 선택',
+        style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+      ),
+      appBarElevation: 1,
       body: ListView(
         children: [
           SizedBox(

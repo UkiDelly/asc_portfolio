@@ -1,18 +1,18 @@
-import 'package:asc_portfolio/constant/enum/help-center/category_enum.dart';
+import 'package:asc_portfolio/constant/enum/faq/category_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../../common/base_scaffold.dart';
 
-class FAQScreen extends StatefulWidget {
+class QnAScreen extends StatefulWidget {
   final ProblemCategory category;
-  const FAQScreen({super.key, required this.category});
+  const QnAScreen({super.key, required this.category});
 
   @override
-  State<FAQScreen> createState() => _FAQScreenState();
+  State<QnAScreen> createState() => _QnAScreenState();
 }
 
-class _FAQScreenState extends State<FAQScreen> {
+class _QnAScreenState extends State<QnAScreen> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
@@ -20,9 +20,7 @@ class _FAQScreenState extends State<FAQScreen> {
   Widget build(BuildContext context) {
     print('category=${widget.category.enumToString}');
     return BaseScaffold(
-      appBar: AppBar(
-        title: const Text('1:1 문의'),
-      ),
+      appBarTitle: const Text('1:1 문의'),
       body: FormBuilder(
         child: Column(
           children: [

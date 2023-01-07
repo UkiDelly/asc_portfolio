@@ -1,11 +1,8 @@
 import 'package:asc_portfolio/constant/assets.dart';
-import 'package:asc_portfolio/constant/enum/help-center/category_enum.dart';
-import 'package:asc_portfolio/pages/help_center/faq_screen.dart';
-import 'package:asc_portfolio/pages/help_center/help_acount_screen.dart';
-import 'package:asc_portfolio/pages/help_center/help_center_etc.dart';
-import 'package:asc_portfolio/pages/help_center/help_center_screen.dart';
-import 'package:asc_portfolio/pages/help_center/help_payment_screen.dart';
-import 'package:asc_portfolio/pages/help_center/help_useage_screen.dart';
+import 'package:asc_portfolio/constant/enum/faq/category_enum.dart';
+import 'package:asc_portfolio/pages/admin/faq/admin_faq_screen.dart';
+import 'package:asc_portfolio/pages/faq/faq_screen.dart';
+import 'package:asc_portfolio/pages/faq_detail/faq_detail_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/pages/seat/change_seat_screen.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
@@ -146,38 +143,23 @@ class MyApp extends ConsumerWidget {
           builder: (context, state) => const ChangeSeatScreen(),
         ),
         GoRoute(
-          path: '/help_center',
-          builder: (context, state) => HelpCenterScreen(),
+          path: '/faq',
+          builder: (context, state) => const FAQScreen(),
           routes: [
             GoRoute(
-              path: 'payment',
-              builder: (context, state) => const HelpPaymentScreen(),
-            ),
-            GoRoute(
-              path: 'useage',
-              builder: (context, state) => const HelpUseageScreen(),
-            ),
-            GoRoute(
-              path: 'etc',
-              builder: (context, state) => const HelpEtcScreen(),
-            ),
-            GoRoute(
-              path: 'account',
-              builder: (context, state) => const HelpAccountScreen(),
-            ),
-            GoRoute(
-              path: 'support/:category',
+              path: ':category',
               builder: (context, state) {
-                final ProblemCategory category = ProblemCategoryExtension.stringToEnum(
-                  state.params['category']!,
-                );
-                return FAQScreen(
+                ProblemCategory category =
+                    ProblemCategoryExtension.stringToEnum(state.params['category'] ?? '');
+
+                return FAQDetailScreen(
                   category: category,
                 );
               },
-            ),
+            )
           ],
-        )
+        ),
+        GoRoute(path: '/admin-faq', builder: (context, state) => const AdminFAQManageScreen())
       ],
     );
     return MaterialApp.router(

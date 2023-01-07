@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:asc_portfolio/controller/chage_seat_controller.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
 import 'package:asc_portfolio/provider/seat_state/seat_state.dart';
-import 'package:asc_portfolio/server/repository/seat_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -66,13 +65,15 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
     }
 
     return BaseScaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.appPurple,
-        title: const Text('좌석 이동'),
-        centerTitle: true,
-        shadowColor: Colors.white,
-        elevation: 1,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text('좌석 이동'),
+      //   centerTitle: true,
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+      appBarTitle: const Text('좌석 이동'),
+      appBarElevation: 1,
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
@@ -262,7 +263,9 @@ class _ChangeSeatScreenState extends ConsumerState<ChangeSeatScreen> {
       actions: <Widget>[
         TextButton(
           onPressed: () async {
-            ref.watch(seatStateNotifierProvider.notifier).postSeatReservationStart(selectedSeatNumber - 1, 0);
+            ref
+                .watch(seatStateNotifierProvider.notifier)
+                .postSeatReservationStart(selectedSeatNumber - 1, 0);
             startTimer();
           },
           child: const Text(

@@ -90,7 +90,7 @@ class MainScreenState extends ConsumerState<MainScreen> {
             color: Colors.white,
             onPressed: () {
               if (!loginState.loginCheck) context.go('/login');
-              context.go('/payment');
+              context.push('/payment');
             },
             icon: loginState.loginCheck
                 ? const Icon(

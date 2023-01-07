@@ -52,63 +52,68 @@ class _InAppPaymentSecondState extends ConsumerState<InAppPaymentSecond> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.appPurple,
-        title: const Text(
-          '결제진행',
-          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
-        ),
-        shadowColor: Colors.white,
-        elevation: 1,
+      // appBar: AppBar(
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text(
+      //     '결제진행',
+      //     style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+      //   ),
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+
+      appBarTitle: const Text(
+        '결제진행',
+        style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
       ),
+      appBarElevation: 1,
+
       body: Builder(
         builder: (BuildContext context) {
-          return Container(
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: FloatingActionButton.extended(
-                      heroTag: 'Text2',
-                      label: Text(
-                        '${product.name} order 테스트',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ), // <-- Text
-                      backgroundColor: AppColor.appPurple,
-                      onPressed: () async {
-                        ref.read(paymentRepoProvider).getPaymentConfirm('638af347cf9f6d001f64695e');
-                      },
-                    ),
+          return SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: FloatingActionButton.extended(
+                    heroTag: 'Text2',
+                    label: Text(
+                      '${product.name} order 테스트',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ), // <-- Text
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: () async {
+                      ref.read(paymentRepoProvider).getPaymentConfirm('638af347cf9f6d001f64695e');
+                    },
                   ),
-                  const SizedBox(
-                    height: 20,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: FloatingActionButton.extended(
+                    heroTag: 'Text',
+                    label: Text(
+                      '${product.name} 결제진행',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ), // <-- Text
+                    backgroundColor: AppColor.appPurple,
+                    onPressed: () {
+                      goBootpayTest(context);
+                    },
                   ),
-                  Center(
-                    child: FloatingActionButton.extended(
-                      heroTag: 'Text',
-                      label: Text(
-                        '${product.name} 결제진행',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ), // <-- Text
-                      backgroundColor: AppColor.appPurple,
-                      onPressed: () {
-                        goBootpayTest(context);
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 10)
-                ],
-              ),
+                ),
+                const SizedBox(height: 10)
+              ],
             ),
           );
         },

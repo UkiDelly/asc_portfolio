@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../common/base_scaffold.dart';
 import '../../constant/enum/product/product_enum.dart';
-import '../../style/app_color.dart';
 import 'in_app_payment/in_app_payment.dart';
 
 class PaymentDetailPeriodPage extends StatelessWidget {
@@ -11,15 +10,21 @@ class PaymentDetailPeriodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.appPurple,
-        title: const Text(
-          '자유석 기간권',
-          style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
-        ),
-        shadowColor: Colors.white,
-        elevation: 1,
+      // appBar: AppBar(
+      //   backgroundColor: AppColor.appPurple,
+      //   title: const Text(
+      //     '자유석 기간권',
+      //     style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
+      //   ),
+      //   shadowColor: Colors.white,
+      //   elevation: 1,
+      // ),
+
+      appBarTitle: const Text(
+        '자유석 기간권',
+        style: TextStyle(fontWeight: FontWeight.w300, color: Colors.white, fontSize: 20),
       ),
+      appBarElevation: 1,
       body: ListView(
         children: [
           ListTile(
