@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../main.dart';
-import '../../model/admin/admin_check_user_valid_ticket.dart';
+import '../../model/admin/check_user/admin_check_user_valid_ticket.dart';
 import '../../model/user_ticket_model.dart';
 import '../api/api.dart';
 

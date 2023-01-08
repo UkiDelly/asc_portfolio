@@ -79,7 +79,7 @@ class ForeGround extends StatelessWidget {
                     final String? roleType = await storage.read(key: 'roleType');
 
                     if (roleType == 'admin' || roleType == 'ADMIN') {
-                      context.push('/admin-faq');
+                      context.push('/admin-faq/${labelList[index].path}');
                       return;
                     }
                     context.push('/faq/${labelList[index].path}');

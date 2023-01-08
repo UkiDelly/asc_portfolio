@@ -2,7 +2,7 @@ import 'package:asc_portfolio/constant/sales/sale_enum.dart';
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../model/admin/admin_management_product_model.dart';
+import '../../model/admin/product/admin_management_product_model.dart';
 import '../../server/repository/product_repository.dart';
 
 part 'admin_sales_state_notifier.g.dart';

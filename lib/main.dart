@@ -5,6 +5,7 @@ import 'package:asc_portfolio/pages/faq/faq_screen.dart';
 import 'package:asc_portfolio/pages/faq/qna_screen.dart';
 import 'package:asc_portfolio/pages/faq_detail/faq_detail_screen.dart';
 import 'package:asc_portfolio/pages/main_screen.dart';
+import 'package:asc_portfolio/pages/qr_code/qr_code.screen.dart';
 import 'package:asc_portfolio/pages/seat/change_seat_screen.dart';
 import 'package:asc_portfolio/service/notification_service.dart';
 import 'package:asc_portfolio/style/app_color.dart';
@@ -113,6 +114,10 @@ class MyApp extends ConsumerWidget {
           ],
         ),
         GoRoute(
+          path: '/qr_code',
+          builder: (context, state) => const QRCodeScreen(),
+        ),
+        GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
           redirect: (context, state) {
@@ -171,7 +176,16 @@ class MyApp extends ConsumerWidget {
             return QnAScreen(category: category);
           },
         ),
-        GoRoute(path: '/admin-faq', builder: (context, state) => const AdminFAQManageScreen())
+        GoRoute(
+          path: '/admin-faq/:category',
+          builder: (context, state) {
+            ProblemCategory category =
+                ProblemCategoryExtension.stringToEnum(state.params['category'] ?? '');
+            return AdminFAQManageScreen(
+              category: category,
+            );
+          },
+        )
       ],
     );
     return MaterialApp.router(

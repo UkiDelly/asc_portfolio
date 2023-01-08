@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../main.dart';
-import '../../model/admin/admin_check_user_product.dart';
-import '../../model/admin/admin_management_product_model.dart';
+import '../../model/admin/check_user/admin_check_user_product.dart';
+import '../../model/admin/product/admin_management_product_model.dart';
 import '../../provider/dio_provider.dart';
 import '../api/api.dart';
 
@@ -24,7 +24,6 @@ class ProductRepository {
         options: Options(
           headers: <String, dynamic>{
             'dateString': dateString //
-            
           },
         ),
       );
